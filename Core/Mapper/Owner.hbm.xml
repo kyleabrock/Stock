@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Core"
+                   namespace="Core.Domain">
+
+  <class name="Owner">
+    <id name="Id" column="OwnerId">
+      <generator class="increment"/>
+    </id>
+    <component name="Name" class="Name">
+      <property name="LastName" not-null="true"/>
+      <property name="FirstName" not-null="true"/>
+      <property name="Patronymic" not-null="true"/>
+      <property name="DisplayName" not-null="true"/>
+    </component>
+    <property name="Department" not-null="true"/>
+    <property name="Comments" not-null="true"/>
+  </class>
+
+</hibernate-mapping>

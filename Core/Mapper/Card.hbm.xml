@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Core"
+                   namespace="Core.Domain">
+
+  <class name="Card">
+    <id name="Id" column="CardId">
+      <generator class="increment"/>
+    </id>
+    <property name="CardNumber" not-null="true"/>
+    <property name="CardName" not-null="true"/>
+    <property name="IsDefault" not-null="true"/>
+    <property name="CreationDate" not-null="true"/>
+    <many-to-one name="Staff" class="Staff" column="StaffId" />
+    <bag name="StockUnitList" inverse="true">
+      <key column="CardId" />
+      <one-to-many class="StockUnit" />
+    </bag>
+    <property name="Comments" not-null="true"/>
+  </class>
+
+</hibernate-mapping>

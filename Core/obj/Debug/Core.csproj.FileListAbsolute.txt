@@ -1,0 +1,14 @@
+C:\Work\Stock\Core\bin\Debug\hibernate.cfg.xml
+C:\Work\Stock\Core\bin\Debug\Core.dll
+C:\Work\Stock\Core\bin\Debug\Core.pdb
+C:\Work\Stock\Core\bin\Debug\NHibernate.dll
+C:\Work\Stock\Core\bin\Debug\nunit.framework.dll
+C:\Work\Stock\Core\bin\Debug\Iesi.Collections.dll
+C:\Work\Stock\Core\bin\Debug\NHibernate.pdb
+C:\Work\Stock\Core\bin\Debug\NHibernate.xml
+C:\Work\Stock\Core\bin\Debug\nunit.framework.xml
+C:\Work\Stock\Core\bin\Debug\Iesi.Collections.pdb
+C:\Work\Stock\Core\bin\Debug\Iesi.Collections.xml
+C:\Work\Stock\Core\obj\Debug\ResolveAssemblyReference.cache
+C:\Work\Stock\Core\obj\Debug\Core.dll
+C:\Work\Stock\Core\obj\Debug\Core.pdb

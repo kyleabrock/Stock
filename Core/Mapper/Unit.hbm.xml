@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Core"
+                   namespace="Core.Domain">
+
+  <class name="Unit">
+    <id name="Id" column="UnitId">
+      <generator class="increment"/>
+    </id>
+    <many-to-one name="StockUnit" class="StockUnit" column="StockUnitId" />
+    <many-to-one name="UnitType" class="UnitType" column="UnitTypeId" />
+    <property name="Manufacture" not-null="true"/>
+    <property name="ModelName" not-null="true"/>
+    <property name="Serial" not-null="true"/>
+    <property name="Comments" not-null="true"/>
+  </class>
+
+</hibernate-mapping>

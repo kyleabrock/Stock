@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Core"
+                   namespace="Core.Domain">
+
+  <class name="UnitType">
+    <id name="Id" column="UnitTypeId">
+      <generator class="increment"/>
+    </id>    
+    <property name="TypeName" not-null="true" />
+    <property name="Priority" not-null="true" />
+    <property name="Comments" not-null="true" />
+  </class>
+
+</hibernate-mapping>
