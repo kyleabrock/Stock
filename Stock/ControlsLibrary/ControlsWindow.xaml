@@ -1,0 +1,81 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:tk="http://schemas.microsoft.com/wpf/2008/toolkit"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:domain="clr-namespace:Core.Domain;assembly=Core"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    mc:Ignorable="d"
+    x:Class="Stock.ControlsLibrary.ControlsWindow"
+	x:Name="Window"
+	Title="ControlsWindow"
+	Width="1024" Height="480">
+	<Window.Resources>
+
+    </Window.Resources>
+
+	<Grid x:Name="LayoutRoot">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="360" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical">
+            <TextBox HorizontalAlignment="Left" Height="24" Margin="4" Text="TextBox" VerticalAlignment="Top" Width="350"
+                     Style="{StaticResource TextBoxStyle}"/>
+            <PasswordBox HorizontalAlignment="Left" Height="24" Margin="4" VerticalAlignment="Top" Width="350"
+                         Style="{StaticResource PasswordBoxStyle}" />
+            <RichTextBox HorizontalAlignment="Left" Margin="4" VerticalAlignment="Top" Width="350" Height="128"
+                     Style="{StaticResource RichTextBoxStyle}" VerticalScrollBarVisibility="Auto"/>
+            <ComboBox HorizontalAlignment="Left" Height="24" Margin="4" VerticalAlignment="Top" Width="350" IsEditable="False"
+                      Style="{StaticResource ComboBoxStyle}">
+                <ComboBoxItem Content="Test" />
+                <ComboBoxItem Content="Test 1" />
+                <ComboBoxItem Content="Test 2" />
+                <ComboBoxItem Content="Test 3" />
+            </ComboBox>
+            <ComboBox HorizontalAlignment="Left" Height="24" Margin="4" VerticalAlignment="Top" Width="350" IsEditable="True"
+                      Text="Editable Combobox" Style="{StaticResource ComboBoxStyle}">
+                <ComboBoxItem Content="Test" />
+                <ComboBoxItem Content="Test 1" />
+                <ComboBoxItem Content="Test 2" />
+                <ComboBoxItem Content="Test 3" />
+            </ComboBox>
+            <ProgressBar Width="350" HorizontalAlignment="Left" Margin="4" Height="10" Value="50" Style="{StaticResource ProgressBarStyle}" />
+            <StackPanel Orientation="Horizontal">
+                <Button Width="100" Height="32" Margin="4" Content="Default Style" Style="{StaticResource ButtonDefaultStyle}" />
+                <Button Width="100" Height="32" Margin="4" Content="Primary" Style="{StaticResource ButtonPrimaryStyle}" />
+                <Button Width="100" Height="32" Margin="4" Content="Success" Style="{StaticResource ButtonSuccessStyle}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Width="100" Height="32" Margin="4" Content="Info" Style="{StaticResource ButtonInfoStyle}" />
+                <Button Width="100" Height="32" Margin="4" Content="Warning" Style="{StaticResource ButtonWarningStyle}"  />
+                <Button Width="100" Height="32" Margin="4" Content="Danger" Style="{StaticResource ButtonDangerStyle}"  />
+            </StackPanel>
+            <Grid Width="354" HorizontalAlignment="Left">
+                <TextBox Width="350" Height="32" Margin="4" HorizontalAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource TextBoxStyle}" />
+                <Button Content="{StaticResource FindImage}" Margin="4" Width="32" Height="32" HorizontalAlignment="Right" Style="{StaticResource ButtonInfoStyle}" />
+            </Grid>
+            <StackPanel Orientation="Horizontal">
+            	<ToggleButton Margin="4" Style="{DynamicResource SwitchButtonStyle}" />
+                <xctk:DateTimePicker HorizontalAlignment="Left" Width="100" Value="01.01.1990"
+                             TimePickerVisibility="Collapsed" Format="ShortDate" 
+                             ShowButtonSpinner="False" 
+                             Margin="4" Style="{StaticResource DateTimePickerStyle}"/>
+            </StackPanel>
+        </StackPanel>
+        
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+            <tk:DataGrid Height="350" Margin="4" VerticalAlignment="Top" Style="{StaticResource DataGridDefaultStyle}"
+                         d:DataContext="{d:DesignInstance {x:Type domain:Staff}}">
+                <tk:DataGrid.Columns>
+                    <tk:DataGridTextColumn Header="Отдел" Width="250" SortDirection="Ascending" Binding="{Binding Department}" />
+                    <tk:DataGridTextColumn Header="Примечание" Width="250" SortDirection="Descending" Binding="{Binding Comments}" />
+                </tk:DataGrid.Columns>
+            	<domain:Staff Department="Отдел ИТ" Comments="Проверка" />
+            	<domain:Staff Department="Отдел УИИ" Comments="Проверка" />
+            	<domain:Staff Department="Отдел ИТ" Comments="Проверка" />
+            </tk:DataGrid>
+        </StackPanel>
+	</Grid>
+</Window>

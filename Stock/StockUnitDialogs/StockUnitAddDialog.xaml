@@ -1,0 +1,152 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:tk="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+	xmlns:domain="clr-namespace:Core.Domain;assembly=Core" 
+    xmlns:utils="clr-namespace:Stock.Utils"
+    xmlns:local="clr-namespace:Stock.StockUnitDialogs"
+    mc:Ignorable="d"
+	x:Class="Stock.StockUnitDialogs.StockUnitAddDialog"
+	x:Name="Window"
+	Title="Основное средство"
+	Width="960" Height="640" ResizeMode="NoResize" 
+    WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+    Icon="../Themes/MainIcon.ico">
+    <Window.DataContext>
+        <local:StockUnitViewModel x:Name="ViewModel" />
+    </Window.DataContext>
+    <Window.Resources>
+        <utils:StatusTypesToColorConverter x:Key="ColorConverter" />
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot" Margin="4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition />
+            <RowDefinition Height="48"/>
+        </Grid.RowDefinitions>
+        <!-- Title -->
+        <TextBlock x:Name="TitleLb" Grid.RowSpan="2" Grid.ColumnSpan="2" Style="{StaticResource DialogTitleTextBlockStyle}" >
+            <Run Language="ru-RU" Text="Приход/Расход"/>
+        </TextBlock>
+
+        <!-- Main form -->
+        <TextBlock x:Name="IdLb" Grid.Row="2" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+            <Run Language="en-US" Text="ID" />
+        </TextBlock>
+        <TextBox x:Name="IdTb" Text="{Binding Path=StockUnit.Id}" Grid.Column="1" Grid.Row="2" Margin="4" IsReadOnly="True" Style="{StaticResource TextBoxStyle}"/>
+        
+        <TextBlock x:Name="StockNumberLb" Grid.Row="3" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+            <Run Language="ru-RU" Text="Инв. №"/>
+        </TextBlock>
+        <TextBox x:Name="StockNumberTb" Text="{Binding Path=StockUnit.StockNumber}" Grid.Row="3" Grid.Column="1" Margin="4" Style="{StaticResource TextBoxStyle}"/>
+
+        <TextBlock x:Name="StockNameLb" Grid.Row="4" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+            <Run Language="ru-RU" Text="Название"/>
+        </TextBlock>
+        <TextBox x:Name="StockNameTb" Text="{Binding Path=StockUnit.StockName}" Grid.Row="4" Grid.Column="1" Grid.RowSpan="3" Margin="4" TextWrapping="Wrap" 
+                 VerticalAlignment="Stretch" Style="{StaticResource TextBoxStyle}"
+                 VerticalScrollBarVisibility="Auto"/>
+
+        <TextBlock x:Name="StatusLb" Grid.Row="2" Grid.Column="2" Style="{StaticResource DialogTextBlockStyle}">
+            <Run Language="ru-RU" Text="Статус"/>
+        </TextBlock>
+        <ComboBox x:Name="StatusCb" ItemsSource="{Binding Path=StatusList}" SelectedItem="{Binding Path=StockUnit.Status}" Grid.Row="2" Grid.Column="3"  Margin="4" VerticalAlignment="Center"
+                  Style="{StaticResource ComboBoxStyle}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" d:DataContext="{d:DesignInstance domain:Status}">
+                        <Border Margin="2,0" Background="{Binding Path=StatusType, Converter={StaticResource ColorConverter}}" Width="8" />
+                        <ContentPresenter Content="{Binding Path=StatusName}" HorizontalAlignment="Center" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <TextBlock x:Name="CreationDateLb" Grid.Row="3" Grid.Column="2" Style="{StaticResource DialogTextBlockStyle}"><Run Language="ru-RU" Text="Ввод в экспл."/></TextBlock>
+        <xctk:DateTimePicker x:Name="CreationDateDtPk" Value="{Binding Path=StockUnit.CreationDate}" Grid.Row="3" Grid.Column="3"
+                             VerticalAlignment="Center" 
+                             TimePickerVisibility="Collapsed" Format="ShortDate" 
+                             ShowButtonSpinner="False"
+                             Margin="4" Style="{StaticResource DateTimePickerStyle}"/>
+
+        <TextBlock x:Name="OwnerLb" Grid.Row="4" Grid.Column="2" Style="{StaticResource DialogTextBlockStyle}"><Run Language="ru-RU" Text="МОЛ"/></TextBlock>
+        <ComboBox x:Name="OwnerCb" SelectedItem="{Binding Path=StockUnit.Owner}" ItemsSource="{Binding Path=OwnerList}" Grid.Row="4" Grid.Column="3"
+                  VerticalAlignment="Center" 
+                  DisplayMemberPath="Name.DisplayName"
+                  Margin="4" Style="{StaticResource ComboBoxStyle}"/>
+        
+        <TextBlock x:Name="CommentsLb" Grid.Row="5" Grid.Column="2" Style="{StaticResource DialogTextBlockStyle}"><Run Language="ru-RU" Text="Комментарии"/></TextBlock>
+        <TextBox x:Name="CommentsTb" Text="{Binding Path=StockUnit.Comments}" Grid.Row="5" Grid.Column="3" Grid.RowSpan="2" Margin="4" VerticalAlignment="Stretch"
+                 Style="{StaticResource TextBoxStyle}" TextWrapping="Wrap"/>
+        
+        <!-- Datagrid -->
+        <Grid Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4" Margin="0,4" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="UnitAddButton" Style="{StaticResource ButtonDefaultStyle}" Width="100"
+                        Content="Добавить" Command="{Binding AddUnitCommand}" HorizontalAlignment="Right" Margin="4,0" />
+                <Button x:Name="UnitDelButton" Style="{StaticResource ButtonDangerStyle}" Width="32"  Margin="4,0"
+                        Command="{Binding RemoveUnitCommand}" HorizontalAlignment="Right">
+                    <Button.Content>
+                        <Image Source="../Themes/Bin16.png" Width="16" Height="16" />
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <tk:DataGrid x:Name="MainDataGrid" Grid.Row="1" Style="{StaticResource DataGridDefaultStyle}" IsReadOnly="False" CanUserAddRows="True" Margin="4" PreviewKeyDown="MainDataGrid_PreviewKeyDown"
+                         ItemsSource="{Binding UnitList}" SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
+                <tk:DataGrid.Columns>
+                    <!--<tk:DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="38" IsReadOnly="True" />-->
+                    <tk:DataGridComboBoxColumn Header="Тип" Width="170" DisplayMemberPath="TypeName" SelectedItemBinding="{Binding UnitType}" >
+                        <tk:DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="{x:Type ComboBox}">
+                                <Setter Property="ItemsSource" Value="{Binding Path=DataContext.UnitTypes, RelativeSource={RelativeSource AncestorType=tk:DataGrid}}" />
+                            </Style>
+                        </tk:DataGridComboBoxColumn.ElementStyle>
+                        <tk:DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="{x:Type ComboBox}">
+                                <Setter Property="ItemsSource" Value="{Binding Path=DataContext.UnitTypes, RelativeSource={RelativeSource AncestorType=tk:DataGrid}}" />
+                            </Style>
+                        </tk:DataGridComboBoxColumn.EditingElementStyle>
+                    </tk:DataGridComboBoxColumn>
+                    <tk:DataGridTextColumn Header="Производитель" Width="160" Binding="{Binding Manufacture}" />
+                    <tk:DataGridTextColumn Header="Модель" Width="150" Binding="{Binding ModelName}" />
+                    <tk:DataGridTextColumn Header="Сер. №" Width="170" Binding="{Binding Serial}" />
+                    <tk:DataGridTextColumn Header="Комментарии" Width="200" Binding="{Binding Comments}" />
+                </tk:DataGrid.Columns>
+            </tk:DataGrid>
+        </Grid>
+
+        <!-- Dialog buttons -->
+        <StackPanel Grid.Column="3" Grid.Row="8" Height="32" Margin="0,4" 
+                    Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button x:Name="OkBtn" Content="Сохранить" 
+                    IsDefault="True" Style="{StaticResource ButtonDefaultStyle}" 
+                    Command="{Binding SaveCommand}" Margin="4,0" Width="100"/>
+            <Button x:Name="CancelBtn" Content="Отмена" 
+                    IsCancel="True" Style="{StaticResource ButtonDefaultStyle}" 
+                    Command="{Binding CloseCommand}" Margin="4,0" Width="100"/>
+        </StackPanel>
+
+    </Grid>
+</Window>

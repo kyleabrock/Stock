@@ -1,0 +1,67 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="BootstrapColor1" Color="#006DCC" />
+    <SolidColorBrush x:Key="BootstrapColor2" Color="#49AFCD" />
+    <SolidColorBrush x:Key="BootstrapColor3" Color="#5BB75B" />
+    <SolidColorBrush x:Key="BootstrapColor4" Color="#FAA732" />
+    <SolidColorBrush x:Key="BootstrapColor5" Color="#DA4F49" />
+
+    <!-- Color Scheme Bootstrap Flat Grayscale -->
+
+    <SolidColorBrush x:Key="BootstrapGrayColor1" Color="#212121" />
+    <SolidColorBrush x:Key="BootstrapGrayColor2" Color="#333333" />
+    <SolidColorBrush x:Key="BootstrapGrayColor3" Color="#545454" />
+    <SolidColorBrush x:Key="BootstrapGrayColor4" Color="#999999" />
+    <SolidColorBrush x:Key="BootstrapGrayColor5" Color="#EDEDED" />
+
+    <!-- Color Scheme Main color brushes -->
+
+    <SolidColorBrush x:Key="DefaultBackground" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="DefaultBorderBrush" Color="#333333" />
+    <SolidColorBrush x:Key="DefaultArrowBrush" Color="#333333" />
+    <SolidColorBrush x:Key="FocusedBorderBrush" Color="#006DCC" />
+    <SolidColorBrush x:Key="DefaultTextBrush" Color="#333333" />
+    <Color x:Key="BorderFocusedColor">#49AFCD</Color>
+    <Color x:Key="BorderDefaultColor">#333333</Color>
+
+    <SolidColorBrush x:Key="ProgressBardBrush" Color="#006DCC" />
+
+    <SolidColorBrush x:Key="ButtonDefaultBorderBrush" Color="#999999" />
+    <SolidColorBrush x:Key="ButtonDefaultOverBrush" Color="#EDEDED" />
+    <SolidColorBrush x:Key="ButtonDefaultClickBrush" Color="#999999" />
+
+    <SolidColorBrush x:Key="ButtonForegroundBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ButtonDisabledForegroundBrush" Color="#545454" />
+
+    <SolidColorBrush x:Key="ButtonPrimaryBorderBrush" Color="#006DCC" />
+    <SolidColorBrush x:Key="ButtonPrimaryOverBrush" Color="#0054B3" />
+    <SolidColorBrush x:Key="ButtonPrimaryClickBrush" Color="#003A99" />
+
+    <SolidColorBrush x:Key="ButtonSuccessBorderBrush" Color="#5BB75B" />
+    <SolidColorBrush x:Key="ButtonSuccessOverBrush" Color="#429E42" />
+    <SolidColorBrush x:Key="ButtonSuccessClickBrush" Color="#288428" />
+
+    <SolidColorBrush x:Key="ButtonInfoBorderBrush" Color="#49AFCD" />
+    <SolidColorBrush x:Key="ButtonInfoOverBrush" Color="#3096B4" />
+    <SolidColorBrush x:Key="ButtonInfoClickBrush" Color="#167C9A" />
+
+    <SolidColorBrush x:Key="ButtonWarningBorderBrush" Color="#FAA732" />
+    <SolidColorBrush x:Key="ButtonWarningOverBrush" Color="#E18E19" />
+    <SolidColorBrush x:Key="ButtonWarningClickBrush" Color="#C77400" />
+
+    <SolidColorBrush x:Key="ButtonDangerBorderBrush" Color="#DA4F49" />
+    <SolidColorBrush x:Key="ButtonDangerOverBrush" Color="#C13630" />
+    <SolidColorBrush x:Key="ButtonDangerClickBrush" Color="#A71C16" />
+
+    <SolidColorBrush x:Key="DataGridThumbBrush" Color="#999999" />
+    <SolidColorBrush x:Key="DataGridSortBrush" Color="#999999" />
+    <SolidColorBrush x:Key="DataGridColumnBorderBrush" Color="#999999" />
+    <SolidColorBrush x:Key="DataGridColumnTextBrush" Color="#545454" />
+    <SolidColorBrush x:Key="DataGridRowHeaderBrush" Color="#EDEDED" />
+    <SolidColorBrush x:Key="DataGridRowHeaderOverBrush" Color="#999999" />
+
+    <Color x:Key="SwitchButtonDefaultColor">#999999</Color>
+    <Color x:Key="SwitchButtonIsCheckedColor">#5BB75B</Color>
+
+</ResourceDictionary>
