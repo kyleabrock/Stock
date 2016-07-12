@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Core
+namespace Stock.Core
 {
     public enum Genders
     {
@@ -22,5 +22,17 @@ namespace Core
         Waiting = 2,
         [Description("Списано")]
         Discarded = 3
+    }
+
+    public enum LogMessageType
+    {
+        [Description("Аудит входа")]
+        LoginAudit = 0,
+        [Description("Аудит выхода")]
+        LogoutAudit = 1,
+        [Description("Изменение записи")]
+        EntityChange = 2,
+        [Description("Информация")]
+        Information = 3
     }
 }

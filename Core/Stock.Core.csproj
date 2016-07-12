@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A75AD08D-6ABD-4931-B056-410744BDF829}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Stock.Core</RootNamespace>
+    <AssemblyName>Stock.Core</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4">
+      <HintPath>..\..\..\..\Libraries\NHibernate\Required_Bins\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\..\Libraries\NHibernate\Required_Bins\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Libraries\NUnit\bin\net-3.5\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Domain\Account.cs" />
+    <Compile Include="Domain\Card.cs" />
+    <Compile Include="Domain\Document.cs" />
+    <Compile Include="Domain\DocumentNumber.cs" />
+    <Compile Include="Domain\DocumentType.cs" />
+    <Compile Include="Domain\EntityBase.cs" />
+    <Compile Include="Domain\ILoggedEntity.cs" />
+    <Compile Include="Domain\Log.cs" />
+    <Compile Include="Domain\Name.cs" />
+    <Compile Include="Domain\Owner.cs" />
+    <Compile Include="Domain\Repair.cs" />
+    <Compile Include="Domain\Staff.cs" />
+    <Compile Include="Domain\Status.cs" />
+    <Compile Include="Domain\StockUnit.cs" />
+    <Compile Include="Domain\StockUnitNote.cs" />
+    <Compile Include="Domain\Unit.cs" />
+    <Compile Include="Domain\UnitType.cs" />
+    <Compile Include="Domain\UserAcc.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Factory\ILogFactory.cs" />
+    <Compile Include="Factory\LogFactory.cs" />
+    <Compile Include="Filter\CardFilter.cs" />
+    <Compile Include="Filter\DocumentFilter.cs" />
+    <Compile Include="Filter\IFilterBase.cs" />
+    <Compile Include="Filter\RepairFilter.cs" />
+    <Compile Include="Filter\StockUnitFilter.cs" />
+    <Compile Include="Filter\UnitFilter.cs" />
+    <Compile Include="Finder\IFinder.cs" />
+    <Compile Include="Finder\StockUnitFinder.cs" />
+    <Compile Include="Finder\UnitFinder.cs" />
+    <Compile Include="NHibernateHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\AccountRepository.cs" />
+    <Compile Include="Repository\CardRepository.cs" />
+    <Compile Include="Repository\DocumentRepository.cs" />
+    <Compile Include="Repository\IComplexFilterRepository.cs" />
+    <Compile Include="Repository\IRepository.cs" />
+    <Compile Include="Repository\LogRepository.cs" />
+    <Compile Include="Repository\OwnerRepository.cs" />
+    <Compile Include="Repository\RepairRepository.cs" />
+    <Compile Include="Repository\Repository.cs" />
+    <Compile Include="Repository\StaffRepository.cs" />
+    <Compile Include="Repository\StatusRepository.cs" />
+    <Compile Include="Repository\StockUnitNoteRepository.cs" />
+    <Compile Include="Repository\StockUnitRepository.cs" />
+    <Compile Include="Repository\UnitRepository.cs" />
+    <Compile Include="Repository\UnitTypeRepository.cs" />
+    <Compile Include="Tests\CardTest.cs" />
+    <Compile Include="Tests\ConnectionTest.cs" />
+    <Compile Include="Tests\ExportSchemaTest.cs" />
+    <Compile Include="Tests\StockUnitTest.cs" />
+    <Compile Include="Tests\UnitTest.cs" />
+    <Compile Include="Utils\StatusTypesToNameConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="hibernate.cfg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Mapper\StockUnitNote.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mapper\Log.hbm.xml" />
+    <EmbeddedResource Include="Mapper\Account.hbm.xml" />
+    <EmbeddedResource Include="Mapper\Repair.hbm.xml" />
+    <EmbeddedResource Include="Mapper\Card.hbm.xml" />
+    <EmbeddedResource Include="Mapper\Document.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mapper\DocumentType.hbm.xml" />
+    <EmbeddedResource Include="Mapper\Owner.hbm.xml" />
+    <EmbeddedResource Include="Mapper\Staff.hbm.xml" />
+    <EmbeddedResource Include="Mapper\Status.hbm.xml" />
+    <EmbeddedResource Include="Mapper\StockUnit.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mapper\Unit.hbm.xml" />
+    <EmbeddedResource Include="Mapper\UnitType.hbm.xml" />
+    <EmbeddedResource Include="Mapper\UserAcc.hbm.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(ProjectDir)$(OutDir)NHibernate.dll" "$(SolutionDir)Stock\$(OutDir)" /Y /I
+xcopy "$(ProjectDir)$(OutDir)Iesi.Collections.dll" "$(SolutionDir)Stock\$(OutDir)" /Y /I</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

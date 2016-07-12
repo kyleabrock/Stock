@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="Stock.UI.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:Stock.UI.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1000" Background="{StaticResource DefaultBackground}">
+    <UserControl.DataContext>
+        <viewModels:SettingsViewModel x:Name="ViewModel" />
+    </UserControl.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="256" />
+            <ColumnDefinition Width="320" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Text="Настройки" Margin="16,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource DialogTitleTextBlockStyle}" />
+        <TextBlock Text="Ресурсы приложения" Margin="16,0" Grid.Row="1" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}" />
+        <TextBlock Text="Период обновления (сек)" Margin="16,0" Grid.Row="2" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}" />
+        
+        <TextBox Text="{Binding Path=SettingsAppFolderPath}" Grid.Row="1" Grid.Column="1" Margin="4,4,26,4" Style="{StaticResource TextBoxStyle}" />
+        <Button Content="..." Command="{Binding SelectFolderCommand}" Width="24" Height="24" Margin="4" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource ButtonInfoStyle}" />
+        <TextBox Text="{Binding Path=RefreshPeriod}" Grid.Row="2" Grid.Column="1" Margin="4" Style="{StaticResource TextBoxStyle}" />
+        
+        <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="100" Height="32" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" Margin="4,0" Style="{StaticResource ButtonInfoStyle}" />
+
+    </Grid>
+</UserControl>

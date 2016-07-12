@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Core.Domain;
+using Stock.Core.Domain;
 
-namespace Core.Repository
+namespace Stock.Core.Repository
 {
     public interface IRepository<T> where T : EntityBase
     {

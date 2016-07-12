@@ -1,36 +1,77 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using Core.Domain;
+using System.Linq.Expressions;
 using NHibernate;
 using NHibernate.Criterion;
+using Stock.Core.Domain;
+using Stock.Core.Filter;
 
-namespace Core.Repository
+namespace Stock.Core.Repository
 {
-    public class CardRepository : Repository<Card>
+    public class CardRepository : Repository<Card>, IComplexFilterRepository<Card>
     {
-        public Card GetByIdFull(int id)
+        public Card GetById(int id, bool eagerLoading)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 var result = session.Get<Card>(id);
+                if (!eagerLoading)
+                    return result;
                 NHibernateUtil.Initialize(result.Staff);
                 NHibernateUtil.Initialize(result.StockUnitList);
-                
+                foreach (var stockUnit in result.StockUnitList)
+                {
+                    NHibernateUtil.Initialize(stockUnit.Status);
+                    NHibernateUtil.Initialize(stockUnit.Owner);
+                }
+
                 return result;
             }
         }
 
-        public IList<Card> GetAllFull(bool initLists)
+        public IList<Card> GetAll(Expression<Func<Card, object>> orderByPath, bool asc, bool eagerLoading)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                var result = session.QueryOver<Card>().List();
+                var query = session.QueryOver<Card>().OrderBy(orderByPath);
+                var result = asc ? query.Asc.List() : query.Desc.List();
+
                 foreach (var item in result)
                 {
                     NHibernateUtil.Initialize(item.Staff);
-                    if (initLists)
+                    if (eagerLoading)
                         NHibernateUtil.Initialize(item.StockUnitList);
                 }
+
+                return result;
+            }
+        }
+
+        public IList<Card> GetAllByComplexFilter(IFilterBase filter)
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                var mainCriteria = session.CreateCriteria<Card>();
+
+                var cardFilter = filter as CardFilter;
+                if (cardFilter != null)
+                {
+                    if (cardFilter.Staff != null && cardFilter.Department == null)
+                        mainCriteria.CreateCriteria("Staff").Add(Restrictions.Eq("Id", cardFilter.Staff.Id));
+                    if (cardFilter.Staff != null && cardFilter.Department != null)
+                    {
+                        mainCriteria.CreateCriteria("Staff")
+                            .Add(Restrictions.Eq("Id", cardFilter.Staff.Id))
+                            .Add(Restrictions.Eq("Department", cardFilter.Department));
+                    }
+                    if (cardFilter.Staff == null && cardFilter.Department != null)
+                        mainCriteria.CreateCriteria("Staff").Add(Restrictions.Eq("Department", cardFilter.Department));
+                }
+
+                var result = mainCriteria.List<Card>();
+                foreach (var item in result)
+                    NHibernateUtil.Initialize(item.Staff);
 
                 return result;
             }

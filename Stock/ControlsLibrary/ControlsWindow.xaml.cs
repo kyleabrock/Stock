@@ -1,4 +1,4 @@
-﻿namespace Stock.ControlsLibrary
+﻿namespace Stock.UI.ControlsLibrary
 {
 	/// <summary>
 	/// Interaction logic for ControlsWindow.xaml

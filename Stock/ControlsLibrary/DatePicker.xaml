@@ -41,7 +41,7 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="20"/>
                                 </Grid.ColumnDefinitions>
                                 <Border x:Name="PART_LeftBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,0,0,0" CornerRadius="2">
                                     <xctk:ButtonSpinner x:Name="PART_Spinner" AllowSpin="{TemplateBinding AllowSpin}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,1" ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}" Background="{TemplateBinding Background}" HorizontalContentAlignment="Stretch" IsTabStop="False" ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}" VerticalContentAlignment="Stretch">
@@ -72,11 +72,11 @@
                                                             <Border x:Name="ToggleButtonChrome" Background="{StaticResource DefaultBackground}" BorderBrush="{StaticResource DefaultBorderBrush}" BorderThickness="0,1,1,1" CornerRadius="0,2,2,0" />
                                                             <Grid>
                                                                 <Grid.ColumnDefinitions>
-                                                                    <ColumnDefinition Width="*"/>
+                                                                    <ColumnDefinition Width="1"/>
                                                                     <ColumnDefinition Width="Auto"/>
                                                                 </Grid.ColumnDefinitions>
                                                                 <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="Stretch" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Stretch"/>
-                                                                <Grid x:Name="arrowGlyph" Grid.Column="1" IsHitTestVisible="False" Margin="5">
+                                                                <Grid x:Name="arrowGlyph" Grid.Column="1" IsHitTestVisible="False" Margin="4,5,5,5" HorizontalAlignment="Center">
                                                                     <Path x:Name="Arrow" Fill="{StaticResource DefaultArrowBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 2 L 4 6 L 8 2 L 7 1 L 4 4 L 1 1 Z" RenderTransformOrigin="0.5,0.5" >
                                                                         <Path.RenderTransform>
                                                                             <RotateTransform />

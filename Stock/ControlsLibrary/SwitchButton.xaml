@@ -17,11 +17,11 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Grid>
-                        <Border Name="FalseBorder" CornerRadius="12" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="0" />
+                        <Border Name="FalseBorder" CornerRadius="12" Margin="0,2" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="0" />
                         <Canvas x:Name="PaintCanvas">
                             <Ellipse x:Name="Arrow" Fill="{TemplateBinding Foreground}" 
                                          Height="{TemplateBinding ActualHeight}" Width="{TemplateBinding ActualHeight}" 
-                                         StrokeThickness="0" Margin="0"
+                                         Stroke="{TemplateBinding Background}" StrokeThickness="0.5" Margin="0"
                                          Canvas.Left="0" Canvas.Top="0" RenderTransformOrigin="0.5, 0.5" />
                         </Canvas>
                     </Grid>

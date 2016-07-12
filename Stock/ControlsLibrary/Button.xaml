@@ -59,4 +59,16 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ButtonDefaultImgStyle" BasedOn="{StaticResource ButtonDefaultStyle}" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Margin" Value="4" />
+    </Style>
+
+    <Style x:Key="ButtonDefaultXsStyle" BasedOn="{StaticResource ButtonDefaultStyle}" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="100" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Margin" Value="4" />
+    </Style>
+
 </ResourceDictionary>

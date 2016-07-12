@@ -14,7 +14,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
-                    <Border Background="{StaticResource DataGridThumbBrush}" />
+                    <Border Background="{TemplateBinding Background}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -40,13 +40,13 @@
                                     BorderBrush="{StaticResource DataGridColumnBorderBrush}" 
                                     BorderThickness="0,0,0,2">
                             <Grid>
-                                <ContentPresenter Margin="8,0,16,0" HorizontalAlignment="Left" 
+                                <ContentPresenter Margin="6,0,16,0" HorizontalAlignment="Left" 
                                     VerticalAlignment="Center" 
                                     Content="{TemplateBinding Content}" 
                                     ContentStringFormat="{TemplateBinding ContentStringFormat}" 
                                     ContentTemplate="{TemplateBinding ContentTemplate}" 
                                     TextBlock.Foreground="{StaticResource DataGridColumnTextBrush}"
-                                    TextBlock.FontSize="11.333"
+                                    TextBlock.FontSize="12"
                                     TextBlock.FontWeight="Bold" />
                             </Grid>
                         </Border>
@@ -72,7 +72,7 @@
                                 </PathGeometry>
                             </Path.Data>
                         </Path>
-                        <Thumb Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Background="{StaticResource DataGridSortBrush}" Style="{StaticResource ThumbStyle}" />
+                        <Thumb Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Background="Transparent" Style="{StaticResource ThumbStyle}" />
                         <Thumb Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Background="{StaticResource DataGridSortBrush}" Style="{StaticResource ThumbStyle}" />
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -137,7 +137,7 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Margin" Value="8,4"></Setter>
+        <Setter Property="Margin" Value="4,2"></Setter>
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
@@ -188,7 +188,7 @@
         <Setter Property="ColumnHeaderStyle" Value="{StaticResource DgColumnHeaderStyle}" />
         <Setter Property="RowHeaderStyle" Value="{StaticResource DgRowHeaderStyle}" />
         <Setter Property="CellStyle" Value="{StaticResource DgCellStyle}" />
-        <Setter Property="FontSize" Value="11.333" />
+        <Setter Property="FontSize" Value="12" />
     </Style>
 
 </ResourceDictionary>

@@ -24,6 +24,7 @@
     <SolidColorBrush x:Key="DefaultTextBrush" Color="#333333" />
     <Color x:Key="BorderFocusedColor">#49AFCD</Color>
     <Color x:Key="BorderDefaultColor">#333333</Color>
+    <Color x:Key="ProgressDefaultColor">#EDEDED</Color>
 
     <SolidColorBrush x:Key="ProgressBardBrush" Color="#006DCC" />
 

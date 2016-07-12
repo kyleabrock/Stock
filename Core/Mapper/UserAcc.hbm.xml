@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
-                   assembly="Core"
-                   namespace="Core.Domain">
+                   assembly="Stock.Core"
+                   namespace="Stock.Core.Domain">
 
   <class name="UserAcc">
     <id name="Id" column="UserAccId">
@@ -14,7 +14,9 @@
       <property name="DisplayName" not-null="true"/>
     </component>
     <property name="Department" not-null="true"/>
+    <property name="UserImagePath" not-null="true"/>
     <property name="Comments" not-null="true"/>
+    <one-to-one name="Account" class="Account"/>
   </class>
 
 </hibernate-mapping>

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Core.Utils
+namespace Stock.Core.Utils
 {
     [ValueConversion(typeof(StatusTypes), typeof(string))]
     public class StatusTypesToNameConverter : IValueConverter

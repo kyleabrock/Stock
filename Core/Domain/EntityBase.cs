@@ -1,4 +1,4 @@
-﻿namespace Core.Domain
+﻿namespace Stock.Core.Domain
 {
     public class EntityBase
     {

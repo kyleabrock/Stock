@@ -1,8 +1,19 @@
-namespace Core.Domain
+namespace Stock.Core.Domain
 {
     public class DocumentType : EntityBase
     {
-        public virtual string TypeName { get; set; }        
-        public virtual string Comments { get; set; }
+        private string _typeName = "";
+        public virtual string TypeName
+        {
+            get { return _typeName; } 
+            set { _typeName = value; }
+        }
+        
+        private string _comments = "";
+        public virtual string Comments
+        {
+            get { return _comments; }
+            set { _comments = value; }
+        }
     }
 }

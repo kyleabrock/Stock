@@ -1,0 +1,96 @@
+﻿<UserControl x:Class="Stock.UI.Views.UserPageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:Stock.UI.ViewModels"
+             xmlns:tk="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1000" Background="{StaticResource DefaultBackground}" IsVisibleChanged="UserPageView_OnIsVisibleChanged">
+    <UserControl.DataContext>
+        <viewModels:UserPageViewModel x:Name="ViewModel" />
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320" />
+            <ColumnDefinition Width="128" />
+            <ColumnDefinition Width="288" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="32" />
+            <RowDefinition Height="32" />
+            <RowDefinition Height="32" />
+            <RowDefinition Height="32" />
+            <RowDefinition Height="32" />
+            <RowDefinition Height="32" />
+            <RowDefinition Height="48" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Border Margin="0,4" Grid.Row="0" Grid.Column="0" Grid.RowSpan="8" BorderThickness="0" Width="256" Height="256">
+            <Grid>
+                <Border x:Name="MaskBorder" Background="White" BorderThickness="0" CornerRadius="256"/>
+                <StackPanel>
+                    <StackPanel.OpacityMask>
+                        <VisualBrush Visual="{Binding ElementName=MaskBorder}" />
+                    </StackPanel.OpacityMask>
+                    <Image Source="{Binding Path=UserImageSource}" Width="256" Height="256" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <TextBlock Text="ПРОФИЛЬ" Grid.Row="0" Grid.Column="1" Margin="8" Style="{StaticResource DialogTitleTextBlockStyle}" />
+        <TextBlock Text="Фамилия" Grid.Row="1" Grid.Column="1" Margin="8" Style="{StaticResource DialogTextBlockStyle}" />
+        <TextBlock Text="Имя" Grid.Row="2" Grid.Column="1" Margin="8" Style="{StaticResource DialogTextBlockStyle}" />
+        <TextBlock Text="Отчетство" Grid.Row="3" Grid.Column="1" Margin="8" Style="{StaticResource DialogTextBlockStyle}" />
+        <TextBlock Text="Отображать" Grid.Row="4" Grid.Column="1" Margin="8" Style="{StaticResource DialogTextBlockStyle}" />
+        <TextBlock Text="Отдел" Grid.Row="5" Grid.Column="1" Margin="8" Style="{StaticResource DialogTextBlockStyle}" />
+        <TextBlock Text="Комментарии" Grid.Row="6" Grid.Column="1" Margin="8" Style="{StaticResource DialogTextBlockStyle}" />
+        
+        <TextBox Text="{Binding Path=User.Name.LastName}" Grid.Row="1" Grid.Column="2" Margin="4" Style="{StaticResource TextBoxStyle}" IsReadOnly="True" />
+        <TextBox Text="{Binding Path=User.Name.FirstName}" Grid.Row="2" Grid.Column="2" Margin="4" Style="{StaticResource TextBoxStyle}" IsReadOnly="True" />
+        <TextBox Text="{Binding Path=User.Name.Patronymic}" Grid.Row="3" Grid.Column="2" Margin="4" Style="{StaticResource TextBoxStyle}" IsReadOnly="True" />
+        <TextBox Text="{Binding Path=User.Name.DisplayName}" Grid.Row="4" Grid.Column="2" Margin="4" Style="{StaticResource TextBoxStyle}" IsReadOnly="True" />
+        <TextBox Text="{Binding Path=User.Department}" Grid.Row="5" Grid.Column="2" Margin="4" Style="{StaticResource TextBoxStyle}" IsReadOnly="True" />
+        <TextBox Text="{Binding Path=User.Comments}" Grid.Row="6" Grid.Column="2" Grid.RowSpan="2" Margin="4" Style="{StaticResource TextBoxStyle}" IsReadOnly="True" />
+        
+        <Button Content="Выход" Command="{Binding LogoutCommand}" Grid.Row="0" Grid.Column="2" Width="100" Height="32" Margin="4" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ButtonInfoStyle}" />
+        
+        <Grid Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="4" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            
+            <TextBlock Text="Активность пользователя" Grid.Row="0" Grid.Column="0" Style="{StaticResource DialogTitleTextBlockStyle}" />
+
+            <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
+            <tk:DataGrid Style="{StaticResource DataGridDefaultStyle}" IsReadOnly="True" 
+                     Grid.Row="1" ItemsSource="{Binding Path=UserLogList}">
+                <tk:DataGrid.Columns>
+                    <tk:DataGridTextColumn Header="Тип" Width="120" Binding="{Binding Path=MessageTypeAsString}" />
+                    <tk:DataGridTextColumn Header="Дата" Width="80" Binding="{Binding Path=Date, StringFormat=\{0:dd.MM.yyyy HH:mm:ss\}}">
+                        <tk:DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                            </Style>
+                        </tk:DataGridTextColumn.ElementStyle>
+                    </tk:DataGridTextColumn>
+                    <tk:DataGridTextColumn Header="Сообщение" Width="520" Binding="{Binding Path=Message}" >
+                        <tk:DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                            </Style>
+                        </tk:DataGridTextColumn.ElementStyle>
+                    </tk:DataGridTextColumn>
+                </tk:DataGrid.Columns>
+            </tk:DataGrid>
+            <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
+
+        </Grid>
+        
+    </Grid>
+</UserControl>
