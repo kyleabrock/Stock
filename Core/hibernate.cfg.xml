@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
+<!-- Integrated Security=True -->
 <hibernate-configuration  xmlns="urn:nhibernate-configuration-2.2" >
   <session-factory name="NHibernate.Test">
     <property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
     <property name="connection.connection_string">
-      Data Source=homepc-acfd345b;Initial Catalog=Stock;User ID=sa;Password=Pf,hfkj
+      Data Source=Srvr-ossi-04611;Initial Catalog=Stock;User ID=sa;Password=Pf,hfkj
     </property>
     <property name="dialect">NHibernate.Dialect.MsSql2008Dialect</property>
   </session-factory>

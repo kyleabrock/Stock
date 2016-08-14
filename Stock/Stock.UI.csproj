@@ -1,0 +1,493 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{73FB4839-4E92-404B-8314-25C242AA49A5}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Stock.UI</RootNamespace>
+    <AssemblyName>Stock</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Themes\MainIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Controls.Input.Toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\..\..\Libraries\Extended WPF Toolkit Binaries .NET 3.5\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="ApplicationState.cs" />
+    <Compile Include="AutoCompleteFocusableBox.cs" />
+    <Compile Include="ControlsLibrary\Arc.cs" />
+    <Compile Include="ControlsLibrary\ControlWindowViewModel.cs" />
+    <Compile Include="ControlsLibrary\ProgressToAngleConverter.cs" />
+    <Compile Include="FocusAttacher.cs" />
+    <Compile Include="Utils\BoolToVisibilityConverter.cs" />
+    <Compile Include="ViewModels\Base\AsyncCommand.cs" />
+    <Compile Include="ViewModels\Base\AsyncCommandBase.cs" />
+    <Compile Include="ViewModels\Base\ITableBaseViewModel.cs" />
+    <Compile Include="ViewModels\Base\ITableComplexFilterViewModel.cs" />
+    <Compile Include="ViewModels\Base\ITableNavigationViewModel.cs" />
+    <Compile Include="ViewModels\Base\ITableSearchViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\OwnerAddViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\ReportSelectViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\StockUnitSearchViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\RepairAddViewModel.cs" />
+    <Compile Include="ViewModels\RepairTableViewModel.cs" />
+    <Compile Include="ViewModels\UserPageViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\LogTableViewModel.cs" />
+    <Compile Include="Views\Dialogs\CardAddView.xaml.cs">
+      <DependentUpon>CardAddView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Dialogs\CardAddViewModel.cs" />
+    <Compile Include="Views\Dialogs\ReportSelectView.xaml.cs">
+      <DependentUpon>ReportSelectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\StockUnitSearchView.xaml.cs">
+      <DependentUpon>StockUnitSearchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ControlsLibrary\ControlsWindow.xaml.cs">
+      <DependentUpon>ControlsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\DocumentAddView.xaml.cs">
+      <DependentUpon>DocumentAddView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Dialogs\DocumentAddViewModel.cs" />
+    <Compile Include="Views\Dialogs\OwnerAddView.xaml.cs">
+      <DependentUpon>OwnerAddView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Views\Dialogs\StaffAddView.xaml.cs">
+      <DependentUpon>StaffAddView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Dialogs\StaffAddViewModel.cs" />
+    <Compile Include="ViewModels\StatusTableViewModel.cs" />
+    <Compile Include="ViewModels\Base\TableSearchViewModel.cs" />
+    <Compile Include="ViewModels\Base\TableNavigationViewModel.cs" />
+    <Compile Include="ViewModels\Base\TableViewModel.cs" />
+    <Compile Include="Views\Dialogs\RepairAddView.xaml.cs">
+      <DependentUpon>RepairAddView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StaffTableView.xaml.cs">
+      <DependentUpon>StaffTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\StatusAddView.xaml.cs">
+      <DependentUpon>StatusAddView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Dialogs\StatusAddViewModel.cs" />
+    <Compile Include="Views\StatusTableView.xaml.cs">
+      <DependentUpon>StatusTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Dialogs\StockUnitViewModel.cs" />
+    <Compile Include="Views\Dialogs\StockUnitAddView.xaml.cs">
+      <DependentUpon>StockUnitAddView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\CardTableViewModel.cs" />
+    <Compile Include="ViewModels\DocumentTableViewModel.cs" />
+    <Compile Include="ViewModels\OwnerTableViewModel.cs" />
+    <Compile Include="ViewModels\StaffTableViewModel.cs" />
+    <Compile Include="Views\StockUnitTableView.xaml.cs">
+      <DependentUpon>StockUnitTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Base\RelayCommand.cs" />
+    <Compile Include="ViewModels\UnitTableViewModel.cs" />
+    <Compile Include="Utils\GendersToIconConverter.cs" />
+    <Compile Include="Utils\StatusTypesToColorConverter.cs" />
+    <Compile Include="Views\CardTableView.xaml.cs">
+      <DependentUpon>CardTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OwnerTableView.xaml.cs">
+      <DependentUpon>OwnerTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DocumentTableView.xaml.cs">
+      <DependentUpon>DocumentTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Base\ViewModelBase.cs" />
+    <Compile Include="ViewModels\StockUnitTableViewModel.cs" />
+    <Compile Include="Views\UnitTableView.xaml.cs">
+      <DependentUpon>UnitTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RepairTableView.xaml.cs">
+      <DependentUpon>RepairTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserPageView.xaml.cs">
+      <DependentUpon>UserPageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LogTableView.xaml.cs">
+      <DependentUpon>LogTableView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="ControlsLibrary\ListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlsLibrary\RadialProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlsLibrary\TabItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ControlsLibrary\TabControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ControlsLibrary\UserTabItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\CardAddView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\ReportSelectView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\StockUnitSearchView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ControlsLibrary\Brushes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlsLibrary\Button.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlsLibrary\ButtonPrimary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlsLibrary\ComboBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlsLibrary\ControlsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ControlsLibrary\DataGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlsLibrary\DatePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlsLibrary\PasswordBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlsLibrary\ProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlsLibrary\RichTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlsLibrary\TextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlsLibrary\ButtonSuccess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ControlsLibrary\ButtonInfo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ControlsLibrary\ButtonWarning.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ControlsLibrary\ButtonDanger.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ControlsLibrary\SwitchButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ControlsLibrary\MenuTabControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\DocumentAddView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Views\Dialogs\OwnerAddView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\StaffAddView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\RepairAddView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\StaffTableView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\StatusAddView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\StatusTableView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\StockUnitAddView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\StockUnitTableView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CardTableView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\OwnerTableView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DocumentTableView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UnitTableView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\RepairTableView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LoginView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UserPageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LogTableView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Themes\Exit.png" />
+    <Resource Include="Themes\Genders\Female.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Themes\Genders\Male.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Themes\Genders\Unknown.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Themes\MainIcon.png" />
+    <Resource Include="Themes\Settings.png" />
+    <Resource Include="Themes\Staff.png" />
+    <Resource Include="Themes\Status.png" />
+    <Resource Include="Themes\StatusTypes\Completed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Themes\StatusTypes\Delayed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Themes\StatusTypes\InWork.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Themes\StatusTypes\New.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Themes\User.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Stock.Core.csproj">
+      <Project>{A75AD08D-6ABD-4931-B056-410744BDF829}</Project>
+      <Name>Stock.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stock.Report\Stock.Report.csproj">
+      <Project>{937C7F7B-E89D-445F-858E-D32043BB4259}</Project>
+      <Name>Stock.Report</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Themes\Card.png" />
+    <Resource Include="Themes\Unit.png" />
+    <Resource Include="Themes\StockUnit.png" />
+    <Resource Include="Themes\Document.png" />
+    <Resource Include="Themes\Owner.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Themes\Find.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Themes\Bin.png" />
+    <Resource Include="Themes\Edit.png" />
+    <Resource Include="Themes\Filter.png" />
+    <Resource Include="Themes\Refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Themes\Move.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="Themes\SplashScreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Themes\MainIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Themes\Report.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Themes\Repair.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Themes\UserAcc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>Клиентский профиль .NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Установщик Windows 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

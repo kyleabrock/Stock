@@ -1,10 +1,23 @@
-namespace Core.Domain
+namespace Stock.Core.Domain
 {
     public class UnitType : EntityBase
     {
-        public virtual string TypeName { get; set; }
-        public virtual string Priority { get; set; }
-        public virtual string Comments { get; set; }
+        private string _typeName = "";
+        public virtual string TypeName
+        {
+            get { return _typeName; }
+            set { _typeName = value; }
+        }
+
+        public virtual int Priority { get; set; }
+
+        private string _comments = "";
+
+        public virtual string Comments
+        {
+            get { return _comments; }
+            set { _comments = value; }
+        }
 
         public override bool Equals(object obj)
         {
@@ -26,8 +39,8 @@ namespace Core.Domain
             unchecked
             {
                 var hashCode = Id.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Priority.GetHashCode());
                 hashCode = (hashCode * 397) ^ (TypeName != null ? TypeName.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Priority != null ? Priority.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (Comments != null ? Comments.GetHashCode() : 0);
                 return hashCode;
             }

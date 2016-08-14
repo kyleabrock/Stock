@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Stock.Core"
+                   namespace="Stock.Core.Domain">
+
+  <class name="Log">
+    <id name="Id" column="LogId">
+      <generator class="increment"/>
+    </id>
+    <property name="MessageType" not-null="true"/>
+    <property name="Date" not-null="true"/>
+    <property name="UserId" not-null="true"/>
+    <property name="UserName" not-null="true"/>
+    <property name="Message" not-null="true"/>
+  </class>
+
+</hibernate-mapping>

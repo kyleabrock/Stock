@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using Core.Domain;
+using System.Linq;
 using NHibernate;
+using Stock.Core.Domain;
 
-namespace Core.Repository
+namespace Stock.Core.Repository
 {
     public class StaffRepository : Repository<Staff>
     {
@@ -14,6 +15,19 @@ namespace Core.Repository
                     .OrderBy(x => x.Name.DisplayName)
                     .Asc
                     .List();
+            }
+        }
+
+        public IList<string> GetDepartments()
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                var result = session.QueryOver<Staff>()
+                    .Select(x => x.Department)
+                    .OrderBy(x => x.Department).Asc
+                    .List<string>();
+                
+                return new List<string>(result.Distinct());
             }
         }
     }

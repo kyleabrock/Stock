@@ -1,7 +1,18 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Stock.UI.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SettingsAppFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\\Srvr-ossi-04611\Документы\!Базы данных\Backup\StockSettings\</Value>
+    </Setting>
+    <Setting Name="RefreshPeriod" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
+    <Setting Name="TemplatesFolderPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Templates\</Value>
+    </Setting>
+    <Setting Name="ExportFolderPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Export\</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

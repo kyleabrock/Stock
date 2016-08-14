@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
-using Core.Domain;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using NHibernate;
+using Stock.Core.Domain;
 
-namespace Core.Repository
+namespace Stock.Core.Repository
 {
     public class Repository<T> : IRepository<T> where T : EntityBase
     {
@@ -11,6 +13,18 @@ namespace Core.Repository
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 return session.QueryOver<T>().List();
+            }
+        }
+
+        public IList<T> GetAll(Expression<Func<T, object>> orderByPath, bool asc = true)
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                var query = session.QueryOver<T>();
+                var result = asc ? query.OrderBy(orderByPath).Asc.List() 
+                    : query.OrderBy(orderByPath).Desc.List();
+                
+                return result;
             }
         }
 

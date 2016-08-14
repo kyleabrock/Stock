@@ -1,9 +1,9 @@
-﻿using Core.Domain;
-using NHibernate.Cfg;
+﻿using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using NUnit.Framework;
+using Stock.Core.Domain;
 
-namespace Core.Tests
+namespace Stock.Core.Tests
 {
     [TestFixture]
     class ExportSchemaTest
@@ -15,7 +15,7 @@ namespace Core.Tests
             cfg.Configure();
             cfg.AddAssembly(typeof(Unit).Assembly);
 
-            new SchemaExport(cfg).Execute(false, true, false);
+            new SchemaExport(cfg).Execute(true, false, false);
         }
 
         [Test]

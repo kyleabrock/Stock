@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using Core;
+using Stock.Core;
 
-namespace Stock.Utils
+namespace Stock.UI.Utils
 {
     [ValueConversion(typeof(Genders), typeof(string))]
     public class GendersToIconConverter : IValueConverter

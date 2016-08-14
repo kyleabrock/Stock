@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Stock.Core"
+                   namespace="Stock.Core.Domain">
+
+  <class name="Account">
+    <id name="Id" column="AccountId">
+      <generator class="increment"/>
+    </id>
+    <property name="Login" not-null="true"/>
+    <property name="Salt" not-null="true"/>
+    <property name="HashedPassword" not-null="true"/>
+    <one-to-one name="UserAcc" class="UserAcc" constrained="true"/>
+  </class>
+
+</hibernate-mapping>

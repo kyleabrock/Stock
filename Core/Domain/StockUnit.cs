@@ -1,19 +1,43 @@
 using System;
 using System.Collections.Generic;
 
-namespace Core.Domain
+namespace Stock.Core.Domain
 {
-    public class StockUnit : EntityBase
+    public class StockUnit : EntityBase, ILoggedEntity
     {
-        public virtual string StockNumber { get; set; }
-        public virtual string StockName { get; set; }
-        public virtual DateTime CreationDate { get; set; }
+        private string _stockNumber = "";
+        public virtual string StockNumber
+        {
+            get { return _stockNumber; }
+            set { _stockNumber = value; }
+        }
+
+        private string _stockName = "";
+        public virtual string StockName
+        {
+            get { return _stockName; }
+            set { _stockName = value; }
+        }
+
+        private DateTime _creationDate = DateTime.Now;
+        public virtual DateTime CreationDate
+        {
+            get { return _creationDate; }
+            set { _creationDate = value; }
+        }
+
         public virtual Owner Owner { get; set; }
         public virtual Card Card { get; set; }
         public virtual Status Status { get; set; }
         public virtual IList<Document> DocumentList { get; set; }
         public virtual IList<Unit> UnitList { get; set; }
-        public virtual string Comments { get; set; }
+        
+        private string _comments = "";
+        public virtual string Comments
+        {
+            get { return _comments; }
+            set { _comments = value; }
+        }
 
         public virtual void AddUnit(Unit item)
         {
@@ -23,7 +47,7 @@ namespace Core.Domain
             UnitList.Add(item);
         }
 
-        public virtual void AddUnit(IList<Unit> items)
+        public virtual void AddUnit(IEnumerable<Unit> items)
         {
             foreach (var item in items)
                 AddUnit(item);
@@ -34,10 +58,23 @@ namespace Core.Domain
             UnitList.Remove(item);
         }
 
-        public virtual void RemoveUnit(IList<Unit> items)
+        public virtual void RemoveUnit(IEnumerable<Unit> items)
         {
             foreach (var item in items)
                 RemoveUnit(item);
+        }
+
+        public virtual string LoggedMessage
+        {
+            get
+            {
+                string result = "Основное средство. ";
+                result += "ID: " + Id + "; ";
+                result += "Инв. №: " + StockNumber + "; ";
+                result += "Название: " + StockName + "; ";
+
+                return result;
+            }
         }
     }
 }

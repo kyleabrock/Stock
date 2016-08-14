@@ -1,4 +1,4 @@
-﻿namespace Stock
+﻿namespace Stock.UI
 {
     /// <summary>
     /// Логика взаимодействия для App.xaml

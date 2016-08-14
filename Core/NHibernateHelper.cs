@@ -1,11 +1,12 @@
-﻿using Core.Domain;
+﻿using System;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
+using Stock.Core.Domain;
 
-namespace Core
+namespace Stock.Core
 {
-    public class NHibernateHelper
+    public static class NHibernateHelper
     {
         private static ISessionFactory _sessionFactory;
 
@@ -28,6 +29,41 @@ namespace Core
         {
             return SessionFactory.OpenSession();
         }
+
+        public static bool TestConnection()
+        {
+            var configuration = new Configuration();
+            try
+            {
+                configuration.Configure();
+            }
+            catch (HibernateConfigException ex)
+            {
+                LastError = ex.Message;
+                return false;
+            }
+            try
+            {
+                configuration.AddAssembly(typeof(Unit).Assembly);
+            }
+            catch (MappingException ex)
+            {
+                LastError = ex.Message;
+                return false;
+            }
+            try
+            {
+                _sessionFactory = configuration.BuildSessionFactory();
+            }
+            catch (Exception ex)
+            {
+                LastError = ex.Message;
+                return false;
+            }
+            return true;
+        }
+
+        public static string LastError { get; set; }
 
         public static void ExportSchema()
         {

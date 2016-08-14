@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Core.Domain;
 using NHibernate;
+using Stock.Core.Domain;
 
-namespace Core.Repository
+namespace Stock.Core.Repository
 {
     public class OwnerRepository : Repository<Owner>
     {
