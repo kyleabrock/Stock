@@ -4,167 +4,158 @@
         xmlns:views="clr-namespace:Stock.UI.Views"
         Title="IT-Учет" Height="700" Width="1024" MinWidth="800" MinHeight="600" 
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource BootstrapGrayColor1}"
+        Background="{DynamicResource BootstrapGrayColor1}"
         Icon="Themes/MainIcon.ico">
+    <Window.Resources>
+        <Style x:Key="TabContentPresenterStyle" TargetType="{x:Type ContentPresenter}">
+            <Setter Property="Margin" Value="0,8,8,8" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ButtonForegroundBrush}" />
+            <Setter Property="TextBlock.FontFamily" Value="Segoe UI" />
+            <Setter Property="TextBlock.FontSize" Value="13.333" />
+        </Style>
+        <Style x:Key="MenuImage" TargetType="{x:Type Image}">
+            <Setter Property="Margin" Value="8" />
+            <Setter Property="Width" Value="24" />
+            <Setter Property="Height" Value="24" />
+        </Style>
+    </Window.Resources>
 
-    <Grid Name="MainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <TabControl Name="MainTabControl" SelectionChanged="MainTabControl_SelectionChanged" 
-                    Style="{StaticResource MenuTabControlStyle}">
-            <TabItem Name="UserAccTab" Style="{StaticResource MenuLoginTabItemStyle}" BorderThickness="0,0,0,1">
+                    Style="{DynamicResource MenuTabControlStyle}" Padding="4,0">
+            <TabItem Style="{DynamicResource MenuLoginTabItemStyle}" BorderThickness="0,0,0,1" Margin="0,0,4,0">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical" Width="132">
-                        <Border x:Name="ImageBorder" Margin="8,4" Width="64" Height="64">
+                        <Border Margin="8,4" Width="64" Height="64">
                             <Grid>
                                 <Border x:Name="MaskBorder" Background="White" BorderThickness="0" CornerRadius="32" />
                                 <StackPanel>
                                     <StackPanel.OpacityMask>
                                         <VisualBrush Visual="{Binding ElementName=MaskBorder}" />
                                     </StackPanel.OpacityMask>
-                                    <Image x:Name="UserImage" Width="64" Height="64" Source="{DynamicResource UserAccBitmapImage}" />
+                                    <Image Width="64" Height="64" Source="{Binding Path=UserImage}" />
                                 </StackPanel>
                             </Grid>
                         </Border>
-
-                        <ContentPresenter x:Name="UserNamePresenter" Content="Гость" Margin="0,8" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                          TextBlock.Foreground="{StaticResource ButtonForegroundBrush}"
+                        <ContentPresenter Content="{Binding Path=User.Name.DisplayName}" Margin="0,8" HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center" TextBlock.Foreground="{DynamicResource ButtonForegroundBrush}"
                                           TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="13.333"/>
-
                     </StackPanel>
                 </TabItem.Header>
-                <Grid x:Name="UserAccTabGrid" >
-                    <views:LoginView x:Name="LoginWindow" Visibility="Visible" IsEnabled="True" />
-                    <views:UserPageView x:Name="UserPageWindow" Visibility="Hidden" IsEnabled="False" />
+                <Grid>
+                    <views:UserPageView />
                 </Grid>
             </TabItem>
-            <TabItem Name="StockUnitTab" Style="{StaticResource MenuMainTabItemStyle}">
+            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0" IsSelected="True">
     			<TabItem.Header>
     				<StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
-                        <Image Width="24" Height="24" Source="{StaticResource StockUnitBitmapImage}" Margin="8" HorizontalAlignment="Left" />
-						<ContentPresenter Content="Комплекты" Margin="0,8,8,8" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                          TextBlock.Foreground="{StaticResource ButtonForegroundBrush}"
-                                          TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="13.333"/>
+                        <Image Source="{DynamicResource StockUnitBitmapImage}" Style="{StaticResource MenuImage}" />
+						<ContentPresenter Content="Комплекты" Style="{StaticResource TabContentPresenterStyle}"/>
                     </StackPanel>
                 </TabItem.Header>
-                <Grid x:Name="StockUnitTabGrid" >
-                    <views:StockUnitTableView x:Name="StockUnitWindow" />
+                <Grid Margin="0">
+                    <views:StockUnitTableView />
                 </Grid>
     		</TabItem>
-            <TabItem Name="CardTab" Style="{StaticResource MenuMainTabItemStyle}">
+            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
     			<TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Width="24" Height="24" Source="{StaticResource CardBitmapImage}" Margin="8" />
-                        <ContentPresenter Content="Карточки" Margin="0,8,8,8" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                          TextBlock.Foreground="{StaticResource ButtonForegroundBrush}"
-                                          TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="13.333"/>
+                        <Image Source="{DynamicResource CardBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <ContentPresenter Content="Карточки" Style="{StaticResource TabContentPresenterStyle}"/>
 					</StackPanel>			
 				</TabItem.Header>
-                <Grid x:Name="CardTabGrid">
-                    <views:CardTableView x:Name="CardWindow" />
+                <Grid>
+                    <views:CardTableView />
                 </Grid>
     		</TabItem>
-            <TabItem Name="DocumentTab" Style="{StaticResource MenuMainTabItemStyle}">
+            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
     			<TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Width="24" Height="24" Source="{StaticResource DocumentBitmapImage}" Margin="8" />
-                        <ContentPresenter Content="Документы" Margin="0,8,8,8" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                          TextBlock.Foreground="{StaticResource ButtonForegroundBrush}"
-                                          TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="13.333"/>
+                        <Image Source="{DynamicResource DocumentBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <ContentPresenter Content="Документы" Style="{StaticResource TabContentPresenterStyle}"/>
 					</StackPanel>		
 				</TabItem.Header>
-                <Grid x:Name="DocumentTabGrid">
-                    <views:DocumentTableView x:Name="DocumentWindow" />
+                <Grid>
+                    <views:DocumentTableView />
                 </Grid>
     		</TabItem>
-            <TabItem Name="UnitTab" Style="{StaticResource MenuMainTabItemStyle}">
+            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Width="24" Height="24" Source="{StaticResource UnitBitmapImage}" Margin="8" />
-                        <ContentPresenter Content="Устройства" Margin="0,8,8,8" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                          TextBlock.Foreground="{StaticResource ButtonForegroundBrush}"
-                                          TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="13.333"/>
+                        <Image Source="{DynamicResource UnitBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <ContentPresenter Content="Устройства" Style="{StaticResource TabContentPresenterStyle}" />
                     </StackPanel>
                 </TabItem.Header>
-                <Grid x:Name="UnitTabGrid">
-                    <views:UnitTableView x:Name="UnitWindow" />
+                <Grid>
+                    <views:UnitTableView />
                 </Grid>
             </TabItem>
-            <TabItem Name="RepairTab" Style="{StaticResource MenuMainTabItemStyle}">
+            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Width="24" Height="24" Source="{StaticResource RepairBitmapImage}" Margin="8" />
-                        <ContentPresenter Content="Ремонт" Margin="0,8,8,8" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                          TextBlock.Foreground="{StaticResource ButtonForegroundBrush}"
-                                          TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="13.333"/>
+                        <Image Source="{DynamicResource RepairBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <ContentPresenter Content="Ремонт" Style="{StaticResource TabContentPresenterStyle}" />
                     </StackPanel>
                 </TabItem.Header>
-                <Grid x:Name="RepairTabGrid">
-                    <views:RepairTableView x:Name="RepairWindow" />
+                <Grid>
+                    <views:RepairTableView />
                 </Grid>
             </TabItem>
-            <TabItem Name="OwnerTab" Style="{StaticResource MenuMainTabItemStyle}">
+            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Width="24" Height="24" Source="{StaticResource OwnerBitmapImage}" Margin="8" />
-                        <ContentPresenter Content="МОЛ" Margin="0,8,8,8" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                          TextBlock.Foreground="{StaticResource ButtonForegroundBrush}"
-                                          TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="13.333"/>
+                        <Image Source="{DynamicResource OwnerBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <ContentPresenter Content="МОЛ"  Style="{StaticResource TabContentPresenterStyle}" />
                     </StackPanel>
                 </TabItem.Header>
-                <Grid x:Name="OwnerTabGrid">
-                    <views:OwnerTableView x:Name="OwnerWindow" />
+                <Grid>
+                    <views:OwnerTableView />
                 </Grid>
             </TabItem>
-            <TabItem Name="StaffTab" Style="{StaticResource MenuMainTabItemStyle}">
+            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Width="24" Height="24" Source="{StaticResource StaffBitmapImage}" Margin="8" />
-                        <ContentPresenter Content="Сотрудники" Margin="0,8,8,8" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                          TextBlock.Foreground="{StaticResource ButtonForegroundBrush}"
-                                          TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="13.333"/>
+                        <Image Source="{DynamicResource StaffBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <ContentPresenter Content="Сотрудники" Style="{StaticResource TabContentPresenterStyle}" />
                     </StackPanel>
                 </TabItem.Header>
-                <Grid x:Name="StaffTabGrid">
-                    <views:StaffTableView x:Name="StaffWindow" />
+                <Grid>
+                    <views:StaffTableView />
                 </Grid>
             </TabItem>
-            <TabItem Name="StatusTab" Style="{StaticResource MenuMainTabItemStyle}">
+            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Width="24" Height="24" Source="{StaticResource StatusBitmapImage}" Margin="8" />
-                        <ContentPresenter Content="Статусы" Margin="0,8,8,8" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                          TextBlock.Foreground="{StaticResource ButtonForegroundBrush}"
-                                          TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="13.333"/>
+                        <Image Source="{DynamicResource StatusBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <ContentPresenter Content="Статусы" Style="{StaticResource TabContentPresenterStyle}" />
                     </StackPanel>
                 </TabItem.Header>
-                <Grid x:Name="StatusTabGrid">
-                    <views:StatusTableView x:Name="StatusWindow" />
+                <Grid>
+                    <views:StatusTableView />
                 </Grid>
             </TabItem>
-            <TabItem Name="LogTab" Style="{StaticResource MenuMainTabItemStyle}">
+            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Width="24" Height="24" Source="{StaticResource SettingsBitmapImage}" Margin="8" />
-                        <ContentPresenter Content="Журнал" Margin="0,8,8,8" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                          TextBlock.Foreground="{StaticResource ButtonForegroundBrush}"
-                                          TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="13.333"/>
+                        <Image Source="{DynamicResource SettingsBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <ContentPresenter Content="Журнал" Style="{StaticResource TabContentPresenterStyle}" />
                     </StackPanel>
                 </TabItem.Header>
-                <Grid x:Name="LogTabGrid">
-                    <views:LogTableView x:Name="LogWindow" />
+                <Grid>
+                    <views:LogTableView />
                 </Grid>
             </TabItem>
-            <TabItem Name="SettingsTab" Style="{StaticResource MenuMainTabItemStyle}">
+            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Width="24" Height="24" Source="{StaticResource SettingsBitmapImage}" Margin="8" />
-                        <ContentPresenter Content="Настройки" Margin="0,8,8,8" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                          TextBlock.Foreground="{StaticResource ButtonForegroundBrush}"
-                                          TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="13.333"/>
+                        <Image Source="{DynamicResource SettingsBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <ContentPresenter Content="Настройки" Style="{StaticResource TabContentPresenterStyle}" />
                     </StackPanel>
                 </TabItem.Header>
-                <Grid x:Name="SettingsTabGrid">
-                    <views:SettingsView x:Name="SettingsWindow" />
+                <Grid>
+                    <views:SettingsView />
                 </Grid>
             </TabItem>
         </TabControl>

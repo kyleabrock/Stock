@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using NHibernate;
 using Stock.Core.Domain;
+using Stock.Core.Filter;
+using IFilter = Stock.Core.Filter.IFilter;
 
 namespace Stock.Core.Repository
 {
@@ -34,6 +36,37 @@ namespace Stock.Core.Repository
             {
                 return session.Get<T>(id);
             }
+        }
+
+        public virtual IList<T> GetAllAsTableView()
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                var result = session.QueryOver<T>().List();
+                InitializeTableValues(result);
+                return result;
+            }
+        }
+
+        public virtual IList<T> Find(IFilter filter)
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                var criteria = filter.Criteria;
+                if (criteria != null)
+                {
+                    var result = criteria.GetExecutableCriteria(session).List<T>();
+                    InitializeTableValues(result);
+                    return result;
+                }
+
+                return GetAllAsTableView();
+            }
+        }
+
+        protected virtual void InitializeTableValues(IEnumerable<T> items)
+        {
+            
         }
 
         public void Save(T arg)

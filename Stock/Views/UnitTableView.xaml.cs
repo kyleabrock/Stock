@@ -10,7 +10,7 @@ namespace Stock.UI.Views
     /// <summary>
     /// Логика взаимодействия для ResourceFlowWindow.xaml
     /// </summary>
-    public partial class UnitTableView
+    public partial class UnitTableView : ITableView
     {
         public UnitTableView()
         {

@@ -3,7 +3,7 @@
     /// <summary>
     /// Логика взаимодействия для ResourceFlowWindow.xaml
     /// </summary>
-    public partial class LogTableView
+    public partial class LogTableView : ITableView
     {
         public LogTableView()
         {

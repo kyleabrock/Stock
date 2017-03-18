@@ -6,22 +6,17 @@
     xmlns:tk="http://schemas.microsoft.com/wpf/2008/toolkit"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:dialogs="clr-namespace:Stock.UI.ViewModels.Dialogs" xmlns:utils="clr-namespace:Stock.UI.Utils"
-	mc:Ignorable="d"
-	x:Class="Stock.UI.Views.Dialogs.CardAddView"
-	x:Name="Window"
-	Title="Карточка"
-	Width="800" Height="600" 
-    MinWidth="640" MinHeight="480"
-    ResizeMode="CanResizeWithGrip"
-    WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+	mc:Ignorable="d" x:Class="Stock.UI.Views.Dialogs.CardAddView"
+	x:Name="Window" Title="Карточка"
+	Width="800" Height="600" MinWidth="640" MinHeight="480"
+    ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
     Icon="../../Themes/MainIcon.ico">
     <Window.DataContext>
         <dialogs:CardAddViewModel x:Name="ViewModel" />
     </Window.DataContext>
     <Window.Resources>
-        <utils:StatusTypesToColorConverter x:Key="ColorConverter" />
+        <utils:StatusTypeToColorConverter x:Key="ColorConverter" />
     </Window.Resources>
-
 
     <Grid Margin="4">
         <Grid.ColumnDefinitions>
@@ -42,45 +37,45 @@
         <!-- Title -->
 
         <!-- Main form -->
-        <TextBlock Grid.Column="0" Margin="4" Style="{StaticResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Column="0" Margin="4" Style="{DynamicResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="en-US" Text="ID" />
         </TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="0" Margin="4" Style="{StaticResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="4" Style="{DynamicResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="ru-RU" Text="Номер"/>
         </TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="0" Margin="4" Style="{StaticResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="4" Style="{DynamicResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="ru-RU" Text="Название"/>
         </TextBlock>
-        <TextBlock Grid.Row="0" Grid.Column="2" Margin="4" Style="{StaticResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Row="0" Grid.Column="2" Margin="4" Style="{DynamicResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="ru-RU" Text="По-умолчанию"/>
         </TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="2" Margin="4" Style="{StaticResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Row="1" Grid.Column="2" Margin="4" Style="{DynamicResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="ru-RU" Text="Ввод в экспл."/>
         </TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="2" Margin="4" Style="{StaticResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Row="2" Grid.Column="2" Margin="4" Style="{DynamicResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="ru-RU" Text="Ответственный"/>
         </TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="2" Margin="4" Style="{StaticResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Row="3" Grid.Column="2" Margin="4" Style="{DynamicResource DialogTextBlockStyle}" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="ru-RU" Text="Комментарии"/>
         </TextBlock>
 
-        <TextBox Text="{Binding Path=Card.Id}" Grid.Row="0" Grid.Column="1" Margin="4" IsReadOnly="True" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Center"/>
-        <TextBox x:Name="CardNumberTb" Text="{Binding Path=Card.CardNumber}" Grid.Row="1" Grid.Column="1" Margin="4" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Center"/>
-        <TextBox Text="{Binding Path=Card.CardName}" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Margin="4" 
-                 TextWrapping="Wrap" VerticalAlignment="Stretch" Style="{StaticResource TextBoxStyle}" VerticalScrollBarVisibility="Auto"/>
-        <ToggleButton Grid.Row="0" Grid.Column="3" IsChecked="{Binding Path=Card.IsDefault}"
-                      HorizontalAlignment="Left" Margin="4,4,0,4" Style="{StaticResource SwitchButtonStyle}" Height="24" VerticalAlignment="Center" />
-        <xctk:DateTimePicker x:Name="CreationDateDtPk" Grid.Row="1" Grid.Column="3" Value="{Binding Path=Card.CreationDate}"
+        <TextBox Text="{Binding Path=Card.Id}" Grid.Row="0" Grid.Column="1" Margin="4" IsEnabled="False" Style="{DynamicResource TextBoxStyle}" VerticalAlignment="Center"/>
+        <TextBox x:Name="CardNumberTb" Text="{Binding Path=Card.CardNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="4" Style="{DynamicResource TextBoxStyle}" VerticalAlignment="Center"/>
+        <TextBox Text="{Binding Path=Card.CardName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Margin="4" 
+                 TextWrapping="Wrap" VerticalAlignment="Stretch" Style="{DynamicResource TextBoxStyle}" VerticalScrollBarVisibility="Auto"/>
+        <ToggleButton Grid.Row="0" Grid.Column="3" IsChecked="{Binding Path=Card.IsDefault, UpdateSourceTrigger=PropertyChanged}"
+                      HorizontalAlignment="Left" Margin="4,4,0,4" Style="{DynamicResource SwitchButtonStyle}" Height="24" VerticalAlignment="Center" />
+        <xctk:DateTimePicker x:Name="CreationDateDtPk" Grid.Row="1" Grid.Column="3" Value="{Binding Path=Card.CreationDate, UpdateSourceTrigger=PropertyChanged}"
                              FontSize="13.333" TimePickerVisibility="Collapsed" Format="ShortDate" ShowButtonSpinner="False" 
-                             Margin="4" Style="{StaticResource DateTimePickerStyle}" />
-        <ComboBox x:Name="StaffCb" Grid.Row="2" Grid.Column="3" ItemsSource="{Binding Path=StaffList}" SelectedItem="{Binding Path=Card.Staff}"
-                  FontSize="13.333" DisplayMemberPath="Name.DisplayName" Margin="4" Style="{StaticResource ComboBoxStyle}" />
+                             Margin="4" Style="{DynamicResource DateTimePickerStyle}" />
+        <ComboBox x:Name="StaffCb" Grid.Row="2" Grid.Column="3" ItemsSource="{Binding Path=StaffList}" SelectedItem="{Binding Path=Card.Staff, UpdateSourceTrigger=PropertyChanged}"
+                  FontSize="13.333" DisplayMemberPath="Name.DisplayName" Margin="4" Style="{DynamicResource ComboBoxStyle}" />
         <TextBox Text="{Binding Path=Card.Comments}" Grid.Row="3" Grid.Column="3" VerticalAlignment="Stretch"
-                 Style="{StaticResource TextBoxStyle}" Margin="4" TextWrapping="Wrap" Grid.RowSpan="2"/>
+                 Style="{DynamicResource TextBoxStyle}" Margin="4" TextWrapping="Wrap" Grid.RowSpan="2"/>
         
         <!-- Datagrid -->
-        <TabControl Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Margin="4" Style="{StaticResource TabControlDefaultStyle}">
-            <TabItem Header="Состав" Style="{StaticResource TabItemDefaultStyle}">
+        <TabControl Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Margin="4" Style="{DynamicResource TabControlDefaultStyle}">
+            <TabItem Header="Состав" Style="{DynamicResource TabItemDefaultStyle}">
                 <Grid Margin="4,8">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="32"/>
@@ -88,19 +83,19 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Horizontal">
-                        <Button Margin="4,0" Style="{StaticResource AddButtonNormalStyle}" Click="StockUnitAddButton_OnClick" />
-                        <Button Margin="4,0" Style="{StaticResource DeleteButtonSmallStyle}" Command="{Binding RemoveStockUnitCommand}" />
-                        <Button Margin="4,0" Style="{StaticResource ReportButtonSmallStyle}" Command="{Binding ExportStockUnitCommand}" />
+                        <Button Margin="4,0" Style="{DynamicResource AddButtonNormalStyle}" Command="{Binding AddCommand}" />
+                        <Button Margin="4,0" Style="{DynamicResource DeleteButtonSmallStyle}" Command="{Binding RemoveCommand}" />
+                        <Button Margin="4,0" Style="{DynamicResource ReportButtonSmallStyle}" Command="{Binding ExportCommand}" />
                     </StackPanel>
 
-                    <tk:DataGrid Grid.Row="1" Style="{StaticResource DataGridDefaultStyle}" Margin="4"
+                    <tk:DataGrid Grid.Row="1" Style="{DynamicResource DataGridDefaultStyle}" Margin="4"
                                  ItemsSource="{Binding StockUnitList}" SelectedItem="{Binding SelectedItem}" IsReadOnly="True">
                         <tk:DataGrid.Columns>
                             <tk:DataGridTemplateColumn Header="Статус" Width="76" SortMemberPath="Status.StatusName">
                                 <tk:DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Border Margin="4" Background="{Binding Path=Status.StatusType, Converter={StaticResource ColorConverter}}" CornerRadius="6" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Path=Status.StatusName}" Margin="4" FontSize="10" Foreground="{StaticResource ButtonForegroundBrush}" HorizontalAlignment="Center" />
+                                            <TextBlock Text="{Binding Path=Status.StatusName}" Margin="4" FontSize="10" Foreground="{DynamicResource ButtonForegroundBrush}" HorizontalAlignment="Center" />
                                         </Border>
                                     </DataTemplate>
                                 </tk:DataGridTemplateColumn.CellTemplate>
@@ -113,7 +108,7 @@
                     </tk:DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Файлы" Style="{StaticResource TabItemDefaultStyle}">
+            <TabItem Header="Файлы" Style="{DynamicResource TabItemDefaultStyle}">
                 <Grid></Grid>
             </TabItem>
         </TabControl>
@@ -121,9 +116,9 @@
         <!-- Dialog buttons -->
         <StackPanel Grid.Column="3" Grid.Row="6" Height="32" Margin="0" 
                     Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-            <Button Content="Сохранить" IsDefault="True" Style="{StaticResource ButtonDefaultStyle}" 
+            <Button Content="Сохранить" IsDefault="True" Style="{DynamicResource ButtonDefaultStyle}" 
                     Command="{Binding SaveCommand}" Margin="4,0" Width="100"/>
-            <Button Content="Отмена" IsCancel="True" Style="{StaticResource ButtonDefaultStyle}" 
+            <Button Content="Отмена" IsCancel="True" Style="{DynamicResource ButtonDefaultStyle}" 
                     Command="{Binding CloseCommand}" Margin="4,0" Width="100"/>
         </StackPanel>
 

@@ -9,7 +9,7 @@ namespace Stock.UI.Views
     /// <summary>
     /// Логика взаимодействия для ResourceFlowWindow.xaml
     /// </summary>
-    public partial class StatusTableView
+    public partial class StatusTableView : ITableView
     {
         public StatusTableView()
         {
@@ -29,6 +29,15 @@ namespace Stock.UI.Views
                 ViewModel.AddAction = DisplayAddDialog;
             if (ViewModel.EditAction == null)
                 ViewModel.EditAction = DisplayEditDialog;
+            if (ViewModel.ShowInfoMessage == null)
+                ViewModel.ShowInfoMessage = (text, caption) => MessageBox.Show(text, caption);
+            if (ViewModel.ShowDialogMessage == null)
+            {
+                const MessageBoxButton buttons = MessageBoxButton.OKCancel;
+                const MessageBoxResult result = MessageBoxResult.OK;
+                ViewModel.ShowDialogMessage =
+                    (text, caption) => MessageBox.Show(text, caption, buttons) == result;
+            }
         }
 
         private void DisplayAddDialog()

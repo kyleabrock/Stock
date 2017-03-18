@@ -1,30 +1,14 @@
 ﻿<Application x:Class="Stock.UI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:utils="clr-namespace:Stock.UI.Utils"
-             StartupUri="MainWindow.xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:utils="clr-namespace:Stock.UI.Utils"
+             Startup="ApplicationStart"
+             ShutdownMode="OnMainWindowClose">
+     
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="ControlsLibrary/Brushes.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/TextBox.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/RichTextBox.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/PasswordBox.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/Progressbar.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/Combobox.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/Button.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/ButtonPrimary.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/ButtonInfo.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/ButtonSuccess.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/ButtonWarning.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/ButtonDanger.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/SwitchButton.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/DataGrid.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/DatePicker.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/MenuTabControl.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/TabItem.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/TabControl.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/RadialProgressBar.xaml" />
-                <ResourceDictionary Source="ControlsLibrary/ListView.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Blake.Controls;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <!-- Converters -->
@@ -33,168 +17,14 @@
 
             <!-- Images -->
 
-            <BitmapImage x:Key="BinBitmapImage" UriSource="Themes/Bin.png" />
-            <BitmapImage x:Key="CardBitmapImage" UriSource="Themes/Card.png" />
-            <BitmapImage x:Key="DocumentBitmapImage" UriSource="Themes/Document.png" />
-            <BitmapImage x:Key="EditBitmapImage" UriSource="Themes/Edit.png" />
-            <BitmapImage x:Key="FilterBitmapImage" UriSource="Themes/Filter.png" />
-            <BitmapImage x:Key="SearchBitmapImage" UriSource="Themes/Find.png" />
             <BitmapImage x:Key="MainIconBitmapImage" UriSource="Themes/MainIcon.png" />
-            <BitmapImage x:Key="MoveBitmapImage" UriSource="Themes/Move.png" />
-            <BitmapImage x:Key="OwnerBitmapImage" UriSource="Themes/Owner.png" />
-            <BitmapImage x:Key="RefreshBitmapImage" UriSource="Themes/Refresh.png" />
-            <BitmapImage x:Key="RepairBitmapImage" UriSource="Themes/Repair.png" />
-            <BitmapImage x:Key="ReportBitmapImage" UriSource="Themes/Report.png" />
-            <BitmapImage x:Key="SettingsBitmapImage" UriSource="Themes/Settings.png" />
-            <BitmapImage x:Key="StaffBitmapImage" UriSource="Themes/Staff.png" />
-            <BitmapImage x:Key="StatusBitmapImage" UriSource="Themes/Status.png" />
-            <BitmapImage x:Key="StockUnitBitmapImage" UriSource="Themes/StockUnit.png" />
-            <BitmapImage x:Key="UnitBitmapImage" UriSource="Themes/Unit.png" />            
-            <BitmapImage x:Key="UserBitmapImage" UriSource="Themes/User.png" />
-            <BitmapImage x:Key="UserAccBitmapImage" UriSource="Themes/UserAcc.png" />
+            <Image x:Key="MainIconImage" Source="{DynamicResource MainIconBitmapImage}" Width="16" Height="16" x:Shared="false" />
 
-            <Image x:Key="BinImage" Source="{StaticResource BinBitmapImage}" Width="16" Height="16" x:Shared="false" />
-            <Image x:Key="CardImage" Source="{StaticResource CardBitmapImage}" Width="24" Height="24" x:Shared="false" />
-            <Image x:Key="DocumentImage" Source="{StaticResource DocumentBitmapImage}" Width="24" Height="24" x:Shared="false" />
-            <Image x:Key="EditImage" Source="{StaticResource EditBitmapImage}" Width="16" Height="16" x:Shared="false" />
-            <Image x:Key="FilterImage" Source="{StaticResource FilterBitmapImage}" Width="16" Height="16" x:Shared="false" />
-            <Image x:Key="SearchImage" Source="{StaticResource SearchBitmapImage}" Width="16" Height="16" x:Shared="false" />
-            <Image x:Key="MainIconImage" Source="{StaticResource MainIconBitmapImage}" Width="16" Height="16" x:Shared="false" />
-            <Image x:Key="MoveImage" Source="{StaticResource MoveBitmapImage}" Width="16" Height="16" x:Shared="false" />
-            <Image x:Key="OwnerImage" Source="{StaticResource OwnerBitmapImage}" Width="24" Height="24" x:Shared="false" />
-            <Image x:Key="RefreshImage" Source="{StaticResource RefreshBitmapImage}" Width="16" Height="16" x:Shared="false" />
-            <Image x:Key="RepairImage" Source="{StaticResource RepairBitmapImage}" Width="24" Height="24" x:Shared="false" />
-            <Image x:Key="ReportImage" Source="{StaticResource ReportBitmapImage}" Width="16" Height="16" x:Shared="false" />
-            <Image x:Key="SettingsImage" Source="{StaticResource SettingsBitmapImage}" Width="24" Height="24" x:Shared="false" />
-            <Image x:Key="StaffImage" Source="{StaticResource StaffBitmapImage}" Width="24" Height="24" x:Shared="false" />
-            <Image x:Key="StatusImage" Source="{StaticResource StatusBitmapImage}" Width="24" Height="24" x:Shared="false" />
-            <Image x:Key="StockUnitImage" Source="{StaticResource StockUnitBitmapImage}" Width="24" Height="24" x:Shared="false" />
-            <Image x:Key="UnitImage" Source="{StaticResource UnitBitmapImage}" Width="24" Height="24" x:Shared="false" />
-            <Image x:Key="UserImage" Source="{StaticResource UserBitmapImage}" Width="16" Height="16" x:Shared="false" />
-            <Image x:Key="UserAccImage" Source="{StaticResource UserAccBitmapImage}" Width="24" Height="24" x:Shared="false" />
-
-            <!-- Stock Styles: Main Styles -->
-            
-            <Style x:Key="AddButtonNormalStyle" BasedOn="{StaticResource ButtonDefaultStyle}" TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="100" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Content" Value="Добавить" />
-                <Setter Property="ToolTip" Value="Добавить" />
-            </Style>
-
-            <Style x:Key="EditButtonNormalStyle" BasedOn="{StaticResource ButtonInfoStyle}" TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="100" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Content" Value="Правка" />
-                <Setter Property="ToolTip" Value="Правка" />
-            </Style>
-
-            <Style x:Key="EditButtonSmallStyle" BasedOn="{StaticResource ButtonInfoStyle}" TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="32" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Content" Value="{StaticResource EditImage}" />
-                <Setter Property="ToolTip" Value="Правка" />
-            </Style>
-
-            <Style x:Key="DeleteButtonNormalStyle" BasedOn="{StaticResource ButtonDangerStyle}" TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="100" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Content" Value="Удалить" />
-                <Setter Property="ToolTip" Value="Удалить" />
-            </Style>
-
-            <Style x:Key="DeleteButtonSmallStyle" BasedOn="{StaticResource ButtonDangerStyle}" TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="32" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Content" Value="{StaticResource BinImage}" />
-                <Setter Property="ToolTip" Value="Удалить" />
-            </Style>
-
-            <Style x:Key="RefreshButtonNormalStyle" BasedOn="{StaticResource ButtonDefaultStyle}" TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="100" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Content" Value="Обновить" />
-                <Setter Property="ToolTip" Value="Обновить" />
-            </Style>
-
-            <Style x:Key="RefreshButtonSmallStyle" BasedOn="{StaticResource ButtonDefaultStyle}" TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="32" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Content" Value="{StaticResource RefreshImage}" />
-                <Setter Property="ToolTip" Value="Обновить" />
-            </Style>
-
-            <Style x:Key="FilterButtonNormalStyle" BasedOn="{StaticResource ButtonDefaultStyle}" TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="100" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Content" Value="Фильтр" />
-                <Setter Property="ToolTip" Value="Фильтр" />
-            </Style>
-
-            <Style x:Key="FilterButtonSmallStyle" BasedOn="{StaticResource ButtonDefaultStyle}" TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="32" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Content" Value="{StaticResource FilterImage}" />
-                <Setter Property="ToolTip" Value="Фильтр" />
-            </Style>
-
-            <Style x:Key="SearchButtonNormalStyle" BasedOn="{StaticResource ButtonInfoStyle}" TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="100" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Content" Value="Поиск" />
-                <Setter Property="ToolTip" Value="Поиск" />
-            </Style>
-
-            <Style x:Key="SearchButtonSmallStyle" BasedOn="{StaticResource ButtonInfoStyle}" TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="32" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Content" Value="{StaticResource SearchImage}" />
-                <Setter Property="ToolTip" Value="Поиск" />
-            </Style>
-
-            <Style x:Key="ReportButtonNormalStyle" BasedOn="{StaticResource ButtonInfoStyle}" TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="100" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Content" Value="Отчеты" />
-                <Setter Property="ToolTip" Value="Отчеты" />
-            </Style>
-
-            <Style x:Key="ReportButtonSmallStyle" BasedOn="{StaticResource ButtonInfoStyle}" TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="32" />
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Content" Value="{StaticResource ReportImage}" />
-                <Setter Property="ToolTip" Value="Отчеты" />
-            </Style>
-
-            <!-- Stock Styles: TextBlock Style -->
-
-            <Style x:Key="DialogTitleTextBlockStyle" TargetType="{x:Type TextBlock}">
-                <Setter Property="Foreground" Value="{StaticResource BootstrapGrayColor3}" />
-                <Setter Property="Margin" Value="4" />
-                <Setter Property="FontSize" Value="21.333" />
-                <Setter Property="FontWeight" Value="Bold" />
+            <Style x:Key="ElementStyle"  TargetType="{x:Type TextBlock}">
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
-
-            <Style x:Key="DialogTextBlockStyle" TargetType="{x:Type TextBlock}">
-                <Setter Property="Margin" Value="4" />
-                <Setter Property="FontSize" Value="13.333" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-            </Style>
-
-            <Style x:Key="DialogTextBoxStyle" TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="4" />
-                <Setter Property="FontSize" Value="13.333" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-            </Style>
-
-            <Style x:Key="WindowTitleBlockStyle" TargetType="{x:Type TextBlock}">
-                <Setter Property="Margin" Value="4" />
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="FontSize" Value="21.333" />
-                <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="Foreground" Value="{StaticResource BootstrapGrayColor3}" />
+            <Style x:Key="EditingTextBoxStyle" TargetType="{x:Type TextBox}">
+                <Setter Property="VerticalContentAlignment" Value="Center" />
             </Style>
 
         </ResourceDictionary>

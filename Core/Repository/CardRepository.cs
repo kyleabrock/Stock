@@ -6,6 +6,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using Stock.Core.Domain;
 using Stock.Core.Filter;
+using Stock.Core.Filter.FilterParams;
 
 namespace Stock.Core.Repository
 {
@@ -48,35 +49,15 @@ namespace Stock.Core.Repository
             }
         }
 
-        public IList<Card> GetAllByComplexFilter(IFilterBase filter)
+        protected override void InitializeTableValues(IEnumerable<Card> items)
         {
-            using (ISession session = NHibernateHelper.OpenSession())
+            foreach (var item in items)
             {
-                var mainCriteria = session.CreateCriteria<Card>();
-
-                var cardFilter = filter as CardFilter;
-                if (cardFilter != null)
-                {
-                    if (cardFilter.Staff != null && cardFilter.Department == null)
-                        mainCriteria.CreateCriteria("Staff").Add(Restrictions.Eq("Id", cardFilter.Staff.Id));
-                    if (cardFilter.Staff != null && cardFilter.Department != null)
-                    {
-                        mainCriteria.CreateCriteria("Staff")
-                            .Add(Restrictions.Eq("Id", cardFilter.Staff.Id))
-                            .Add(Restrictions.Eq("Department", cardFilter.Department));
-                    }
-                    if (cardFilter.Staff == null && cardFilter.Department != null)
-                        mainCriteria.CreateCriteria("Staff").Add(Restrictions.Eq("Department", cardFilter.Department));
-                }
-
-                var result = mainCriteria.List<Card>();
-                foreach (var item in result)
-                    NHibernateUtil.Initialize(item.Staff);
-
-                return result;
+                NHibernateUtil.Initialize(item.Staff);
+                NHibernateUtil.Initialize(item.StockUnitList);
             }
         }
-
+        
         public Card GetDefaultCard()
         {
             using (ISession session = NHibernateHelper.OpenSession())

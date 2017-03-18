@@ -5,11 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:tk="http://schemas.microsoft.com/wpf/2008/toolkit"
              xmlns:viewModels="clr-namespace:Stock.UI.ViewModels"
+             xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+             xmlns:utils="clr-namespace:Stock.UI.Utils"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1000" Background="{StaticResource DefaultBackground}">
+             d:DesignHeight="700" d:DesignWidth="1000" Background="{DynamicResource DefaultBackground}">
     <UserControl.DataContext>
         <viewModels:CardTableViewModel x:Name="ViewModel" />
     </UserControl.DataContext>
+    <UserControl.Resources>
+        <utils:IntToVisibilityConverter x:Key="IntToVisibilityConverter" />
+    </UserControl.Resources>
     
     <Grid>
         <Grid.RowDefinitions>
@@ -17,63 +22,122 @@
             <RowDefinition Height="48"/>
             <RowDefinition Height="16"/>
             <RowDefinition />
+            <RowDefinition Height="24" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="0" x:Name="FilterGridColumn"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Карточки" Grid.Row="0" Style="{StaticResource WindowTitleBlockStyle}" />
+        <TextBlock Text="Карточки" Grid.Row="0" Style="{DynamicResource WindowTitleBlockStyle}" />
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Height="32" VerticalAlignment="Bottom">
-            <Button Margin="4,0" Style="{StaticResource AddButtonNormalStyle}" Command="{Binding AddCommand}" />
-            <Button Margin="4,0" Style="{StaticResource EditButtonSmallStyle}" Command="{Binding EditCommand}" />
-            <Button Margin="4,0" Style="{StaticResource DeleteButtonSmallStyle}" Command="{Binding DeleteCommand}" />
-            <Button Margin="4,0" Style="{StaticResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
-            <Button Margin="4,0" Style="{StaticResource FilterButtonSmallStyle}" Click="FilterButton_OnClick" />
+            <Button Margin="4,0" Style="{DynamicResource AddButtonNormalStyle}" Command="{Binding AddCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource EditButtonSmallStyle}" Command="{Binding EditCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource DeleteButtonSmallStyle}" Command="{Binding DeleteCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource FilterButtonSmallStyle}" Click="FilterButton_OnClick" />
         </StackPanel>
         <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{StaticResource TextBoxStyle}" />
+            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle}" />
             <Button Margin="4,0" Command="{Binding SearchCommand}" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" 
-                    Style="{StaticResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
+                    Style="{DynamicResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
         </Grid>
 
         <!-- Filter Grid -->
-        <StackPanel Orientation="Vertical" Background="{StaticResource BootstrapGrayColor5}" Grid.Column="1" Grid.Row="3" Width="200">
-            <TextBlock Style="{StaticResource DialogTextBlockStyle}">
-                <Run Language="ru-RU">Отдел</Run>
+        <StackPanel Orientation="Vertical" Background="{DynamicResource BootstrapGrayColor5}" Grid.Column="1" Grid.Row="3" Width="200">
+            <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
+                <Run Language="ru-RU">Дата с</Run>
             </TextBlock>
-            <ComboBox ItemsSource="{Binding Path=FilterDepartmentList}" SelectedItem="{Binding Path=ComplexFilter.Department}"
-                      Margin="4" Height="32"
-                      Style="{StaticResource ComboBoxStyle}"  />
+            <xctk:DateTimePicker Value="{Binding Path=ComplexFilterParams.StartDateTime}" TimePickerVisibility="Collapsed" Format="ShortDate" 
+                             ShowButtonSpinner="False" Margin="4,0,4,4" Style="{DynamicResource DateTimePickerStyle}" VerticalAlignment="Center"/>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Margin="4" Style="{StaticResource DialogTextBlockStyle}">
-                <Run Language="ru-RU">Ответственный</Run>
+            <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
+                <Run Language="ru-RU">Дата по</Run>
             </TextBlock>
-            <ComboBox ItemsSource="{Binding Path=FilterStaffList}" SelectedItem="{Binding Path=ComplexFilter.Staff}" 
-                      DisplayMemberPath="Name.DisplayName" Grid.Row="1" Grid.Column="1" Margin="4" Height="32"
-                      Style="{StaticResource ComboBoxStyle}" />
+            <xctk:DateTimePicker Value="{Binding Path=ComplexFilterParams.EndDateTime}" TimePickerVisibility="Collapsed" Format="ShortDate" 
+                             ShowButtonSpinner="False" Margin="4,0,4,4" Style="{DynamicResource DateTimePickerStyle}" VerticalAlignment="Center"/>
 
-            <Button Content="Применить" Style="{StaticResource ButtonInfoStyle}" Margin="4" Height="32" Command="{Binding FilterCommand}" />
-            <Button Content="Сброс" Style="{StaticResource ButtonDefaultStyle}" Margin="4" Height="32" Command="{Binding ClearFilterCommand}" />
+            <Expander Margin="4">
+                <Expander.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Отдел" FontSize="13.333" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,2" />
+                        <Grid HorizontalAlignment="Right" Margin="8,0,0,0" Width="20" Height="24" Visibility="{Binding Path=FilterDepartmentCount, Converter={StaticResource IntToVisibilityConverter}}">
+                            <Ellipse Fill="{DynamicResource BootstrapColor2}" Margin="0,2" />
+                            <TextBlock Text="{Binding Path=FilterDepartmentCount}" FontSize="10" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource DefaultBackground}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander.Header>
+                <ListBox ItemsSource="{Binding Path=FilterDepartmentCheckList}" Height="150" Margin="4">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding Path=IsChecked}" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Path=Item}" Style="{DynamicResource DialogTextBlockStyle}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Expander>
+
+            <Expander Margin="4">
+                <Expander.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Ответственный" FontSize="13.333" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,2" />
+                        <Grid HorizontalAlignment="Right" Margin="8,0,0,0" Width="20" Height="24" Visibility="{Binding Path=FilterStaffCount, Converter={StaticResource IntToVisibilityConverter}}">
+                            <Ellipse Fill="{DynamicResource BootstrapColor2}" Margin="0,2" />
+                            <TextBlock Text="{Binding Path=FilterStaffCount}" FontSize="10" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource DefaultBackground}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander.Header>
+                <ListBox ItemsSource="{Binding Path=FilterStaffCheckList}" Height="150" Margin="4">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding Path=IsChecked}" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Path=Item.Name.DisplayName}" Style="{DynamicResource DialogTextBlockStyle}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Expander>
+
+            <Button Content="Применить" Style="{DynamicResource ButtonInfoStyle}" Margin="4" Height="32" Command="{Binding FilterCommand}" />
+            <Button Content="Сброс" Style="{DynamicResource ButtonDefaultStyle}" Margin="4" Height="32" Command="{Binding ClearFilterCommand}" />
         </StackPanel>
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid Style="{StaticResource DataGridDefaultStyle}" IsReadOnly="True" 
+        <tk:DataGrid Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True" 
                      MouseDoubleClick="MainDataGrid_OnMouseDoubleClick" Grid.Row="3"
-                     ItemsSource="{Binding Path=TableItemListView}" SelectedItem="{Binding SelectedItem}">
+                     ItemsSource="{Binding Path=ItemList}" SelectedItem="{Binding SelectedItem}">
             <tk:DataGrid.Columns>
-                <tk:DataGridTextColumn Header="Номер" Width="50" Binding="{Binding Path=CardNumber}" />
-                <tk:DataGridTextColumn Header="Название" Width="250" Binding="{Binding Path=CardName}" />
-                <tk:DataGridTextColumn Header="Ввод" Width="85" Binding="{Binding Path=CreationDate, StringFormat=\{0:dd.MM.yyyy\}}" />
-                <tk:DataGridTextColumn Header="Закреплена" Width="100" Binding="{Binding Path=Staff.Name.DisplayName}" />
-                <tk:DataGridTextColumn Header="Комментарии" Width="250" Binding="{Binding Path=Comments}" />
+                <tk:DataGridTextColumn Header="Номер" Width="50" Binding="{Binding Path=CardNumber}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Название" Width="250" Binding="{Binding Path=CardName}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Ввод" Width="85" Binding="{Binding Path=CreationDate, StringFormat=\{0:dd.MM.yyyy\}}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Закреплена" Width="100" Binding="{Binding Path=Staff.Name.DisplayName}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Комментарии" Width="250" Binding="{Binding Path=Comments}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
             </tk:DataGrid.Columns>
+            <tk:DataGrid.ContextMenu>
+                <ContextMenu Style="{DynamicResource ContextMenuStyle}">
+                    <MenuItem Header="Добавить" Command="{Binding AddCommand}" Icon="{DynamicResource DarkPlusImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                    <MenuItem Header="Редактировать" Command="{Binding EditCommand}" Icon="{DynamicResource DarkEditImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                    <MenuItem Header="Удалить" Command="{Binding DeleteCommand}" Icon="{DynamicResource DarkBinImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                </ContextMenu>
+            </tk:DataGrid.ContextMenu>
         </tk:DataGrid>
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
+        
+        <StatusBar Grid.Row="4">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Всего элементов: " />
+                    <TextBlock Text="{Binding Path=ItemListCollection.Count}" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
 
-        <ProgressBar IsIndeterminate="True" Grid.Row="3" 
-                     Width="64" Height="64" Style="{StaticResource RadialProgressBar}"
+        <ProgressBar IsIndeterminate="True" Grid.Row="3"
+                     Width="64" Height="64" Style="{DynamicResource RadialProgressBar}"
                      HorizontalAlignment="Center" VerticalAlignment="Center" 
                      Visibility="{Binding Path=RefreshCommand.IsExecuting, Converter={StaticResource BoolToVisibilityConverter}}" />
 

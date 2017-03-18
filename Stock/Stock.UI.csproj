@@ -16,6 +16,9 @@
     <WarningLevel>4</WarningLevel>
     <Utf8Output>true</Utf8Output>
     <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -28,7 +31,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -77,17 +79,16 @@
     </ApplicationDefinition>
     <Compile Include="ApplicationState.cs" />
     <Compile Include="AutoCompleteFocusableBox.cs" />
-    <Compile Include="ControlsLibrary\Arc.cs" />
-    <Compile Include="ControlsLibrary\ControlWindowViewModel.cs" />
-    <Compile Include="ControlsLibrary\ProgressToAngleConverter.cs" />
+    <Compile Include="CheckBoxItem.cs" />
     <Compile Include="FocusAttacher.cs" />
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Utils\BoolToVisibilityConverter.cs" />
+    <Compile Include="Utils\InverseBoolConverter.cs" />
+    <Compile Include="Utils\IntToVisibilityConverter.cs" />
     <Compile Include="ViewModels\Base\AsyncCommand.cs" />
     <Compile Include="ViewModels\Base\AsyncCommandBase.cs" />
-    <Compile Include="ViewModels\Base\ITableBaseViewModel.cs" />
-    <Compile Include="ViewModels\Base\ITableComplexFilterViewModel.cs" />
-    <Compile Include="ViewModels\Base\ITableNavigationViewModel.cs" />
-    <Compile Include="ViewModels\Base\ITableSearchViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\ConnectionViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\LoginViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\OwnerAddViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\ReportSelectViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\StockUnitSearchViewModel.cs" />
@@ -100,14 +101,17 @@
       <DependentUpon>CardAddView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\Dialogs\CardAddViewModel.cs" />
+    <Compile Include="Views\Dialogs\ConnectionView.xaml.cs">
+      <DependentUpon>ConnectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\ReportSelectView.xaml.cs">
       <DependentUpon>ReportSelectView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\StockUnitSearchView.xaml.cs">
       <DependentUpon>StockUnitSearchView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ControlsLibrary\ControlsWindow.xaml.cs">
-      <DependentUpon>ControlsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\DocumentAddView.xaml.cs">
       <DependentUpon>DocumentAddView.xaml</DependentUpon>
@@ -122,9 +126,8 @@
     </Compile>
     <Compile Include="ViewModels\Dialogs\StaffAddViewModel.cs" />
     <Compile Include="ViewModels\StatusTableViewModel.cs" />
-    <Compile Include="ViewModels\Base\TableSearchViewModel.cs" />
-    <Compile Include="ViewModels\Base\TableNavigationViewModel.cs" />
     <Compile Include="ViewModels\Base\TableViewModel.cs" />
+    <Compile Include="ViewModels\Base\TableNavigationViewModel.cs" />
     <Compile Include="Views\Dialogs\RepairAddView.xaml.cs">
       <DependentUpon>RepairAddView.xaml</DependentUpon>
     </Compile>
@@ -151,8 +154,7 @@
     </Compile>
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="ViewModels\UnitTableViewModel.cs" />
-    <Compile Include="Utils\GendersToIconConverter.cs" />
-    <Compile Include="Utils\StatusTypesToColorConverter.cs" />
+    <Compile Include="Utils\StatusTypeToColorConverter.cs" />
     <Compile Include="Views\CardTableView.xaml.cs">
       <DependentUpon>CardTableView.xaml</DependentUpon>
     </Compile>
@@ -164,14 +166,12 @@
     </Compile>
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\StockUnitTableViewModel.cs" />
+    <Compile Include="Views\TableView.cs" />
     <Compile Include="Views\UnitTableView.xaml.cs">
       <DependentUpon>UnitTableView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RepairTableView.xaml.cs">
       <DependentUpon>RepairTableView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\LoginView.xaml.cs">
-      <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserPageView.xaml.cs">
       <DependentUpon>UserPageView.xaml</DependentUpon>
@@ -182,103 +182,23 @@
     <Compile Include="Views\LogTableView.xaml.cs">
       <DependentUpon>LogTableView.xaml</DependentUpon>
     </Compile>
-    <Page Include="ControlsLibrary\ListView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ControlsLibrary\RadialProgressBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ControlsLibrary\TabItem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ControlsLibrary\TabControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ControlsLibrary\UserTabItem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Dialogs\CardAddView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\ConnectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\ReportSelectView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Dialogs\StockUnitSearchView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ControlsLibrary\Brushes.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ControlsLibrary\Button.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ControlsLibrary\ButtonPrimary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ControlsLibrary\ComboBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ControlsLibrary\ControlsWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ControlsLibrary\DataGrid.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ControlsLibrary\DatePicker.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ControlsLibrary\PasswordBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ControlsLibrary\ProgressBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ControlsLibrary\RichTextBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ControlsLibrary\TextBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ControlsLibrary\ButtonSuccess.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ControlsLibrary\ButtonInfo.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ControlsLibrary\ButtonWarning.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ControlsLibrary\ButtonDanger.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ControlsLibrary\SwitchButton.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ControlsLibrary\MenuTabControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -350,10 +270,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\LoginView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\UserPageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -394,34 +310,16 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Themes\Exit.png" />
-    <Resource Include="Themes\Genders\Female.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Themes\Genders\Male.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Themes\Genders\Unknown.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Themes\MainIcon.png" />
     <Resource Include="Themes\Settings.png" />
     <Resource Include="Themes\Staff.png" />
     <Resource Include="Themes\Status.png" />
-    <Resource Include="Themes\StatusTypes\Completed.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Themes\StatusTypes\Delayed.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Themes\StatusTypes\InWork.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Themes\StatusTypes\New.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Themes\User.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\BlakeUI\Blake.Controls\Blake.Controls.csproj">
+      <Project>{B6DB960D-2A22-4312-9DEC-63F10354B332}</Project>
+      <Name>Blake.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core\Stock.Core.csproj">
       <Project>{A75AD08D-6ABD-4931-B056-410744BDF829}</Project>
       <Name>Stock.Core</Name>
@@ -439,22 +337,7 @@
     <Resource Include="Themes\Owner.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Themes\Find.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Themes\Bin.png" />
-    <Resource Include="Themes\Edit.png" />
-    <Resource Include="Themes\Filter.png" />
-    <Resource Include="Themes\Refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Themes\Move.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <SplashScreen Include="Themes\SplashScreen.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Themes\MainIcon.ico" />
+    <Resource Include="Themes\MainIcon_old.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Themes\Report.png" />
@@ -481,6 +364,17 @@
       <ProductName>Установщик Windows 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="Themes\SplashScreen.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Themes\LoginIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Themes\MainIcon16.ico" />
+    <Resource Include="Themes\MainIcon32.ico" />
+    <Resource Include="Themes\MainIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

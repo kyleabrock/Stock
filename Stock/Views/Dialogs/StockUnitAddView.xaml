@@ -8,21 +8,17 @@
 	xmlns:domain="clr-namespace:Stock.Core.Domain;assembly=Stock.Core"
 	xmlns:dialogs="clr-namespace:Stock.UI.ViewModels.Dialogs"
 	xmlns:utils="clr-namespace:Stock.UI.Utils"
-	xmlns:lc="clr-namespace:Stock.UI"
-	mc:Ignorable="d"
-	x:Class="Stock.UI.Views.Dialogs.StockUnitAddView"
-	x:Name="Window"
+	xmlns:lc="clr-namespace:Stock.UI" mc:Ignorable="d"
+	x:Class="Stock.UI.Views.Dialogs.StockUnitAddView" x:Name="Window"
 	Title="Основное средство"
-    Width="800" Height="600"
-    MinWidth="640" MinHeight="480"
-    ResizeMode="CanResizeWithGrip"
-    WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
-    Icon="../../Themes/MainIcon.ico">
+    Width="800" Height="600" MinWidth="640" MinHeight="480"
+    ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+    Icon="pack://application:,,,/Stock;component/Themes/MainIcon.ico">
     <Window.DataContext>
         <dialogs:StockUnitViewModel x:Name="ViewModel" />
     </Window.DataContext>
     <Window.Resources>
-        <utils:StatusTypesToColorConverter x:Key="ColorConverter" />
+        <utils:StatusTypeToColorConverter x:Key="ColorConverter" />
     </Window.Resources>
 
     <Grid Margin="4">
@@ -44,35 +40,35 @@
         <!-- Title -->
 
         <!-- Main form -->
-        <TextBlock Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="en-US" Text="ID" />
         </TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="ru-RU" Text="Инв. №"/>
         </TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="ru-RU" Text="Название"/>
         </TextBlock>
-        <TextBlock Grid.Column="2" Style="{StaticResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Column="2" Style="{DynamicResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="ru-RU" Text="Статус"/>
         </TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Row="1" Grid.Column="2" Style="{DynamicResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="ru-RU" Text="Ввод в экспл."/>
         </TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="2" Style="{StaticResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Row="2" Grid.Column="2" Style="{DynamicResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="ru-RU" Text="МОЛ"/>
         </TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="2" Style="{StaticResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
+        <TextBlock Grid.Row="3" Grid.Column="2" Style="{DynamicResource DialogTextBlockStyle}" Margin="4" VerticalAlignment="Center" d:LayoutOverrides="GridBox">
             <Run Language="ru-RU" Text="Комментарии"/>
         </TextBlock>
-        
-        <TextBox Text="{Binding Path=StockUnit.Id}" Grid.Column="1" Margin="4" IsReadOnly="True" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Center"/>
-        <TextBox x:Name="StockNumberTb" Text="{Binding Path=StockUnit.StockNumber}" Grid.Row="1" Grid.Column="1" Margin="4" Style="{StaticResource TextBoxStyle}" VerticalAlignment="Center"/>
-        <TextBox Text="{Binding Path=StockUnit.StockName}" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Margin="4" TextWrapping="Wrap" 
-                 VerticalAlignment="Stretch" Style="{StaticResource TextBoxStyle}"
+
+        <TextBox Text="{Binding Path=StockUnit.Id}" Grid.Column="1" Margin="4" IsEnabled="False" Style="{DynamicResource TextBoxStyle}" VerticalAlignment="Center"/>
+        <TextBox x:Name="StockNumberTb" Text="{Binding Path=StockUnit.StockNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="4" Style="{DynamicResource TextBoxStyle}" VerticalAlignment="Center"/>
+        <TextBox Text="{Binding Path=StockUnit.StockName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Margin="4" TextWrapping="Wrap" 
+                 VerticalAlignment="Stretch" Style="{DynamicResource TextBoxStyle}"
                  VerticalScrollBarVisibility="Auto"/>
-        <ComboBox x:Name="StatusCb" ItemsSource="{Binding Path=StatusList}" SelectedItem="{Binding Path=StockUnit.Status}" Grid.Column="3"  Margin="4"
-                  Style="{StaticResource ComboBoxStyle}" VerticalAlignment="Center">
+        <ComboBox x:Name="StatusCb" ItemsSource="{Binding Path=StatusList}" SelectedItem="{Binding Path=StockUnit.Status, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3"  Margin="4"
+                  Style="{DynamicResource ComboBoxStyle}" VerticalAlignment="Center">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" d:DataContext="{d:DesignInstance domain:Status}">
@@ -82,19 +78,19 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <xctk:DateTimePicker x:Name="CreationDateDtPk" Value="{Binding Path=StockUnit.CreationDate}" Grid.Row="1" Grid.Column="3" 
+        <xctk:DateTimePicker x:Name="CreationDateDtPk" Value="{Binding Path=StockUnit.CreationDate, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="3" 
                              TimePickerVisibility="Collapsed" Format="ShortDate" 
                              ShowButtonSpinner="False"
-                             Margin="4" Style="{StaticResource DateTimePickerStyle}" VerticalAlignment="Center"/>
-        <ComboBox x:Name="OwnerCb" SelectedItem="{Binding Path=StockUnit.Owner}" ItemsSource="{Binding Path=OwnerList}" Grid.Row="2" Grid.Column="3" 
+                             Margin="4" Style="{DynamicResource DateTimePickerStyle}" VerticalAlignment="Center"/>
+        <ComboBox x:Name="OwnerCb" SelectedItem="{Binding Path=StockUnit.Owner, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Path=OwnerList}" Grid.Row="2" Grid.Column="3" 
                   DisplayMemberPath="Name.DisplayName"
-                  Margin="4" Style="{StaticResource ComboBoxStyle}" VerticalAlignment="Center"/>
-        <TextBox Text="{Binding Path=StockUnit.Comments}" Grid.Row="3" Grid.Column="3" Margin="4" VerticalAlignment="Stretch"
-                 Style="{StaticResource TextBoxStyle}" TextWrapping="Wrap" Grid.RowSpan="2"/>
+                  Margin="4" Style="{DynamicResource ComboBoxStyle}" VerticalAlignment="Center"/>
+        <TextBox Text="{Binding Path=StockUnit.Comments, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="3" Margin="4" VerticalAlignment="Stretch"
+                 Style="{DynamicResource TextBoxStyle}" TextWrapping="Wrap" Grid.RowSpan="2"/>
         
         <!-- Datagrid -->
-		<TabControl Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Margin="4" Style="{StaticResource TabControlDefaultStyle}">
-			<TabItem Header="Состав" Style="{StaticResource TabItemDefaultStyle}">
+		<TabControl Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Margin="4" Style="{DynamicResource TabControlDefaultStyle}">
+			<TabItem Header="Состав" Style="{DynamicResource TabItemDefaultStyle}">
 				<Grid Margin="4,8">
             		<Grid.RowDefinitions>
                 		<RowDefinition Height="32"/>
@@ -102,12 +98,12 @@
             		</Grid.RowDefinitions>
 
                     <StackPanel Orientation="Horizontal">
-                        <Button Style="{StaticResource AddButtonNormalStyle}" Command="{Binding AddUnitCommand}" Margin="4,0" />
-                        <Button Style="{StaticResource DeleteButtonSmallStyle}" Margin="4,0" Command="{Binding RemoveUnitCommand}" />
-                        <Button Style="{StaticResource ReportButtonSmallStyle}" Margin="4,0" Command="{Binding ReportsCommand}" />
+                        <Button Style="{DynamicResource AddButtonNormalStyle}" Command="{Binding AddUnitCommand}" Margin="4,0" />
+                        <Button Style="{DynamicResource DeleteButtonSmallStyle}" Margin="4,0" Command="{Binding RemoveUnitCommand}" />
+                        <Button Style="{DynamicResource ReportButtonSmallStyle}" Margin="4,0" Command="{Binding ReportsCommand}" />
                     </StackPanel>
 
-                    <tk:DataGrid Grid.Row="1" Style="{StaticResource DataGridDefaultStyle}" IsReadOnly="False" CanUserAddRows="True" Margin="4" PreviewKeyDown="MainDataGrid_PreviewKeyDown"
+                    <tk:DataGrid Grid.Row="1" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="False" CanUserAddRows="True" Margin="4" PreviewKeyDown="MainDataGrid_PreviewKeyDown"
                                  ItemsSource="{Binding Path=UnitList}" SelectionMode="Single" SelectedItem="{Binding SelectedItem}"
                                  CanUserDeleteRows="False" KeyboardNavigation.TabNavigation="Cycle">
                         <tk:DataGrid.Columns>
@@ -117,6 +113,7 @@
                                 <tk:DataGridComboBoxColumn.ElementStyle>
                                     <Style TargetType="{x:Type ComboBox}">
                                         <Setter Property="ItemsSource" Value="{Binding Path=DataContext.UnitTypes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
                                     </Style>
                                 </tk:DataGridComboBoxColumn.ElementStyle>
                                 <tk:DataGridComboBoxColumn.EditingElementStyle>
@@ -128,39 +125,41 @@
                             <tk:DataGridTemplateColumn Header="Производитель" Width="140" >
                                 <tk:DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Manufacture}" />
+                                        <TextBlock Text="{Binding Manufacture}" VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </tk:DataGridTemplateColumn.CellTemplate>
                                 <tk:DataGridTemplateColumn.CellEditingTemplate>
                                     <DataTemplate>
                                         <lc:AutoCompleteFocusableBox x:Name="ManufactureAcBox"  ItemsSource="{Binding Path=DataContext.ManufactureList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
-                                                                Text="{Binding Manufacture, Mode=TwoWay}" FilterMode="Contains" lc:FocusAttacher.Focus="True"/>
+                                                                Text="{Binding Manufacture, Mode=TwoWay}" FilterMode="Contains" lc:FocusAttacher.Focus="True"
+                                                                VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </tk:DataGridTemplateColumn.CellEditingTemplate>
                             </tk:DataGridTemplateColumn>
                             <tk:DataGridTemplateColumn Header="Модель" Width="140">
                                 <tk:DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding ModelName}" />
+                                        <TextBlock Text="{Binding ModelName}" VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </tk:DataGridTemplateColumn.CellTemplate>
                                 <tk:DataGridTemplateColumn.CellEditingTemplate>
                                     <DataTemplate>
                                         <lc:AutoCompleteFocusableBox x:Name="ModelAcBox" 
                                                                 ItemsSource="{Binding Path=DataContext.ModelList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
-                                                                Text="{Binding ModelName, Mode=TwoWay}" FilterMode="Contains" lc:FocusAttacher.Focus="True"/>
+                                                                Text="{Binding ModelName, Mode=TwoWay}" FilterMode="Contains" lc:FocusAttacher.Focus="True"
+                                                                VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </tk:DataGridTemplateColumn.CellEditingTemplate>
                             </tk:DataGridTemplateColumn>
-                            <tk:DataGridTextColumn Header="Сер. №" Width="150" Binding="{Binding Serial}" />
-                            <tk:DataGridTextColumn Header="Комментарии" Width="150" Binding="{Binding Comments}" />
+                            <tk:DataGridTextColumn Header="Сер. №" Width="150" Binding="{Binding Serial}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                            <tk:DataGridTextColumn Header="Комментарии" Width="150" Binding="{Binding Comments}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
                         </tk:DataGrid.Columns>
                     </tk:DataGrid>
                 </Grid>
 			</TabItem>
-            <TabItem Header="Отметки" Style="{StaticResource TabItemDefaultStyle}">
+            <TabItem Header="Отметки" Style="{DynamicResource TabItemDefaultStyle}">
                 <Grid Margin="4,8">
-                    <tk:DataGrid Style="{StaticResource DataGridDefaultStyle}"
+                    <tk:DataGrid Style="{DynamicResource DataGridDefaultStyle}"
                                  ItemsSource="{Binding Path=StockUnitNoteList}">
                         <tk:DataGrid.Columns>
                             <tk:DataGridTextColumn Header="Заголовок" Width="150" Binding="{Binding Path=Title}" />
@@ -178,9 +177,9 @@
                     </tk:DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Документы" Style="{StaticResource TabItemDefaultStyle}">
+            <TabItem Header="Документы" Style="{DynamicResource TabItemDefaultStyle}">
                 <Grid Margin="4,8">
-                    <tk:DataGrid Style="{StaticResource DataGridDefaultStyle}" IsReadOnly="True" 
+                    <tk:DataGrid Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True" 
                                  ItemsSource="{Binding Path=DocumnetsList}">
                         <tk:DataGrid.Columns>
                             <tk:DataGridTextColumn Header="Документ" Width="250" Binding="{Binding Path=DocumentType.TypeName}" >
@@ -207,9 +206,9 @@
                     </tk:DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Ремонт" Style="{StaticResource TabItemDefaultStyle}">
+            <TabItem Header="Ремонт" Style="{DynamicResource TabItemDefaultStyle}">
                 <Grid Margin="4,8">
-                    <tk:DataGrid Style="{StaticResource DataGridDefaultStyle}" IsReadOnly="True" 
+                    <tk:DataGrid Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True" 
                                  ItemsSource="{Binding Path=RepairList}">
                         <tk:DataGrid.Columns>
                             <tk:DataGridTextColumn Header="Дата" Width="85" Binding="{Binding Path=StartedDate, StringFormat=\{0:dd.MM.yyyy\}}" />
@@ -220,7 +219,20 @@
                                     </Style>
                                 </tk:DataGridTextColumn.ElementStyle>
                             </tk:DataGridTextColumn>
-                            <tk:DataGridTextColumn Header="Неисправность" Width="150" Binding="{Binding Path=Defect}" />
+                            <tk:DataGridTextColumn Header="Неисправность" Width="150" Binding="{Binding Path=Defect}">
+                                <tk:DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+                                    </Style>
+                                </tk:DataGridTextColumn.ElementStyle>
+                            </tk:DataGridTextColumn>
+                            <tk:DataGridTextColumn Header="Результат" Width="150" Binding="{Binding Path=Result}">
+                                <tk:DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+                                    </Style>
+                                </tk:DataGridTextColumn.ElementStyle>
+                            </tk:DataGridTextColumn>
                             <tk:DataGridTextColumn Header="Исполнитель" Width="150" Binding="{Binding Path=User.Name.DisplayName}" />
                             <tk:DataGridTextColumn Header="Комментарии" Width="200" Binding="{Binding Path=Comments}" >
                                 <tk:DataGridTextColumn.ElementStyle>
@@ -235,8 +247,34 @@
                     </tk:DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Файлы" Style="{StaticResource TabItemDefaultStyle}">
-                <Grid></Grid>
+            <TabItem Header="Файлы" Style="{DynamicResource TabItemDefaultStyle}">
+                <Grid Margin="4,8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{DynamicResource AddButtonNormalStyle}" Command="{Binding AddFileCommand}" Margin="4,0" />
+                        <Button Style="{DynamicResource DeleteButtonSmallStyle}" Margin="4,0" Command="{Binding RemoveFileCommand}" />
+                    </StackPanel>
+
+                    <tk:DataGrid Grid.Row="1" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="False" CanUserAddRows="True" Margin="4"
+                                 ItemsSource="{Binding Path=StockUnitFiles}" SelectionMode="Single" SelectedItem="{Binding SelectedFileItem}"
+                                 CanUserDeleteRows="False" KeyboardNavigation.TabNavigation="Cycle">
+                        <tk:DataGrid.Columns>
+                            <tk:DataGridTextColumn Header="Файл" Width="150" Binding="{Binding FileName}" />
+                            <tk:DataGridTextColumn Header="Описание" Width="150" Binding="{Binding Description}" />
+                            <tk:DataGridTextColumn Header="Комментарии" Width="150" Binding="{Binding Comments}" />
+                        </tk:DataGrid.Columns>
+                        <tk:DataGrid.ContextMenu>
+                            <ContextMenu Style="{DynamicResource ContextMenuStyle}">
+                                <MenuItem Header="Открыть файл" Command="{Binding OpenFileCommand}" Style="{DynamicResource MenuItemStyle}" />
+                                <MenuItem Header="Открыть папку" Command="{Binding OpenFolderCommand}" Style="{DynamicResource MenuItemStyle}" />
+                            </ContextMenu>
+                        </tk:DataGrid.ContextMenu>
+                    </tk:DataGrid>
+                </Grid>
             </TabItem>
         </TabControl>
         
@@ -244,9 +282,9 @@
         <!-- Dialog buttons -->
         <StackPanel Grid.Column="3" Grid.Row="6" Height="32" Margin="0" 
                     Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-            <Button Content="Сохранить" IsDefault="True" Style="{StaticResource ButtonDefaultStyle}" 
+            <Button Content="Сохранить" IsDefault="True" Style="{DynamicResource ButtonDefaultStyle}" 
                     Command="{Binding SaveCommand}" Margin="4,0" Width="100"/>
-            <Button Content="Отмена" IsCancel="True" Style="{StaticResource ButtonDefaultStyle}" 
+            <Button Content="Отмена" IsCancel="True" Style="{DynamicResource ButtonDefaultStyle}" 
                     Command="{Binding CloseCommand}" Margin="4,0" Width="100"/>
         </StackPanel>
 

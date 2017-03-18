@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Stock.Core.Domain;
 using Stock.UI.ViewModels.Dialogs;
@@ -16,6 +15,7 @@ namespace Stock.UI.Views.Dialogs
 		{
 			InitializeComponent();
             SetActions();
+            
             SearchTb.Focus();
 		}
 
@@ -26,24 +26,32 @@ namespace Stock.UI.Views.Dialogs
             ViewModel = new StockUnitSearchViewModel(card);
             DataContext = ViewModel;
             SetActions();
+
+            SearchTb.Focus();
 	    }
 
         private void SetActions()
         {
             if (ViewModel.CloseAction == null)
                 ViewModel.CloseAction = Close;
-            if (ViewModel.GetSelectedItemsAction == null)
-                ViewModel.GetSelectedItemsAction = GetSelectedItems;
+            if (ViewModel.GetSelectedItems == null)
+                ViewModel.GetSelectedItems = GetSelectedItems;
         }
 
         public IList<StockUnit> Result { get { return ViewModel.Result; } }
 
-        private void GetSelectedItems()
+        private ObservableCollection<object> GetSelectedItems()
         {
-            var result = new ObservableCollection<object>();
-            foreach (var item in MainDataGrid.SelectedItems)
-                result.Add(item);
-            ViewModel.SelectedItems = new ObservableCollection<object>(result);
+            if (MainDataGrid.SelectedItems.Count > 0)
+            {
+                var result = new ObservableCollection<object>();
+                foreach (var item in MainDataGrid.SelectedItems)
+                    result.Add(item);
+                
+                return new ObservableCollection<object>(result);
+            }
+            
+            return new ObservableCollection<object>();
         }
 
         private void SearchTb_OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -58,12 +66,6 @@ namespace Stock.UI.Views.Dialogs
                 if (MainDataGrid.SelectedIndex != MainDataGrid.Items.Count - 1)
                     MainDataGrid.SelectedIndex += 1;
 	        }
-	    }
-
-	    private void SearchTb_TextChanged(object sender, TextChangedEventArgs e)
-	    {
-	        var binding = ((TextBox) sender).GetBindingExpression(TextBox.TextProperty);
-            binding.UpdateSource();
 	    }
 	}
 }

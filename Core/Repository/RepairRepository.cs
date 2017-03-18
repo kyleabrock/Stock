@@ -5,6 +5,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using Stock.Core.Domain;
 using Stock.Core.Filter;
+using Stock.Core.Filter.FilterParams;
 
 namespace Stock.Core.Repository
 {
@@ -69,28 +70,14 @@ namespace Stock.Core.Repository
                 return new List<Repair>();
             }
         }
-
-        public IList<Repair> GetAllByComplexFilter(IFilterBase filter)
+        
+        protected override void InitializeTableValues(IEnumerable<Repair> items)
         {
-            using (ISession session = NHibernateHelper.OpenSession())
+            foreach (var item in items)
             {
-                var mainCriteria = session.CreateCriteria<Repair>();
-                var repairFilter = filter as RepairFilter;
-                if (repairFilter != null)
-                {
-                    if (repairFilter.User != null)
-                        mainCriteria.CreateCriteria("User").Add(Restrictions.Eq("Id", repairFilter.User.Id));
-                }
-
-                var result = mainCriteria.List<Repair>();
-                foreach (var item in result)
-                {
-                    NHibernateUtil.Initialize(item.Unit);
-                    NHibernateUtil.Initialize(item.Unit.StockUnit.StockNumber);
-                    NHibernateUtil.Initialize(item.User);
-                }
-
-                return result;
+                NHibernateUtil.Initialize(item.Unit);
+                NHibernateUtil.Initialize(item.Unit.StockUnit.StockNumber);
+                NHibernateUtil.Initialize(item.User);
             }
         }
     }

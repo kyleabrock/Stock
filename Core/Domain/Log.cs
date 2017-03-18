@@ -15,14 +15,14 @@ namespace Stock.Core.Domain
 
         public virtual int UserId { get; set; }
 
-        private string _userName = "";
+        private string _userName = String.Empty;
         public virtual string UserName
         {
             get { return _userName; }
             set { _userName = value; }
         }
 
-        private string _message = "";
+        private string _message = String.Empty;
         public virtual string Message
         {
             get { return _message; }

@@ -21,14 +21,14 @@ namespace Stock.Core.Domain
             set { _completedDate = value; }
         }
 
-        private string _defect = "";
+        private string _defect = String.Empty;
         public virtual string Defect
         {
             get { return _defect; }
             set { _defect = value; }
         }
 
-        private string _result = "";
+        private string _result = String.Empty;
         public virtual string Result
         {
             get { return _result; }
@@ -37,7 +37,7 @@ namespace Stock.Core.Domain
 
         public virtual UserAcc User { get; set; }
 
-        private string _comments = "";
+        private string _comments = String.Empty;
         public virtual string Comments
         {
             get { return _comments; }

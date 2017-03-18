@@ -112,7 +112,7 @@ namespace Stock.UI.ViewModels.Dialogs
             var ownerList = ownerRepository.GetAll(x => x.Name.DisplayName);
             OwnerList = new ObservableCollection<Owner>(ownerList);
 
-            var documentTypeRepository = new Repository<DocumentType>();
+            IRepository<DocumentType> documentTypeRepository = new Repository<DocumentType>();
             var documentTypes = documentTypeRepository.GetAll(x => x.TypeName);
             DocumentTypes = new ObservableCollection<DocumentType>(documentTypes);
         }
@@ -135,7 +135,7 @@ namespace Stock.UI.ViewModels.Dialogs
 
             var user = ApplicationState.GetValue<UserAcc>("User");
             ILogFactory logFactory = new LogFactory();
-            var logEntity = logFactory.CreateLogMessage(user, Document);
+            var logEntity = logFactory.CreateMessage(user, Document);
             var repository = new Repository<Log>();
             repository.Save(logEntity);
             

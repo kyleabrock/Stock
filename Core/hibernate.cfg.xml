@@ -4,7 +4,7 @@
   <session-factory name="NHibernate.Test">
     <property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
     <property name="connection.connection_string">
-      Data Source=Srvr-ossi-04611;Initial Catalog=Stock;User ID=sa;Password=Pf,hfkj
+      Data Source=db.ktm.ossi.loc;Initial Catalog=Stock;User ID=developer;Password=Pf,hfkj
     </property>
     <property name="dialect">NHibernate.Dialect.MsSql2008Dialect</property>
   </session-factory>

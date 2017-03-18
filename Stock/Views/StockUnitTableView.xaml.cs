@@ -10,7 +10,7 @@ namespace Stock.UI.Views
     /// <summary>
     /// Логика взаимодействия для ResourceFlowWindow.xaml
     /// </summary>
-    public partial class StockUnitTableView
+    public partial class StockUnitTableView : ITableView
     {
         public StockUnitTableView()
         {
@@ -30,6 +30,33 @@ namespace Stock.UI.Views
                 ViewModel.AddAction = DisplayAddDialog;
             if (ViewModel.EditAction == null)
                 ViewModel.EditAction = DisplayEditDialog;
+            if (ViewModel.CopyAction == null)
+                ViewModel.CopyAction = DisplayCopyDialog;
+            if (ViewModel.ShowCardAction == null)
+                ViewModel.ShowCardAction = ShowCard;
+            if (ViewModel.ShowInfoMessage == null)
+                ViewModel.ShowInfoMessage = (text, caption) => MessageBox.Show(text, caption);
+            if (ViewModel.ShowDialogMessage == null)
+            {
+                const MessageBoxButton buttons = MessageBoxButton.OKCancel;
+                const MessageBoxResult result = MessageBoxResult.OK;
+                ViewModel.ShowDialogMessage =
+                    (text, caption) => MessageBox.Show(text, caption, buttons) == result;
+            }
+        }
+
+        private void ShowCard(Card card)
+        {
+            var dialog = new CardAddView(card.Id) { Owner = Window.GetWindow(this) };
+            dialog.Closed += (s, e) => dialog.Owner.Focus();
+            dialog.Show();
+        }
+
+        private void DisplayCopyDialog(StockUnit stockUnit)
+        {
+            var dialog = new StockUnitAddView(stockUnit) { Owner = Window.GetWindow(this) };
+            dialog.Closed += (s, e) => dialog.Owner.Focus();
+            dialog.Show();
         }
 
         private void DisplayAddDialog()
@@ -69,6 +96,12 @@ namespace Stock.UI.Views
             {
                 FilterGridColumn.Width = new GridLength(0, GridUnitType.Pixel);
             }
+        }
+
+        private void DataGrid_OnCopyingRowClipboardContent(object sender, DataGridRowClipboardEventArgs e)
+        {
+            //e.ClipboardRowContent.Clear();
+            //var cells = DataGrid.SelectedCells;
         }
     }
 }

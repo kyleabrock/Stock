@@ -1,0 +1,82 @@
+﻿<Window x:Class="Stock.UI.Views.Dialogs.ConnectionView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Blake.Controls.Controls;assembly=Blake.Controls"
+        xmlns:vm="clr-namespace:Stock.UI.ViewModels.Dialogs" xmlns:utils="clr-namespace:Stock.UI.Utils"
+        Title="Настройка подключения к БД" Height="350" Width="300"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        WindowStyle="SingleBorderWindow">
+    <Window.Resources>
+        <utils:InverseBoolConverter x:Key="InverseBoolConverter" />
+        <Style x:Key="EntryFieldStyle" TargetType="Grid">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="20,0" />
+        </Style>
+        <Style x:Key="DbDataSourceStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxWatermarkStyle}">
+            <Setter Property="local:WaterMarkTextHelper.WatermarkText" Value="Адрес сервера БД" />
+        </Style>
+        <Style x:Key="DbInitialCatalogStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxWatermarkStyle}">
+            <Setter Property="local:WaterMarkTextHelper.WatermarkText" Value="Имя базы данных" />
+        </Style>
+        <Style x:Key="DbUserIdStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxWatermarkStyle}">
+            <Setter Property="local:WaterMarkTextHelper.WatermarkText" Value="Имя пользователя" />
+        </Style>
+        <Style x:Key="DbPasswordBoxStyle" TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource PasswordBoxWatermarkStyle}">
+            <Setter Property="local:WaterMarkTextHelper.WatermarkText" Value="Пароль" />
+        </Style>
+    </Window.Resources>
+    <Window.DataContext>
+        <vm:ConnectionViewModel x:Name="ViewModel" />
+    </Window.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="32" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="24" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="0.5*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Style="{StaticResource EntryFieldStyle}">
+            <TextBox Height="32" Text="{Binding Path=DbDataSource, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DbDataSourceStyle}" />
+        </Grid>
+
+        <Grid Grid.Row="1" Style="{StaticResource EntryFieldStyle}">
+            <TextBox Height="32" Text="{Binding Path=DbInitialCatalog, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DbInitialCatalogStyle}" />
+        </Grid>
+
+        <Grid Grid.Row="2" Style="{StaticResource EntryFieldStyle}">
+            <TextBox Height="32" Text="{Binding Path=DbUserId, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=IntegratedSecurityBox, Path=IsChecked, Converter={StaticResource InverseBoolConverter}}" Style="{StaticResource DbUserIdStyle}" />
+        </Grid>
+
+        <Grid Grid.Row="3" Style="{StaticResource EntryFieldStyle}">
+            <PasswordBox x:Name="PasswordBox" Height="32" Style="{StaticResource DbPasswordBoxStyle}" IsEnabled="{Binding ElementName=IntegratedSecurityBox, Path=IsChecked, Converter={StaticResource InverseBoolConverter}}"/>
+        </Grid>
+
+        <Grid Grid.Row="4" Style="{StaticResource EntryFieldStyle}">
+            <CheckBox x:Name="IntegratedSecurityBox" Content="Авторизация Windows" IsChecked="{Binding Path=IntergatedSecurity}" />
+        </Grid>
+
+        <Grid Grid.Row="5" Style="{StaticResource EntryFieldStyle}">
+            <Button Style="{StaticResource ButtonPrimaryStyle}" Command="{Binding Path=CheckConnectionCommand}" CommandParameter="{Binding ElementName=PasswordBox}" Content="Проверить соединение" Height="32" />
+        </Grid>
+
+        <Grid Grid.Row="7" Style="{StaticResource EntryFieldStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            <Button Grid.Column="0" Style="{StaticResource ButtonSuccessStyle}" Command="{Binding Path=SaveCommand}" CommandParameter="{Binding ElementName=PasswordBox}" Content="Сохранить" Height="32" HorizontalAlignment="Stretch" Margin="0,0,4,0" />
+            <Button Grid.Column="1" Style="{StaticResource ButtonDefaultStyle}" Command="{Binding Path=CancelCommand}" Content="Отмена" Height="32" Margin="4,0,0,0" />
+        </Grid>
+
+    </Grid>
+</Window>

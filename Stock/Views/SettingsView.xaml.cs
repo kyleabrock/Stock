@@ -10,16 +10,16 @@ namespace Stock.UI.Views
         public SettingsView()
         {
             InitializeComponent();
-            if (ViewModel.SelectFolderAction == null)
-                ViewModel.SelectFolderAction = OpenFolderDialog;
+            if (ViewModel.SelectFolderFunc == null)
+                ViewModel.SelectFolderFunc = OpenFolderDialog;
         }
 
-        private void OpenFolderDialog()
+        private string OpenFolderDialog()
         {
             var dialog = new FolderBrowserDialog();
             DialogResult result = dialog.ShowDialog();
-            if (result == DialogResult.OK)
-                ViewModel.SettingsAppFolderPath = dialog.SelectedPath;
+            
+            return result == DialogResult.OK ? dialog.SelectedPath : null;
         }
     }
 }

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:tk="http://schemas.microsoft.com/wpf/2008/toolkit"
              xmlns:viewModels="clr-namespace:Stock.UI.ViewModels"
+             xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1000" Background="White">
     <UserControl.DataContext>
@@ -17,57 +18,85 @@
             <RowDefinition Height="48"/>
             <RowDefinition Height="16"/>
             <RowDefinition />
+            <RowDefinition Height="24"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="0" x:Name="FilterGridColumn"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Документы" Grid.Row="0" Style="{StaticResource WindowTitleBlockStyle}" />
+        <TextBlock Text="Документы" Grid.Row="0" Style="{DynamicResource WindowTitleBlockStyle}" />
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Height="32" VerticalAlignment="Bottom">
-            <Button Margin="4,0" Style="{StaticResource AddButtonNormalStyle}" Command="{Binding AddCommand}" />
-            <Button Margin="4,0" Style="{StaticResource EditButtonSmallStyle}" Command="{Binding EditCommand}" />
-            <Button Margin="4,0" Style="{StaticResource DeleteButtonSmallStyle}" Command="{Binding DeleteCommand}" />
-            <Button Margin="4,0" Style="{StaticResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
-            <Button Margin="4,0" Style="{StaticResource FilterButtonSmallStyle}" Click="FilterButton_OnClick" />
+            <Button Margin="4,0" Style="{DynamicResource AddButtonNormalStyle}" Command="{Binding AddCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource EditButtonSmallStyle}" Command="{Binding EditCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource DeleteButtonSmallStyle}" Command="{Binding DeleteCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource FilterButtonSmallStyle}" Click="FilterButton_OnClick" />
         </StackPanel>
         <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{StaticResource TextBoxStyle}" />
+            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle}" />
             <Button Margin="4,0" Command="{Binding SearchCommand}" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" 
-                    Style="{StaticResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
+                    Style="{DynamicResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
         </Grid>
 
         <!-- Filter Grid -->
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <StackPanel Orientation="Vertical" Background="{StaticResource BootstrapGrayColor5}" Grid.Column="1" Grid.Row="3" Width="200">
-            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <StackPanel Orientation="Vertical" Background="{DynamicResource BootstrapGrayColor5}" Grid.Column="1" Grid.Row="3" Width="200">
+            <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
+                <Run Language="ru-RU">Дата создания с</Run>
+            </TextBlock>
+            <xctk:DateTimePicker Value="{Binding Path=ComplexFilterParams.StartDateTime}" TimePickerVisibility="Collapsed" Format="ShortDate" 
+                             ShowButtonSpinner="False" Margin="4,0,4,4" Style="{DynamicResource DateTimePickerStyle}" VerticalAlignment="Center"/>
+
+            <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
+                <Run Language="ru-RU">Дата создания по</Run>
+            </TextBlock>
+            <xctk:DateTimePicker Value="{Binding Path=ComplexFilterParams.EndDateTime}" TimePickerVisibility="Collapsed" Format="ShortDate" 
+                             ShowButtonSpinner="False" Margin="4,0,4,4" Style="{DynamicResource DateTimePickerStyle}" VerticalAlignment="Center"/>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
                 <Run Language="ru-RU">Исполнитель</Run>
             </TextBlock>
-            <ComboBox ItemsSource="{Binding Path=FilterUserList}" SelectedItem="{Binding Path=ComplexFilter.User}" 
-                      DisplayMemberPath="Name.DisplayName" Grid.Row="0" Grid.Column="1" Margin="4" Height="32"
-                      Style="{StaticResource ComboBoxStyle}"  />
+            <ComboBox ItemsSource="{Binding Path=FilterUserList}" SelectedItem="{Binding Path=ComplexFilterParams.User}" 
+                      DisplayMemberPath="Name.DisplayName" Grid.Row="0" Grid.Column="1" Margin="4,0,4,4"
+                      Style="{DynamicResource ComboBoxStyle}"  />
 
-            <Button Content="Применить" Style="{StaticResource ButtonInfoStyle}" Margin="4" Height="32" Command="{Binding FilterCommand}" />
-            <Button Content="Сброс" Style="{StaticResource ButtonDefaultStyle}" Margin="4" Height="32" Command="{Binding ClearFilterCommand}" />
+            <Button Content="Применить" Style="{DynamicResource ButtonInfoStyle}" Margin="4" Height="32" Command="{Binding FilterCommand}" />
+            <Button Content="Сброс" Style="{DynamicResource ButtonDefaultStyle}" Margin="4" Height="32" Command="{Binding ClearFilterCommand}" />
         </StackPanel>
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid Style="{StaticResource DataGridDefaultStyle}" IsReadOnly="True" 
+        <tk:DataGrid Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True" 
                      MouseDoubleClick="MainDataGrid_OnMouseDoubleClick" Grid.Row="3"
-                     ItemsSource="{Binding Path=TableItemListView}" SelectedItem="{Binding Path=SelectedItem}">
+                     ItemsSource="{Binding Path=ItemList}" SelectedItem="{Binding Path=SelectedItem}"
+                     Sorting="DataGrid_OnSorting">
             <tk:DataGrid.Columns>
                 <tk:DataGridTextColumn Header="Дата" Width="85" Binding="{Binding Path=StartedDate, StringFormat=\{0:dd.MM.yyyy\}}" />
+                <tk:DataGridTextColumn Header="Неисправность" Width="150" Binding="{Binding Path=Defect}">
+                    <tk:DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+                        </Style>
+                    </tk:DataGridTextColumn.ElementStyle>
+                </tk:DataGridTextColumn>
                 <tk:DataGridTextColumn Header="Инв.№" Width="100" Binding="{Binding Path=Unit.StockUnit.StockNumber}" />
                 <tk:DataGridTextColumn Header="Устройство" Width="100" Binding="{Binding Path=Unit.FullModelName}">
                     <tk:DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
                         </Style>
                     </tk:DataGridTextColumn.ElementStyle>
                 </tk:DataGridTextColumn>
-                <tk:DataGridTextColumn Header="Неисправность" Width="150" Binding="{Binding Path=Defect}" />
+                <tk:DataGridTextColumn Header="Завершено" Width="85" Binding="{Binding Path=StartedDate, StringFormat=\{0:dd.MM.yyyy\}}" />
+                <tk:DataGridTextColumn Header="Результат" Width="150" Binding="{Binding Path=Result}">
+                    <tk:DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+                        </Style>
+                    </tk:DataGridTextColumn.ElementStyle>
+                </tk:DataGridTextColumn>
                 <tk:DataGridTextColumn Header="Исполнитель" Width="150" Binding="{Binding Path=User.Name.DisplayName}" />
                 <tk:DataGridTextColumn Header="Комментарии" Width="200" Binding="{Binding Path=Comments}" >
                     <tk:DataGridTextColumn.ElementStyle>
@@ -79,11 +108,27 @@
                     </tk:DataGridTextColumn.ElementStyle>
                 </tk:DataGridTextColumn>
             </tk:DataGrid.Columns>
+            <tk:DataGrid.ContextMenu>
+                <ContextMenu Style="{DynamicResource ContextMenuStyle}">
+                    <MenuItem Header="Добавить" Command="{Binding AddCommand}" Icon="{DynamicResource DarkPlusImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                    <MenuItem Header="Редактировать" Command="{Binding EditCommand}" Icon="{DynamicResource DarkEditImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                    <MenuItem Header="Удалить" Command="{Binding DeleteCommand}" Icon="{DynamicResource DarkBinImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                </ContextMenu>
+            </tk:DataGrid.ContextMenu>
         </tk:DataGrid>
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
+        <StatusBar Grid.Row="4">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Всего элементов: " />
+                    <TextBlock Text="{Binding Path=ItemListCollection.Count}" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+
         <ProgressBar IsIndeterminate="True" Grid.Row="3" 
-                     Width="64" Height="64" Style="{StaticResource RadialProgressBar}"
+                     Width="64" Height="64" Style="{DynamicResource RadialProgressBar}"
                      HorizontalAlignment="Center" VerticalAlignment="Center" 
                      Visibility="{Binding Path=RefreshCommand.IsExecuting, Converter={StaticResource BoolToVisibilityConverter}}" />
 

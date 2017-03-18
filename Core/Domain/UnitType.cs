@@ -1,8 +1,10 @@
+using System;
+
 namespace Stock.Core.Domain
 {
     public class UnitType : EntityBase
     {
-        private string _typeName = "";
+        private string _typeName = String.Empty;
         public virtual string TypeName
         {
             get { return _typeName; }
@@ -11,7 +13,7 @@ namespace Stock.Core.Domain
 
         public virtual int Priority { get; set; }
 
-        private string _comments = "";
+        private string _comments = String.Empty;
 
         public virtual string Comments
         {

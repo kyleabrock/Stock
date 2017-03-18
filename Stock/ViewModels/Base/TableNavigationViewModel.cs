@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Windows.Input;
 using Stock.Core.Domain;
-using Stock.Core.Filter;
+using Stock.Core.Filter.FilterParams;
 
 namespace Stock.UI.ViewModels.Base
 {
-    public class TableNavigationViewModel<T> : TableSearchViewModel<T>, ITableNavigationViewModel, ITableComplexFilterViewModel where T : EntityBase 
+    public class TableNavigationViewModel<T> : TableViewModel<T> where T : EntityBase 
     {
         protected TableNavigationViewModel()
         {
@@ -18,12 +18,14 @@ namespace Stock.UI.ViewModels.Base
         public ICommand DeleteCommand { get; set; }
         public Action AddAction { get; set; }
         public Action EditAction { get; set; }
+        public Action<string, string> ShowInfoMessage { get; set; }
+        public Func<string, string, bool> ShowDialogMessage { get; set; }
 
-        private IFilterBase _complexFilter;
-        public IFilterBase ComplexFilter
+        private IFilterParams _complexFilterParams;
+        public IFilterParams ComplexFilterParams
         {
-            get { return _complexFilter; }
-            set { _complexFilter = value; OnPropertyChanged("ComplexFilter"); }
+            get { return _complexFilterParams; }
+            set { _complexFilterParams = value; OnPropertyChanged("ComplexFilterParams"); }
         }
 
         public bool ComplexFilterStatus { get; set; }
@@ -32,7 +34,7 @@ namespace Stock.UI.ViewModels.Base
 
         private void FilterMethod()
         {
-            ComplexFilterStatus = true;
+            IsSearched = true;
             if (RefreshCommand != null)
                 RefreshCommand.Execute(null);
         }
@@ -40,8 +42,8 @@ namespace Stock.UI.ViewModels.Base
         private void CancelFilter()
         {
             ComplexFilterStatus = false;
-            ComplexFilter.ClearFilter();
-            OnPropertyChanged("ComplexFilter");
+            ComplexFilterParams.ClearFilter();
+            OnPropertyChanged("ComplexFilterParams");
 
             if (RefreshCommand != null)
                 RefreshCommand.Execute(null);

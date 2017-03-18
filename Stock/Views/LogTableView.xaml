@@ -17,46 +17,47 @@
             <RowDefinition Height="48"/>
             <RowDefinition Height="16"/>
             <RowDefinition />
+            <RowDefinition Height="24"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="0" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Журнал" Grid.Row="0" Style="{StaticResource WindowTitleBlockStyle}" />
+        <TextBlock Text="Журнал" Grid.Row="0" Style="{DynamicResource WindowTitleBlockStyle}" />
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Height="32" VerticalAlignment="Bottom">
-            <Button Margin="4,0" Style="{StaticResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
         </StackPanel>
         <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{StaticResource TextBoxStyle}" />
+            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle}" />
             <Button Margin="4,0" Command="{Binding SearchCommand}" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" 
-                    Style="{StaticResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
+                    Style="{DynamicResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
         </Grid>
 
         <!-- Filter Grid -->
-        <StackPanel Orientation="Vertical" Background="{StaticResource BootstrapGrayColor5}" Grid.Column="1" Grid.Row="3" Width="200">
-            <!--<TextBlock x:Name="DocumentTypeFilterLb" Grid.Row="0" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <StackPanel Orientation="Vertical" Background="{DynamicResource BootstrapGrayColor5}" Grid.Column="1" Grid.Row="3" Width="200">
+            <!--<TextBlock x:Name="DocumentTypeFilterLb" Grid.Row="0" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
                 <Run Language="ru-RU">Документ</Run>
             </TextBlock>
             <ComboBox x:Name="DocumentTypeFilterCb" ItemsSource="{Binding Path=FilterDocumentTypeList}" SelectedItem="{Binding Path=ComplexFilter.DocumentType}" 
                       DisplayMemberPath="TypeName" Grid.Row="0" Grid.Column="1" Margin="4" Height="32"
-                      Style="{StaticResource ComboBoxStyle}"  />
+                      Style="{DynamicResource ComboBoxStyle}"  />
 
-            <TextBlock x:Name="OwnerFilterLb" Grid.Row="1" Grid.Column="0" Margin="4" Style="{StaticResource DialogTextBlockStyle}">
+            <TextBlock x:Name="OwnerFilterLb" Grid.Row="1" Grid.Column="0" Margin="4" Style="{DynamicResource DialogTextBlockStyle}">
                 <Run Language="ru-RU">МОЛ</Run>
             </TextBlock>
             <ComboBox x:Name="OwnerFilterCb" ItemsSource="{Binding Path=FilterOwnerList}" SelectedItem="{Binding Path=ComplexFilter.Owner}" 
                       DisplayMemberPath="Name.DisplayName" Grid.Row="1" Grid.Column="1" Margin="4" Height="32"
-                      Style="{StaticResource ComboBoxStyle}" />
+                      Style="{DynamicResource ComboBoxStyle}" />
 
-            <Button Content="Применить" Style="{StaticResource ButtonInfoStyle}" Margin="4" Height="32" Command="{Binding FilterCommand}" />
-            <Button Content="Сброс" Style="{StaticResource ButtonDefaultStyle}" Margin="4" Height="32" Command="{Binding ClearFilterCommand}" />-->
+            <Button Content="Применить" Style="{DynamicResource ButtonInfoStyle}" Margin="4" Height="32" Command="{Binding FilterCommand}" />
+            <Button Content="Сброс" Style="{DynamicResource ButtonDefaultStyle}" Margin="4" Height="32" Command="{Binding ClearFilterCommand}" />-->
         </StackPanel>
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid Style="{StaticResource DataGridDefaultStyle}" IsReadOnly="True" 
-                     Grid.Row="3" ItemsSource="{Binding Path=TableItemListView}" SelectedItem="{Binding Path=SelectedItem}">
+        <tk:DataGrid Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True" 
+                     Grid.Row="3" ItemsSource="{Binding Path=ItemList}" SelectedItem="{Binding Path=SelectedItem}">
             <tk:DataGrid.Columns>
                 <tk:DataGridTextColumn Header="Тип" Width="120" Binding="{Binding Path=MessageTypeAsString}" />
                 <tk:DataGridTextColumn Header="Дата" Width="80" Binding="{Binding Path=Date, StringFormat=\{0:dd.MM.yyyy HH:mm:ss\}}">
@@ -78,9 +79,18 @@
             </tk:DataGrid.Columns>
         </tk:DataGrid>
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
+        
+        <StatusBar Grid.Row="4">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Всего элементов: " />
+                    <TextBlock Text="{Binding Path=ItemListCollection.Count}" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
 
         <ProgressBar IsIndeterminate="True" Grid.Row="3" 
-                     Width="64" Height="64" Style="{StaticResource RadialProgressBar}"
+                     Width="64" Height="64" Style="{DynamicResource RadialProgressBar}"
                      HorizontalAlignment="Center" VerticalAlignment="Center" 
                      Visibility="{Binding Path=RefreshCommand.IsExecuting, Converter={StaticResource BoolToVisibilityConverter}}" />
 

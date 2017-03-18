@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Stock.Core.Domain
@@ -12,10 +13,11 @@ namespace Stock.Core.Domain
             get { return _documentNumber; }
             set { _documentNumber = value; }
         }
+
         public virtual Owner Owner { get; set; }
         public virtual IList<StockUnit> StockUnitList { get; set; }
 
-        private string _comments = "";
+        private string _comments = String.Empty;
         public virtual string Comments
         {
             get { return _comments; } 

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using NUnit.Framework;
-using Stock.Core.Repository;
 
 namespace Stock.Report.Tests
 {
@@ -13,14 +10,17 @@ namespace Stock.Report.Tests
         [Test]
         public void ReportExportTest()
         {
-            var stockUnitRepository = new StockUnitRepository();
-            var stockUnit = stockUnitRepository.GetById(1266, true);
+            //const string templateFileName = "C:\\Work\\Паспорт.docx";
+            //const string outFileName = "C:\\Work\\";
 
-            var templateFileName = "C:\\Work\\Паспорт.docx";
-            var outFileName = "C:\\Work\\";
+            //var stockUnitRepository = new StockUnitRepository();
+            //var stockUnit = stockUnitRepository.GetById(1266, true);
 
-            var stockUnitReport = new SimpleReport();
-            stockUnitReport.Export(stockUnit, templateFileName, outFileName);
+            //var simpleReport = new SimpleReport();
+            //simpleReport.Export(stockUnit, templateFileName, outFileName);
+
+            Environment.CurrentDirectory = @"D:\Документы";
+            Console.WriteLine(Path.GetFullPath(@".\812.doc"));
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Stock.Core.Factory
             return logEntity;
         }
 
-        public Log CreateLogMessage(UserAcc user, ILoggedEntity entity)
+        public Log CreateMessage(UserAcc user, ILoggedEntity entity)
         {
             var logEntity = new Log
             {

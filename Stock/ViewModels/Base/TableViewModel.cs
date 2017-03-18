@@ -1,23 +1,41 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Data;
+using System.Windows.Input;
 using Stock.Core.Domain;
+using Stock.Core.Filter;
+using Stock.Core.Repository;
 
 namespace Stock.UI.ViewModels.Base
 {
-    public class TableViewModel<T> : ViewModelBase, ITableBaseViewModel<T> where T : EntityBase 
+    public class TableViewModel<T> : ViewModelBase where T : EntityBase
     {
-        private ICollectionView _tableItemListView;
-        public ICollectionView TableItemListView
+        protected TableViewModel()
         {
-            get { return _tableItemListView; }
-            set { _tableItemListView = value; OnPropertyChanged("TableItemListView"); }
+            RefreshCommand = new AsyncCommand(x => RefreshMethod());
+            RefreshCommand.RunWorkerCompleted += RefreshCommand_RunWorkerCompleted;
+            SearchCommand = new RelayCommand(x => FindMethod());
         }
 
-        private IEnumerable<T> _tableItemList;
-        public IEnumerable<T> TableItemList
+        private string _searchString;
+        public virtual string SearchString
         {
-            get { return _tableItemList; }
-            set { _tableItemList = value; OnPropertyChanged("TableItemList"); }
+            get { return _searchString; }
+            set { _searchString = value; OnPropertyChanged("SearchString"); }
+        }
+
+        private ICollectionView _itemList;
+        public ICollectionView ItemList
+        {
+            get { return _itemList; }
+            set { _itemList = value; OnPropertyChanged("ItemList"); }
+        }
+
+        private IList<T> _itemListCollection;
+        public IList<T> ItemListCollection
+        {
+            get { return _itemListCollection; }
+            set { _itemListCollection = value; OnPropertyChanged("ItemListCollection"); }
         }
 
         private object _selectedItem;
@@ -27,34 +45,72 @@ namespace Stock.UI.ViewModels.Base
             set { _selectedItem = value; OnPropertyChanged("SelectedItem"); }
         }
 
+        public ICommand SearchCommand { get; set; }
         public AsyncCommand RefreshCommand { get; set; }
 
-        public void SaveTableSortOrder()
+        protected IRepository<T> Repository;
+        protected IFilter Filter;
+        protected int SearchStringMininumLength { get; set; }
+        protected bool IsSearched { get; set; }
+        
+        protected virtual void RefreshMethod()
         {
-            if (_tableItemListView == null) return;
-            if (_tableItemListView.SortDescriptions.Count <= 0) return;
+            if (!IsSearched)
+                ItemListCollection = Repository.GetAllAsTableView();
+            else
+            {
+                if (!string.IsNullOrEmpty(SearchString))
+                    Filter.SearchString = SearchString;
+                Filter.CreateFilter();
+                ItemListCollection = Repository.Find(Filter);
+            }
+            
+            var item = SelectedItem as EntityBase;
+            if (item != null) SelectedItem = Repository.GetById(item.Id);
+        }
+
+        protected virtual void RefreshCommand_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            SaveTableSortOrder();
+            ItemList = CollectionViewSource.GetDefaultView(ItemListCollection);
+            LoadTableSortOrder();
+        }
+
+        private SortDescriptionCollection _sortDescriptionCollection;
+
+        private void FindMethod()
+        {
+            if (SearchString == null) SearchString = string.Empty;
+
+            IsSearched = SearchString.Length >= SearchStringMininumLength;
+            if (RefreshCommand != null)
+                RefreshCommand.Execute(null);
+        }
+
+        private void SaveTableSortOrder()
+        {
+            if (_itemList == null) return;
+            if (_itemList.SortDescriptions.Count <= 0) return;
 
             if (_sortDescriptionCollection == null)
                 _sortDescriptionCollection = new SortDescriptionCollection();
 
-            var sortDescriptionArray = new SortDescription[_tableItemListView.SortDescriptions.Count];
-            _tableItemListView.SortDescriptions.CopyTo(sortDescriptionArray, 0);
-            
+            var sortDescriptionArray = new SortDescription[_itemList.SortDescriptions.Count];
+            _itemList.SortDescriptions.CopyTo(sortDescriptionArray, 0);
+
             _sortDescriptionCollection.Clear();
             foreach (var sortDescription in sortDescriptionArray)
                 _sortDescriptionCollection.Add(sortDescription);
         }
 
-        public void LoadTableSortOrder()
+        private void LoadTableSortOrder()
         {
-            if (_tableItemListView == null) return;
+            if (_itemList == null) return;
             if (_sortDescriptionCollection == null) return;
 
-            _tableItemListView.SortDescriptions.Clear();
+            _itemList.SortDescriptions.Clear();
             foreach (var sortDescription in _sortDescriptionCollection)
-                _tableItemListView.SortDescriptions.Add(sortDescription);
+                _itemList.SortDescriptions.Add(sortDescription);
         }
-
-        private SortDescriptionCollection _sortDescriptionCollection;
     }
 }

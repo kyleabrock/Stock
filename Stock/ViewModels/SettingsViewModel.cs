@@ -10,11 +10,17 @@ namespace Stock.UI.ViewModels
     {
         public SettingsViewModel()
         {
-            SettingsAppFolderPath = (string)Properties.Settings.Default["SettingsAppFolder"];
             RefreshPeriod = Properties.Settings.Default["RefreshPeriod"].ToString();
+            SettingsAppFolderPath = Properties.Settings.Default["SettingsAppFolder"].ToString();
+            TemplatesFolderPath = Properties.Settings.Default["TemplatesFolderPath"].ToString();
+            ExportFolderPath = Properties.Settings.Default["ExportFolderPath"].ToString();
+            StockUnitFilesFolder = Properties.Settings.Default["StockUnitFilesFolder"].ToString();
 
             SaveCommand = new RelayCommand(x => SaveMethod());
-            SelectFolderCommand = new RelayCommand(x => SelectFolderMethod());
+            SettingsAppFolderCommand = new RelayCommand(x => { SettingsAppFolderPath = SelectFolderFunc() ?? SettingsAppFolderPath; });
+            TemplatesFolderPathCommand = new RelayCommand(x => { TemplatesFolderPath = SelectFolderFunc() ?? TemplatesFolderPath; });
+            ExportFolderPathCommand = new RelayCommand(x => { ExportFolderPath = SelectFolderFunc() ?? ExportFolderPath; });
+            StockUnitFilesFolderCommand = new RelayCommand(x => { StockUnitFilesFolder = SelectFolderFunc() ?? StockUnitFilesFolder; });
         }
 
         private string _settingsAppFolderPath;
@@ -31,18 +37,45 @@ namespace Stock.UI.ViewModels
             set { _refreshPeriod = value; OnPropertyChanged("RefreshPeriod"); }
         }
 
+        private string _templatesFolderPath;
+        public string TemplatesFolderPath
+        {
+            get { return _templatesFolderPath; }
+            set { _templatesFolderPath = value; OnPropertyChanged("TemplatesFolderPath"); }
+        }
+
+        private string _exportFolderPath;
+        public string ExportFolderPath
+        {
+            get { return _exportFolderPath; }
+            set { _exportFolderPath = value; OnPropertyChanged("ExportFolderPath"); }
+        }
+
+        private string _stockUnitFilesFolder;
+        public string StockUnitFilesFolder
+        {
+            get { return _stockUnitFilesFolder; }
+            set { _stockUnitFilesFolder = value; OnPropertyChanged("StockUnitFilesFolder"); }
+        }
+
         public ICommand SaveCommand { get; set; }
-        public ICommand SelectFolderCommand { get; set; }
-        public Action SelectFolderAction { get; set; }
+        public ICommand SettingsAppFolderCommand { get; set; }
+        public ICommand TemplatesFolderPathCommand { get; set; }
+        public ICommand ExportFolderPathCommand { get; set; }
+        public ICommand StockUnitFilesFolderCommand { get; set; }
+        public Func<string> SelectFolderFunc { get; set; }
 
         private void SaveMethod()
         {
             if (CheckValues())
             {
-                Properties.Settings.Default["SettingsAppFolder"] = SettingsAppFolderPath;
-
                 int refreshPeriod = int.Parse(RefreshPeriod);
                 Properties.Settings.Default["RefreshPeriod"] = refreshPeriod;
+
+                Properties.Settings.Default["SettingsAppFolder"] = SettingsAppFolderPath;
+                Properties.Settings.Default["TemplatesFolderPath"] = TemplatesFolderPath;
+                Properties.Settings.Default["ExportFolderPath"] = ExportFolderPath;
+                Properties.Settings.Default["StockUnitFilesFolder"] = StockUnitFilesFolder;
                 
                 Properties.Settings.Default.Save();
             }
@@ -67,11 +100,6 @@ namespace Stock.UI.ViewModels
                 return false;
             }
             return true;
-        }
-
-        private void SelectFolderMethod()
-        {
-            SelectFolderAction();
         }
     }
 }

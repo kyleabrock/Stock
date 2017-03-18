@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:Stock.UI.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1000" Background="{StaticResource DefaultBackground}">
+             d:DesignHeight="700" d:DesignWidth="1000" Background="{DynamicResource DefaultBackground}">
     <UserControl.DataContext>
         <viewModels:SettingsViewModel x:Name="ViewModel" />
     </UserControl.DataContext>
@@ -13,6 +13,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="48"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
             <RowDefinition Height="32"/>
             <RowDefinition Height="32"/>
             <RowDefinition Height="32"/>
@@ -25,15 +27,24 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         
-        <TextBlock Text="Настройки" Margin="16,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource DialogTitleTextBlockStyle}" />
-        <TextBlock Text="Ресурсы приложения" Margin="16,0" Grid.Row="1" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}" />
-        <TextBlock Text="Период обновления (сек)" Margin="16,0" Grid.Row="2" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}" />
+        <TextBlock Text="Настройки" Margin="16,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource DialogTitleTextBlockStyle}" />
+        <TextBlock Text="Период обновления (сек)" Margin="16,0" Grid.Row="1" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}" />
+        <TextBlock Text="Ресурсы приложения" Margin="16,0" Grid.Row="2" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}" />
+        <TextBlock Text="Шаблоны отчетов" Margin="16,0" Grid.Row="3" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}" />
+        <TextBlock Text="Экспорт" Margin="16,0" Grid.Row="4" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}" />
+        <TextBlock Text="Файлы комплектов" Margin="16,0" Grid.Row="5" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}" />
+
+        <TextBox Text="{Binding Path=RefreshPeriod}" Grid.Row="1" Grid.Column="1" Margin="4" Style="{DynamicResource TextBoxStyle}" />
+        <TextBox Text="{Binding Path=SettingsAppFolderPath}" IsEnabled="False" Grid.Row="2" Grid.Column="1" Margin="4,4,26,4" Style="{DynamicResource TextBoxStyle}" />
+        <Button Content="..." Command="{Binding SettingsAppFolderCommand}" Width="24" Height="24" Margin="4" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Style="{DynamicResource ButtonInfoStyle}" />
+        <TextBox Text="{Binding Path=TemplatesFolderPath}" IsEnabled="False" Grid.Row="3" Grid.Column="1" Margin="4,4,26,4" Style="{DynamicResource TextBoxStyle}" />
+        <Button Content="..." Command="{Binding TemplatesFolderPathCommand}" Width="24" Height="24" Margin="4" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Style="{DynamicResource ButtonInfoStyle}" />
+        <TextBox Text="{Binding Path=ExportFolderPath}" IsEnabled="False" Grid.Row="4" Grid.Column="1" Margin="4,4,26,4" Style="{DynamicResource TextBoxStyle}" />
+        <Button Content="..." Command="{Binding ExportFolderPathCommand}" Width="24" Height="24" Margin="4" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" Style="{DynamicResource ButtonInfoStyle}" />
+        <TextBox Text="{Binding Path=StockUnitFilesFolder}" IsEnabled="False" Grid.Row="5" Grid.Column="1" Margin="4,4,26,4" Style="{DynamicResource TextBoxStyle}" />
+        <Button Content="..." Command="{Binding StockUnitFilesFolderCommand}" Width="24" Height="24" Margin="4" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" Style="{DynamicResource ButtonInfoStyle}" />
         
-        <TextBox Text="{Binding Path=SettingsAppFolderPath}" Grid.Row="1" Grid.Column="1" Margin="4,4,26,4" Style="{StaticResource TextBoxStyle}" />
-        <Button Content="..." Command="{Binding SelectFolderCommand}" Width="24" Height="24" Margin="4" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource ButtonInfoStyle}" />
-        <TextBox Text="{Binding Path=RefreshPeriod}" Grid.Row="2" Grid.Column="1" Margin="4" Style="{StaticResource TextBoxStyle}" />
-        
-        <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="100" Height="32" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" Margin="4,0" Style="{StaticResource ButtonInfoStyle}" />
+        <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="100" Height="32" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right" Margin="4,0" Style="{DynamicResource ButtonInfoStyle}" />
 
     </Grid>
 </UserControl>

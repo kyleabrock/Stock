@@ -10,7 +10,7 @@ namespace Stock.UI.Views
     /// <summary>
     /// Логика взаимодействия для ResourceFlowWindow.xaml
     /// </summary>
-    public partial class RepairTableView
+    public partial class RepairTableView : ITableView
     {
         public RepairTableView()
         {
@@ -30,6 +30,15 @@ namespace Stock.UI.Views
                 ViewModel.AddAction = DisplayAddDialog;
             if (ViewModel.EditAction == null)
                 ViewModel.EditAction = DisplayEditDialog;
+            if (ViewModel.ShowInfoMessage == null)
+                ViewModel.ShowInfoMessage = (text, caption) => MessageBox.Show(text, caption);
+            if (ViewModel.ShowDialogMessage == null)
+            {
+                const MessageBoxButton buttons = MessageBoxButton.OKCancel;
+                const MessageBoxResult result = MessageBoxResult.OK;
+                ViewModel.ShowDialogMessage =
+                    (text, caption) => MessageBox.Show(text, caption, buttons) == result;
+            }
         }
 
         private void DisplayAddDialog()
@@ -69,6 +78,11 @@ namespace Stock.UI.Views
             {
                 FilterGridColumn.Width = new GridLength(0, GridUnitType.Pixel);
             }
+        }
+
+        private void DataGrid_OnSorting(object sender, DataGridSortingEventArgs e)
+        {
+            var column = e.Column;
         }
     }
 }

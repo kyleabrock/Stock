@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Windows;
 using Stock.Core.Domain;
 using Stock.UI.ViewModels.Dialogs;
 
@@ -53,21 +52,23 @@ namespace Stock.UI.Views.Dialogs
         {
             if (ViewModel.CloseAction == null)
                 ViewModel.CloseAction = Close;
+            if (ViewModel.AddFunc == null)
+                ViewModel.AddFunc = AddFunc;
         }
 
-	    private void StockUnitAddButton_OnClick(object sender, RoutedEventArgs e)
+	    private ObservableCollection<StockUnit> AddFunc(Card card)
 	    {
-	        var dialog = new StockUnitSearchView(ViewModel.DefaultCard);
-	        dialog.Closed += (s, j) =>
-	        {
-	            if (dialog.Result != null)
-	            {
-	                ViewModel.NewStockUnitList = new ObservableCollection<StockUnit>(dialog.Result);
-                    ViewModel.AddStockUnit();
-	            }
-	        };
+            var dialog = new StockUnitSearchView(card) { Owner = GetWindow(this) };
+	        
+            var items = new ObservableCollection<StockUnit>();
+            dialog.Closed += (s, j) =>
+            {
+                if (dialog.Result != null)
+                    items = new ObservableCollection<StockUnit>(dialog.Result);
+            };
 
-            dialog.ShowDialog();
+	        dialog.ShowDialog();
+	        return items;
 	    }
 	}
 }

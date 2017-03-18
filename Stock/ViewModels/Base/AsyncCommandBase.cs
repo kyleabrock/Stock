@@ -12,13 +12,13 @@ namespace Stock.UI.ViewModels.Base
             try
             {
                 OnRunWorkerStarting();
-
-                var worker = new BackgroundWorker();
-                worker.DoWork += ((sender, e) => OnExecute(e.Argument));
-                worker.RunWorkerCompleted += ((sender, e) => OnRunWorkerCompleted(e));
                 
-                if (!worker.IsBusy)
-                    worker.RunWorkerAsync(parameter);
+                _worker = new BackgroundWorker { WorkerReportsProgress = true };
+                _worker.DoWork += ((sender, e) => OnExecute(e.Argument));
+                _worker.RunWorkerCompleted += ((sender, e) => OnRunWorkerCompleted(e));
+                
+                if (!_worker.IsBusy)
+                    _worker.RunWorkerAsync(parameter);
             }
             catch (Exception ex)
             {
@@ -52,14 +52,15 @@ namespace Stock.UI.ViewModels.Base
 
         protected abstract void OnExecute(object paramenter);
 
+        private BackgroundWorker _worker;
+
         private void OnRunWorkerStarting()
         {
             IsExecuting = true;
             if (RunWorkerStarting != null)
                 RunWorkerStarting(this, EventArgs.Empty);
-
         }
-
+        
         private void OnRunWorkerCompleted(RunWorkerCompletedEventArgs e)
         {
             IsExecuting = false;

@@ -10,7 +10,7 @@
 	Title="Новый статус"
 	Width="480" Height="480" ResizeMode="NoResize" 
     WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
-    Icon="../../Themes/MainIcon.ico">
+    Icon="pack://application:,,,/Stock;component/Themes/MainIcon.ico">
     <Window.DataContext>
         <dialogs:StatusAddViewModel x:Name="ViewModel"/>
     </Window.DataContext>
@@ -32,26 +32,26 @@
 			<RowDefinition />
 		</Grid.RowDefinitions>
         <!-- Title -->
-		<TextBlock Grid.RowSpan="2" Grid.ColumnSpan="2" Style="{StaticResource DialogTitleTextBlockStyle}">
+		<TextBlock Grid.RowSpan="2" Grid.ColumnSpan="2" Style="{DynamicResource DialogTitleTextBlockStyle}">
             <Run Language="ru-RU" Text="Новое устройство"/>
         </TextBlock>
         
         <!-- Main form -->
-		<TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+		<TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="en-US" Text="ID" />
         </TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="ru-RU" Text="Группа" />
         </TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <TextBlock Grid.Row="4" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="ru-RU" Text="Название"/>
         </TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <TextBlock Grid.Row="5" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="ru-RU" Text="Комментарии"/>
         </TextBlock>
-        
-        <TextBox Text="{Binding Status.Id}" Grid.Row="2" Grid.Column="1" IsReadOnly="True" Style="{StaticResource DialogTextBoxStyle}" />
-        <ComboBox x:Name="StatusTypeCb" SelectedIndex="{Binding StatusType}" Grid.Row="3" Grid.Column="1"
+
+        <TextBox Text="{Binding Status.Id}" Grid.Row="2" Grid.Column="1" IsEnabled="False" Style="{DynamicResource DialogTextBoxStyle}" />
+        <ComboBox x:Name="StatusTypeCb" SelectedIndex="{Binding StatusType, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1"
                   Margin="4" FontSize="13.333"
                   VerticalAlignment="Center">
             <ComboBoxItem Content="Новый" />
@@ -59,16 +59,16 @@
             <ComboBoxItem Content="Отложено" />
             <ComboBoxItem Content="Завершен" />
         </ComboBox>
-        <TextBox x:Name="StatusNameTb" Text="{Binding Status.StatusName}" Grid.Row="4" Grid.Column="1" Style="{StaticResource DialogTextBoxStyle}"/>
-        <TextBox Text="{Binding Status.Comments}" Grid.Row="5" Grid.Column="1" Grid.RowSpan="3" Style="{StaticResource DialogTextBoxStyle}"
+        <TextBox x:Name="StatusNameTb" Text="{Binding Status.StatusName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Style="{DynamicResource DialogTextBoxStyle}"/>
+        <TextBox Text="{Binding Status.Comments, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1" Grid.RowSpan="3" Style="{DynamicResource DialogTextBoxStyle}"
                  VerticalAlignment="Stretch" TextWrapping="Wrap" />
         
         <!-- Dialog buttons -->
         <StackPanel Grid.Row="8" Grid.Column="1" Height="32" Margin="0,4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
 			<Button Content="Сохранить" IsDefault="True" Margin="4,0" Width="100"
-                    HorizontalAlignment="Right" Style="{StaticResource ButtonDefaultStyle}" Command="{Binding SaveCommand}"/>
+                    HorizontalAlignment="Right" Style="{DynamicResource ButtonDefaultStyle}" Command="{Binding SaveCommand}"/>
             <Button Content="Отмена" IsCancel="True" Margin="4,0" Width="100"
-                    HorizontalAlignment="Right" Style="{StaticResource ButtonDefaultStyle}" Command="{Binding CloseCommand}"/>
+                    HorizontalAlignment="Right" Style="{DynamicResource ButtonDefaultStyle}" Command="{Binding CloseCommand}"/>
 		</StackPanel>
 	</Grid>
 </Window>

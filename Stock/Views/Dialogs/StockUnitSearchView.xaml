@@ -4,18 +4,22 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tk="http://schemas.microsoft.com/wpf/2008/toolkit"
-    xmlns:dialogs="clr-namespace:Stock.UI.ViewModels.Dialogs"
-    mc:Ignorable="d"
+    xmlns:dialogs="clr-namespace:Stock.UI.ViewModels.Dialogs" xmlns:utils="clr-namespace:Stock.UI.Utils"
+	mc:Ignorable="d"
 	x:Class="Stock.UI.Views.Dialogs.StockUnitSearchView"
 	x:Name="Window"
 	Title="Поиск устройства"
-	Width="480" Height="640" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
-    Icon="../../Themes/MainIcon.ico">
+	Width="640" Height="600" ResizeMode="NoResize" 
+    WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+    Icon="pack://application:,,,/Stock;component/Themes/MainIcon.ico">
     <Window.DataContext>
         <dialogs:StockUnitSearchViewModel x:Name="ViewModel" />
     </Window.DataContext>
+    <Window.Resources>
+        <utils:StatusTypeToColorConverter x:Key="ColorConverter" />
+    </Window.Resources>
 
-	<Grid x:Name="LayoutRoot" Margin="4">
+    <Grid Margin="4">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="32"/>
             <RowDefinition />
@@ -23,24 +27,51 @@
 		</Grid.RowDefinitions>
         
         <!-- Search controls -->
-        <TextBox x:Name="SearchTb" Grid.Row="0" Style="{StaticResource TextBoxStyle}" 
-                 Text="{Binding SearchString}" TextChanged="SearchTb_TextChanged" 
-                 PreviewKeyDown="SearchTb_OnPreviewKeyDown" Margin="4"/>
+        <TextBox x:Name="SearchTb" Grid.Row="0" Style="{DynamicResource TextBoxStyle}" 
+                 Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Margin="4" 
+                 PreviewKeyDown="SearchTb_OnPreviewKeyDown"/>
         
-        <tk:DataGrid x:Name="MainDataGrid" Grid.Row="1" Style="{StaticResource DataGridDefaultStyle}" 
+        <tk:DataGrid x:Name="MainDataGrid" Grid.Row="1" Style="{DynamicResource DataGridDefaultStyle}" 
                      IsReadOnly="True" Margin="4" SelectionMode="Extended"
-                     ItemsSource="{Binding TableItemListView}" 
+                     ItemsSource="{Binding ItemList}" 
                      SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
             <tk:DataGrid.Columns>
-                <tk:DataGridTextColumn Header="Инв. №" Binding="{Binding StockNumber}" Width="0.5*" />
-                <tk:DataGridTextColumn Header="Название" Binding="{Binding StockName}" Width="1*" />                
+                <tk:DataGridTemplateColumn Header="Статус" Width="76" ClipboardContentBinding="{Binding Path=Status.StatusName}" SortMemberPath="Status.StatusName">
+                    <tk:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Margin="4" Background="{Binding Path=Status.StatusType, Converter={StaticResource ColorConverter}}" CornerRadius="6" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Path=Status.StatusName}" Margin="4" FontSize="10" Foreground="{DynamicResource ButtonForegroundBrush}" HorizontalAlignment="Center" />
+                            </Border>
+                        </DataTemplate>
+                    </tk:DataGridTemplateColumn.CellTemplate>
+                </tk:DataGridTemplateColumn>
+                <tk:DataGridTextColumn Header="Инв. №" Binding="{Binding Path=StockNumber}" Width="100" />
+                <tk:DataGridTextColumn Header="Название" Binding="{Binding Path=StockName}" Width="1*">
+                    <tk:DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+                        </Style>
+                    </tk:DataGridTextColumn.ElementStyle>
+                </tk:DataGridTextColumn>
+                <tk:DataGridTextColumn Header="Комментарии" Binding="{Binding Path=Comments}" Width="1*">
+                    <tk:DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+                        </Style>
+                    </tk:DataGridTextColumn.ElementStyle>
+                </tk:DataGridTextColumn>
             </tk:DataGrid.Columns>
         </tk:DataGrid>
-        
+
+        <ProgressBar IsIndeterminate="True" Grid.Row="1" 
+                     Width="64" Height="64" Style="{DynamicResource RadialProgressBar}"
+                     HorizontalAlignment="Center" VerticalAlignment="Center" 
+                     Visibility="{Binding Path=RefreshCommand.IsExecuting, Converter={StaticResource BoolToVisibilityConverter}}" />
+
         <!-- Dialog buttons -->
         <StackPanel Grid.Row="2" Height="32" Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <Button x:Name="OkBtn" Content="Сохранить" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" Style="{StaticResource ButtonDefaultStyle}" Command="{Binding OkCommand}" Margin="4,0" Width="100"/>
-            <Button x:Name="CancelBtn" Content="Отмена" IsCancel="True" Style="{StaticResource ButtonDefaultStyle}" Command="{Binding CancelCommand}" Margin="4,0" Width="100"/>
+            <Button Content="Сохранить" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" Style="{DynamicResource ButtonDefaultStyle}" Command="{Binding OkCommand}" Margin="4,0" Width="100"/>
+            <Button Content="Отмена" IsCancel="True" Style="{DynamicResource ButtonDefaultStyle}" Command="{Binding CancelCommand}" Margin="4,0" Width="100"/>
         </StackPanel>
 
     </Grid>

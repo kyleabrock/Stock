@@ -1,10 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Stock.UI.Properties;
+using Stock.UI.Views;
 
 namespace Stock.UI
 {
@@ -16,32 +13,22 @@ namespace Stock.UI
         public MainWindow()
         {
             InitializeComponent();
-            BlockButtons(true);
-
-            _settingsFolder = (string)Settings.Default["SettingsAppFolder"];
-            _refreshPeriod = (int)Settings.Default["RefreshPeriod"];
-
-            ApplicationState.SetValue("TemplatesFolderPath", Settings.Default["TemplatesFolderPath"]);
-            ApplicationState.SetValue("ExportFolderPath", Settings.Default["ExportFolderPath"]);
-
-            LoginWindow.LoggedIn += LoginWindow_LoggedIn;
-            UserPageWindow.LoggedOut += UserPageWindow_LoggedOut;
+            
+            var viewModel = new MainWindowViewModel(ShowDialogMessage, ShowLoginWindow);
+            DataContext = viewModel;
         }
 
-        private readonly string _settingsFolder;
-        private readonly int _refreshPeriod;
-
-        private void BlockButtons(bool block)
+        private bool ShowLoginWindow()
         {
-            StockUnitTab.IsEnabled = !block;
-            CardTab.IsEnabled = !block;
-            DocumentTab.IsEnabled = !block;
-            UnitTab.IsEnabled = !block;
-            RepairTab.IsEnabled = !block;
-            OwnerTab.IsEnabled = !block;
-            StaffTab.IsEnabled = !block;
-            StatusTab.IsEnabled = !block;
-            LogTab.IsEnabled = !block;
+            var dialog = new Views.Dialogs.LoginView();
+            var showDialog = dialog.ShowDialog();
+            
+            return showDialog != null && (bool) showDialog;
+        }
+
+        private void ShowDialogMessage(string s)
+        {
+            MessageBox.Show(s);
         }
 
         private DispatcherTimer _timer;
@@ -49,84 +36,93 @@ namespace Stock.UI
         private void RefreshTab()
         {
             var item = MainTabControl.SelectedItem as TabItem;
-            if (item != null)
-            {
-                if (item.Name == "StockUnitTab")
-                    StockUnitWindow.Refresh();
-                if (item.Name == "CardTab")
-                    CardWindow.Refresh();
-                if (item.Name == "DocumentTab")
-                    DocumentWindow.Refresh();
-                if (item.Name == "UnitTab")
-                    UnitWindow.Refresh();
-                if (item.Name == "RepairTab")
-                    RepairWindow.Refresh();
-                if (item.Name == "OwnerTab")
-                    OwnerWindow.Refresh();
-                if (item.Name == "StaffTab")
-                    StaffWindow.Refresh();
-                if (item.Name == "StatusTab")
-                    StatusWindow.Refresh();
-                if (item.Name == "LogTab")
-                    LogWindow.Refresh();
-            }
+            //if (item != null)
+            //{
+            //    if (item.Name == "StockUnitTab")
+            //        StockUnitWindow.Refresh();
+            //    if (item.Name == "CardTab")
+            //        CardWindow.Refresh();
+            //    if (item.Name == "DocumentTab")
+            //        DocumentWindow.Refresh();
+            //    if (item.Name == "UnitTab")
+            //        UnitWindow.Refresh();
+            //    if (item.Name == "RepairTab")
+            //        RepairWindow.Refresh();
+            //    if (item.Name == "OwnerTab")
+            //        OwnerWindow.Refresh();
+            //    if (item.Name == "StaffTab")
+            //        StaffWindow.Refresh();
+            //    if (item.Name == "StatusTab")
+            //        StatusWindow.Refresh();
+            //    if (item.Name == "LogTab")
+            //        LogWindow.Refresh();
+            //}
         }
 
-        private void TimerStart()
-        {
-            _timer = new DispatcherTimer {Interval = new TimeSpan(0, 0, _refreshPeriod)};
-            _timer.Tick += (s, j) => RefreshTab();
-            _timer.Start();
-        }
+        //private void TimerStart()
+        //{
+        //    _timer = new DispatcherTimer {Interval = new TimeSpan(0, 0, _refreshPeriod)};
+        //    _timer.Tick += (s, j) => RefreshTab();
+        //    _timer.Start();
+        //}
 
-        private void LoginWindow_LoggedIn(object sender, EventArgs e)
-        {
-            if (!LoginWindow.LoginStatus) return;
+        //private void LoginWindow_LoggedIn(object sender, EventArgs e)
+        //{
+        //    if (!LoginWindow.LoginStatus) return;
 
-            ApplicationState.SetValue("User", LoginWindow.LoggedInUser);
-            LoginWindow.ClearValues();
-            LoginWindow.Visibility = Visibility.Hidden;
-            LoginWindow.IsEnabled = false;
+        //    ApplicationState.SetValue("User", LoginWindow.LoggedInUser);
+        //    LoginWindow.ClearValues();
+        //    LoginWindow.Visibility = Visibility.Hidden;
+        //    LoginWindow.IsEnabled = false;
 
-            UserPageWindow.Visibility = Visibility.Visible;
-            UserPageWindow.IsEnabled = true;
+        //    UserPageWindow.Visibility = Visibility.Visible;
+        //    UserPageWindow.IsEnabled = true;
 
-            var imagePath = _settingsFolder + LoginWindow.LoggedInUser.UserImagePath;
-            if (File.Exists(imagePath))
-                UserImage.Source = new BitmapImage(new Uri(_settingsFolder + LoginWindow.LoggedInUser.UserImagePath));
+        //    var imagePath = _settingsFolder + LoginWindow.LoggedInUser.UserImagePath;
+        //    if (File.Exists(imagePath))
+        //        UserImage.Source = new BitmapImage(new Uri(_settingsFolder + LoginWindow.LoggedInUser.UserImagePath));
 
-            UserNamePresenter.Content = LoginWindow.LoggedInUser.Name.DisplayName;
-
-            BlockButtons(false);
+        //    UserNamePresenter.Content = LoginWindow.LoggedInUser.Name.DisplayName;
             
-            if (_timer != null)
-                _timer.Stop();
-            else
-            {
-                TimerStart();
-            }
-        }
+        //    if (_timer != null)
+        //        _timer.Stop();
+        //    else
+        //    {
+        //        TimerStart();
+        //    }
+        //}
 
-        void UserPageWindow_LoggedOut(object sender, EventArgs e)
-        {
-            UserPageWindow.Visibility = Visibility.Hidden;
-            UserPageWindow.IsEnabled = false;
+        //void UserPageWindow_LoggedOut(object sender, EventArgs e)
+        //{
+        //    UserPageWindow.Visibility = Visibility.Hidden;
+        //    UserPageWindow.IsEnabled = false;
 
-            LoginWindow.IsEnabled = true;
-            LoginWindow.LoginStatus = false;
-            ApplicationState.SetValue("User", null);
-            LoginWindow.Visibility = Visibility.Visible;
+        //    LoginWindow.IsEnabled = true;
+        //    LoginWindow.LoginStatus = false;
+        //    ApplicationState.SetValue("User", null);
+        //    LoginWindow.Visibility = Visibility.Visible;
 
-            UserImage.Source = (BitmapImage)FindResource("UserAccBitmapImage");
-            UserNamePresenter.Content = "Гость";
-
-            BlockButtons(true);
-        }
+        //    UserImage.Source = (BitmapImage)FindResource("UserAccBitmapImage");
+        //    UserNamePresenter.Content = "Гость";
+        //}
 
         private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.Source is TabControl)
-                RefreshTab();
+            var tabControl = e.Source as TabControl;
+            if (tabControl == null) return;
+
+            var tabItem = tabControl.SelectedItem as TabItem;
+            if (tabItem == null) return;
+
+            var grid = tabItem.Content as Grid;
+            if (grid == null) return;
+
+            var children = grid.Children;
+            foreach (var child in children)
+            {
+                var item = child as ITableView;
+                if (item != null) item.Refresh();
+            }
         }
     }
 }

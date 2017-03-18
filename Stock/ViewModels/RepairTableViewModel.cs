@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Data;
 using Stock.Core.Domain;
 using Stock.Core.Filter;
+using Stock.Core.Filter.FilterParams;
 using Stock.Core.Repository;
 using Stock.UI.ViewModels.Base;
 
@@ -25,77 +23,61 @@ namespace Stock.UI.ViewModels
             set { _filterUserList = value; OnPropertyChanged("FilterUserList"); }
         }
 
-        private RepairRepository _repairRepository;
-        private bool _initFilterStatus = false;
+        protected override void RefreshMethod()
+        {
+            if (!IsFilterInitialized)
+            {
+                Filter = new RepairFilter();
+                ComplexFilterParams = new RepairFilterParams();
+                InitFilter();
+
+                IsFilterInitialized = true;
+            }
+
+            base.RefreshMethod();
+        }
+
+        private bool IsFilterInitialized { get; set; }
 
         private void InitViewModel()
         {
-            _repairRepository = new RepairRepository();
+            Repository = new RepairRepository();
 
             AddCommand = new RelayCommand(x => AddMethod());
             EditCommand = new RelayCommand(x => EditMethod());
             DeleteCommand = new RelayCommand(x => DeleteMethod());
-            RefreshCommand = new AsyncCommand(x => RefreshMethod());
-            RefreshCommand.RunWorkerCompleted += RefreshCommand_RunWorkerCompleted;
-
-            ComplexFilter = new RepairFilter();
+            FilterCommand = new RelayCommand(x => FilterMethod());
+            ClearFilterCommand = new RelayCommand(x => ClearFilterMethod());
         }
 
         private void InitFilter()
         {
             var userRepository = new Repository<UserAcc>();
             FilterUserList = userRepository.GetAll();
-
-            _initFilterStatus = true;
         }
 
-        void RefreshCommand_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void FilterMethod()
         {
-            if (!_initFilterStatus)
-                InitFilter();
-
-            SaveTableSortOrder();
-
-            if (!IsSearched)
-                TableItemListView = CollectionViewSource.GetDefaultView(TableItemList);
-            else
+            var filter = ComplexFilterParams as RepairFilterParams;
+            if (filter != null)
             {
-                //Get all units
-                var itemList = CollectionViewSource.GetDefaultView(TableItemList);
-                var filter = new Predicate<object>(FilterItems);
-                itemList.Filter = filter;
-                TableItemListView = itemList;
+                Filter = new RepairFilter(filter);
+                IsSearched = true;
+                if (RefreshCommand != null)
+                    RefreshCommand.Execute(null);
             }
-
-            LoadTableSortOrder();
         }
 
-        private void RefreshMethod()
+        private void ClearFilterMethod()
         {
-            TableItemList = ComplexFilterStatus ? 
-                _repairRepository.GetAllByComplexFilter(ComplexFilter) 
-                : _repairRepository.GetAll(x => x.StartedDate, false, true);
-        }
+            Filter = new RepairFilter();
+            ComplexFilterParams = new RepairFilterParams();
+            InitFilter();
 
-        private bool FilterItems(object obj)
-        {
-            if (!(obj is Repair))
-                return false;
+            if (string.IsNullOrEmpty(SearchString)) IsSearched = false;
 
-            var filterString = SearchString;
-            var right = (Repair)obj;
-
-            if (StringContains(right.StartedDate.ToShortDateString(), filterString))
-                return true;
-            if (StringContains(right.CompletedDate.ToShortDateString(), filterString))
-                return true;
-            if (StringContains(right.Defect, filterString))
-                return true;
-            if (StringContains(right.Result, filterString))
-                return true;
-            if (StringContains(right.User.Name.DisplayName, filterString))
-                return true;
-            return StringContains(right.Comments, filterString);
+            if (RefreshCommand != null)
+                RefreshCommand.Execute(null);
         }
 
         private void AddMethod()
@@ -116,9 +98,8 @@ namespace Stock.UI.ViewModels
                 const string caption = "Удаление";
                 const string text = "Вы действительно хотите удалить эту запись?\r\n" +
                                     "Все устройства будут удалены.";
-                const MessageBoxButton buttons = MessageBoxButton.OKCancel;
-
-                if (MessageBox.Show(text, caption, buttons) == MessageBoxResult.OK)
+                
+                if (ShowDialogMessage(text, caption))
                 {
                     DeleteRepair(item);
                     if (RefreshCommand != null)
@@ -129,7 +110,14 @@ namespace Stock.UI.ViewModels
 
         private void DeleteRepair(Repair item)
         {
-            _repairRepository.Delete(item);
+            try
+            {
+                Repository.Delete(item);
+            }
+            catch (Exception ex)
+            {
+                ShowInfoMessage(ex.Message, "Ошибка");
+            }
         }
     }
 }

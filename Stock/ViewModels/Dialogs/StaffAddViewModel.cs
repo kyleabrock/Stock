@@ -51,7 +51,7 @@ namespace Stock.UI.ViewModels.Dialogs
 
             var user = ApplicationState.GetValue<UserAcc>("User");
             ILogFactory logFactory = new LogFactory();
-            var logEntity = logFactory.CreateLogMessage(user, Staff);
+            var logEntity = logFactory.CreateMessage(user, Staff);
             var repository = new Repository<Log>();
             repository.Save(logEntity);
 

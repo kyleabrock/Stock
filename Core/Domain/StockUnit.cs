@@ -5,14 +5,14 @@ namespace Stock.Core.Domain
 {
     public class StockUnit : EntityBase, ILoggedEntity
     {
-        private string _stockNumber = "";
+        private string _stockNumber = String.Empty;
         public virtual string StockNumber
         {
             get { return _stockNumber; }
             set { _stockNumber = value; }
         }
 
-        private string _stockName = "";
+        private string _stockName = String.Empty;
         public virtual string StockName
         {
             get { return _stockName; }
@@ -32,7 +32,7 @@ namespace Stock.Core.Domain
         public virtual IList<Document> DocumentList { get; set; }
         public virtual IList<Unit> UnitList { get; set; }
         
-        private string _comments = "";
+        private string _comments = String.Empty;
         public virtual string Comments
         {
             get { return _comments; }

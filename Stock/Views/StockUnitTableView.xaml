@@ -6,14 +6,15 @@
              xmlns:tk="http://schemas.microsoft.com/wpf/2008/toolkit"
              xmlns:viewModels="clr-namespace:Stock.UI.ViewModels"
              xmlns:utils="clr-namespace:Stock.UI.Utils"
-             xmlns:domain="clr-namespace:Stock.Core.Domain;assembly=Stock.Core"
+             xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1000" Background="{StaticResource DefaultBackground}">
+             d:DesignHeight="700" d:DesignWidth="1000" Background="{DynamicResource DefaultBackground}">
     <UserControl.DataContext>
         <viewModels:StockUnitTableViewModel x:Name="ViewModel" />
     </UserControl.DataContext>
     <UserControl.Resources>
-        <utils:StatusTypesToColorConverter x:Key="ColorConverter" />
+        <utils:StatusTypeToColorConverter x:Key="ColorConverter" />
+        <utils:IntToVisibilityConverter x:Key="IntToVisibilityConverter" />
     </UserControl.Resources>
     
     <Grid>
@@ -22,91 +23,164 @@
             <RowDefinition Height="48"/>
             <RowDefinition Height="16"/>
             <RowDefinition />
+            <RowDefinition Height="24" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="0" x:Name="FilterGridColumn"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Основные средства" Grid.Row="0" Style="{StaticResource WindowTitleBlockStyle}" />
+        <TextBlock Text="Основные средства" Grid.Row="0" Style="{DynamicResource WindowTitleBlockStyle}" />
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Height="32" VerticalAlignment="Bottom">
-            <Button Margin="4,0" Style="{StaticResource AddButtonNormalStyle}" Command="{Binding AddCommand}" />
-            <Button Margin="4,0" Style="{StaticResource EditButtonSmallStyle}" Command="{Binding EditCommand}" />
-            <Button Margin="4,0" Style="{StaticResource DeleteButtonSmallStyle}" Command="{Binding DeleteCommand}" />
-            <Button Margin="4,0" Style="{StaticResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
-            <Button Margin="4,0" Style="{StaticResource FilterButtonSmallStyle}" Click="FilterButton_OnClick" />
+            <Button Margin="4,0" Style="{DynamicResource AddButtonNormalStyle}" Command="{Binding AddCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource ImportButtonSmallStyle}" Command="{Binding CopyCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource EditButtonSmallStyle}" Command="{Binding EditCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource DeleteButtonSmallStyle}" Command="{Binding DeleteCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource FilterButtonSmallStyle}" Click="FilterButton_OnClick" />
         </StackPanel>
         <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{StaticResource TextBoxStyle}" />
+            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle}" />
             <Button Margin="4,0" Command="{Binding SearchCommand}" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" 
-                    Style="{StaticResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
+                    Style="{DynamicResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
         </Grid>
 
         <!-- Filter Grid -->
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <StackPanel Orientation="Vertical" Background="{StaticResource BootstrapGrayColor5}" Grid.Column="1" Grid.Row="3" Width="200">
-            <TextBlock Style="{StaticResource DialogTextBlockStyle}">
-                <Run Language="ru-RU">Статус</Run>
+        <StackPanel Orientation="Vertical" Background="{DynamicResource BootstrapGrayColor5}" Grid.Column="1" Grid.Row="3" Width="200">
+            <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
+                <Run Language="ru-RU">Дата с</Run>
             </TextBlock>
-            <ComboBox ItemsSource="{Binding Path=FilterStatusList}" SelectedItem="{Binding Path=ComplexFilter.Status}" 
-                      Margin="4" Height="32"
-                      Style="{StaticResource ComboBoxStyle}" >
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" d:DataContext="{d:DesignInstance domain:Status}">
-                            <Border Margin="2,0" Background="{Binding Path=StatusType, Converter={StaticResource ColorConverter}}" Width="8" />
-                            <ContentPresenter Content="{Binding Path=StatusName}" HorizontalAlignment="Center" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <xctk:DateTimePicker Value="{Binding Path=ComplexFilterParams.StartDateTime}" TimePickerVisibility="Collapsed" Format="ShortDate" 
+                             ShowButtonSpinner="False" Margin="4,0,4,4" Style="{DynamicResource DateTimePickerStyle}" VerticalAlignment="Center"/>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Margin="4" Style="{StaticResource DialogTextBlockStyle}">
-                <Run Language="ru-RU">МОЛ</Run>
+            <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
+                <Run Language="ru-RU">Дата по</Run>
             </TextBlock>
-            <ComboBox ItemsSource="{Binding Path=FilterOwnerList}" SelectedItem="{Binding Path=ComplexFilter.Owner}" 
-                      DisplayMemberPath="Name.DisplayName" Grid.Row="1" Grid.Column="1" Margin="4" Height="32"
-                      Style="{StaticResource ComboBoxStyle}" />
+            <xctk:DateTimePicker Value="{Binding Path=ComplexFilterParams.EndDateTime}" TimePickerVisibility="Collapsed" Format="ShortDate" 
+                             ShowButtonSpinner="False" Margin="4,0,4,4" Style="{DynamicResource DateTimePickerStyle}" VerticalAlignment="Center"/>
 
-            <TextBlock Grid.Row="0" Grid.Column="2" Margin="4" Style="{StaticResource DialogTextBlockStyle}">
-                <Run Language="ru-RU">Карточка</Run>
-            </TextBlock>
-            <ComboBox ItemsSource="{Binding Path=FilterCardList}" SelectedItem="{Binding Path=ComplexFilter.Card}" 
-                      DisplayMemberPath="CardNumber" Grid.Row="0" Grid.Column="3" Margin="4" Height="32"
-                      Style="{StaticResource ComboBoxStyle}" />
+            <Expander Margin="4">
+                <Expander.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Статус" FontSize="13.333" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,2" />
+                        <Grid HorizontalAlignment="Right" Margin="8,0,0,0" Width="20" Height="24" Visibility="{Binding Path=FilterStatusCount, Converter={StaticResource IntToVisibilityConverter}}">
+                            <Ellipse Fill="{DynamicResource BootstrapColor2}" Margin="0,2" />
+                            <TextBlock Text="{Binding Path=FilterStatusCount}" FontSize="10" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource DefaultBackground}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander.Header>
+                <ListBox ItemsSource="{Binding Path=FilterStatusCheckList}" Height="150" Margin="4">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding Path=IsChecked}" VerticalAlignment="Center" />
+                                <Border Margin="4" Background="{Binding Path=Item.StatusType, Converter={StaticResource ColorConverter}}" CornerRadius="6" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Path=Item.StatusName}" Margin="4" FontSize="10" Foreground="{DynamicResource ButtonForegroundBrush}" HorizontalAlignment="Center" />
+                                </Border>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Expander>
 
-            <Button Content="Применить" Style="{StaticResource ButtonInfoStyle}" Margin="4" Height="32" Command="{Binding FilterCommand}" />
-            <Button Content="Сброс" Style="{StaticResource ButtonDefaultStyle}" Margin="4" Height="32" Command="{Binding ClearFilterCommand}" />
+            <Expander Margin="4">
+                <Expander.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="МОЛ" FontSize="13.333" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,2" />
+                        <Grid HorizontalAlignment="Right" Margin="8,0,0,0" Width="20" Height="24" Visibility="{Binding Path=FilterOwnerCount, Converter={StaticResource IntToVisibilityConverter}}">
+                            <Ellipse Fill="{DynamicResource BootstrapColor2}" Margin="0,2" />
+                            <TextBlock Text="{Binding Path=FilterOwnerCount}" FontSize="10" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource DefaultBackground}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander.Header>
+                <ListBox ItemsSource="{Binding Path=FilterOwnerCheckList}" Height="150" Margin="4">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding Path=IsChecked}" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Path=Item.Name.DisplayName}" Style="{DynamicResource DialogTextBlockStyle}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Expander>
+
+            <Expander Margin="4">
+                <Expander.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Карточка" FontSize="13.333" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,2" />
+                        <Grid HorizontalAlignment="Right" Margin="8,0,0,0" Width="20" Height="24" Visibility="{Binding Path=FilterCardCount, Converter={StaticResource IntToVisibilityConverter}}">
+                            <Ellipse Fill="{DynamicResource BootstrapColor2}" Margin="0,2" />
+                            <TextBlock Text="{Binding Path=FilterCardCount}" FontSize="10" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource DefaultBackground}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander.Header>
+                <ListBox ItemsSource="{Binding Path=FilterCardCheckList}" Height="150" Margin="4">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding Path=IsChecked}" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Path=Item.CardNumber}" Style="{DynamicResource DialogTextBlockStyle}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Expander>
+
+            <Button Content="Применить" Style="{DynamicResource ButtonInfoStyle}" Margin="4" Height="32" Command="{Binding FilterCommand}" />
+            <Button Content="Сброс" Style="{DynamicResource ButtonDefaultStyle}" Margin="4" Height="32" Command="{Binding ClearFilterCommand}" />
         </StackPanel>
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid Style="{StaticResource DataGridDefaultStyle}" IsReadOnly="True" 
-                     MouseDoubleClick="MainDataGrid_OnMouseDoubleClick" Grid.Row="4"
-                     ItemsSource="{Binding TableItemListView}" SelectedItem="{Binding SelectedItem}">
+        <tk:DataGrid IsReadOnly="True" Style="{DynamicResource DataGridDefaultStyle}"
+                     MouseDoubleClick="MainDataGrid_OnMouseDoubleClick" Grid.Row="3"
+                     ItemsSource="{Binding ItemList}" SelectedItem="{Binding SelectedItem}" ClipboardCopyMode="IncludeHeader" CopyingRowClipboardContent="DataGrid_OnCopyingRowClipboardContent">
             <tk:DataGrid.Columns>
-                <tk:DataGridTemplateColumn Header="Статус" Width="76" SortMemberPath="Status.StatusName">
+                <tk:DataGridTemplateColumn Header="Статус" Width="76" ClipboardContentBinding="{Binding Path=Status.StatusName}" SortMemberPath="Status.StatusName">
                     <tk:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                                 <Border Margin="4" Background="{Binding Path=Status.StatusType, Converter={StaticResource ColorConverter}}" CornerRadius="6" VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding Path=Status.StatusName}" Margin="4" FontSize="10" Foreground="{StaticResource ButtonForegroundBrush}" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding Path=Status.StatusName}" Margin="4" FontSize="10" Foreground="{DynamicResource ButtonForegroundBrush}" HorizontalAlignment="Center" />
                                 </Border>
                         </DataTemplate>
                     </tk:DataGridTemplateColumn.CellTemplate>
                 </tk:DataGridTemplateColumn>
-                <tk:DataGridTextColumn Header="Инв.№" Width="100" Binding="{Binding Path=StockNumber}" />
-                <tk:DataGridTextColumn Header="Название" Width="250" Binding="{Binding Path=StockName}" />
-                <tk:DataGridTextColumn Header="Ввод" Width="85" Binding="{Binding Path=CreationDate, StringFormat=\{0:dd.MM.yyyy\}}" />
-                <tk:DataGridTextColumn Header="МОЛ" Width="100" Binding="{Binding Path=Owner.Name.DisplayName}" />
-                <tk:DataGridTextColumn Header="Карточка" Width="50" Binding="{Binding Path=Card.CardNumber}" />
-                <tk:DataGridTextColumn Header="Комментарии" Width="120" Binding="{Binding Path=Comments}" />
+                <tk:DataGridTextColumn Header="Инв.№" Width="100" Binding="{Binding Path=StockNumber}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Название" Width="250" Binding="{Binding Path=StockName}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Ввод" Width="85" Binding="{Binding Path=CreationDate, StringFormat=\{0:dd.MM.yyyy\}}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="МОЛ" Width="100" Binding="{Binding Path=Owner.Name.DisplayName}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Ответственный" Width="100" Binding="{Binding Path=Card.Staff.Name.DisplayName}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Карточка" Width="50" Binding="{Binding Path=Card.CardNumber}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Комментарии" Width="120" Binding="{Binding Path=Comments}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
             </tk:DataGrid.Columns>
+            <tk:DataGrid.ContextMenu>
+                <ContextMenu Style="{DynamicResource ContextMenuStyle}">
+                    <MenuItem Header="Добавить" Command="{Binding AddCommand}" Icon="{DynamicResource DarkPlusImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                    <MenuItem Header="Редактировать" Command="{Binding EditCommand}" Icon="{DynamicResource DarkEditImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                    <MenuItem Header="Удалить" Command="{Binding DeleteCommand}" Icon="{DynamicResource DarkBinImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                    <Separator />
+                    <MenuItem Header="Дублировать" Command="{Binding CopyCommand}" Icon="{DynamicResource DarkImportImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                    <Separator />
+                    <MenuItem Header="Показать карточку" VerticalContentAlignment="Center" Command="{Binding ShowCardCommand}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                </ContextMenu>
+            </tk:DataGrid.ContextMenu>
         </tk:DataGrid>
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
+        <StatusBar Grid.Row="4">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Всего элементов: " />
+                    <TextBlock Text="{Binding Path=ItemListCollection.Count}" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+
         <ProgressBar IsIndeterminate="True" Grid.Row="3" 
-                     Width="64" Height="64" Style="{StaticResource RadialProgressBar}"
+                     Width="64" Height="64" Style="{DynamicResource RadialProgressBar}"
                      HorizontalAlignment="Center" VerticalAlignment="Center" 
                      Visibility="{Binding Path=RefreshCommand.IsExecuting, Converter={StaticResource BoolToVisibilityConverter}}" />
 

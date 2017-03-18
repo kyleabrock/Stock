@@ -46,7 +46,7 @@ namespace Stock.UI.Views.Dialogs
 
 	    private void StockUnitAddButton_OnClick(object sender, RoutedEventArgs e)
 	    {
-	        var dialog = new StockUnitSearchView();
+	        var dialog = new StockUnitSearchView {Owner = GetWindow(this)};
 	        dialog.Closed += (s, j) =>
 	        {
 	            if (dialog.Result != null)

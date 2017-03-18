@@ -15,20 +15,15 @@ namespace Stock.UI.ViewModels
     {
         public UserPageViewModel()
         {
-            _settingsFolder = (string)Properties.Settings.Default["SettingsAppFolder"];
-
             SetUserCommand = new RelayCommand(x => SetUserMethod());
             LogoutCommand = new RelayCommand(x => LogoutMethod());
             
-            if (SetUserCommand != null)
-                SetUserCommand.Execute(null);
+            //SetUserCommand.Execute(null);
         }
 
         public ICommand SetUserCommand { get; set; }
         public ICommand LogoutCommand { get; set; }
         public Action Logout { get; set; }
-
-        private string _settingsFolder;
 
         private UserAcc _user;
         public UserAcc User
@@ -54,6 +49,7 @@ namespace Stock.UI.ViewModels
         private void SetUserMethod()
         {
             var user = ApplicationState.GetValue<UserAcc>("User");
+            var settingsFolder = ApplicationState.GetValue<string>("SettingsAppFolder");
             if (user != null)
             {
                 User = user;
@@ -61,7 +57,7 @@ namespace Stock.UI.ViewModels
                 var logRepository = new LogRepository();
                 UserLogList = new ObservableCollection<Log>(logRepository.GetAllByUserId(User.Id, 0));
 
-                var imagePath = _settingsFolder + user.UserImagePath;
+                var imagePath = settingsFolder + user.UserImagePath;
                 if (File.Exists(imagePath))
                     UserImageSource = new BitmapImage(new Uri(imagePath));
             }

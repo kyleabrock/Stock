@@ -6,7 +6,7 @@
              xmlns:viewModels="clr-namespace:Stock.UI.ViewModels"
              xmlns:tk="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1000" Background="{StaticResource DefaultBackground}" IsVisibleChanged="UserPageView_OnIsVisibleChanged">
+             d:DesignHeight="700" d:DesignWidth="1000" Background="{DynamicResource DefaultBackground}" IsVisibleChanged="UserPageView_OnIsVisibleChanged">
     <UserControl.DataContext>
         <viewModels:UserPageViewModel x:Name="ViewModel" />
     </UserControl.DataContext>
@@ -41,22 +41,23 @@
             </Grid>
         </Border>
         
-        <TextBlock Text="ПРОФИЛЬ" Grid.Row="0" Grid.Column="1" Margin="8" Style="{StaticResource DialogTitleTextBlockStyle}" />
-        <TextBlock Text="Фамилия" Grid.Row="1" Grid.Column="1" Margin="8" Style="{StaticResource DialogTextBlockStyle}" />
-        <TextBlock Text="Имя" Grid.Row="2" Grid.Column="1" Margin="8" Style="{StaticResource DialogTextBlockStyle}" />
-        <TextBlock Text="Отчетство" Grid.Row="3" Grid.Column="1" Margin="8" Style="{StaticResource DialogTextBlockStyle}" />
-        <TextBlock Text="Отображать" Grid.Row="4" Grid.Column="1" Margin="8" Style="{StaticResource DialogTextBlockStyle}" />
-        <TextBlock Text="Отдел" Grid.Row="5" Grid.Column="1" Margin="8" Style="{StaticResource DialogTextBlockStyle}" />
-        <TextBlock Text="Комментарии" Grid.Row="6" Grid.Column="1" Margin="8" Style="{StaticResource DialogTextBlockStyle}" />
+        <TextBlock Text="ПРОФИЛЬ" Grid.Row="0" Grid.Column="1" Margin="8" Style="{DynamicResource DialogTitleTextBlockStyle}" />
+        <TextBlock Text="Фамилия" Grid.Row="1" Grid.Column="1" Margin="8" Style="{DynamicResource DialogTextBlockStyle}" />
+        <TextBlock Text="Имя" Grid.Row="2" Grid.Column="1" Margin="8" Style="{DynamicResource DialogTextBlockStyle}" />
+        <TextBlock Text="Отчетство" Grid.Row="3" Grid.Column="1" Margin="8" Style="{DynamicResource DialogTextBlockStyle}" />
+        <TextBlock Text="Отображать" Grid.Row="4" Grid.Column="1" Margin="8" Style="{DynamicResource DialogTextBlockStyle}" />
+        <TextBlock Text="Отдел" Grid.Row="5" Grid.Column="1" Margin="8" Style="{DynamicResource DialogTextBlockStyle}" />
+        <TextBlock Text="Комментарии" Grid.Row="6" Grid.Column="1" Margin="8" Style="{DynamicResource DialogTextBlockStyle}" />
         
-        <TextBox Text="{Binding Path=User.Name.LastName}" Grid.Row="1" Grid.Column="2" Margin="4" Style="{StaticResource TextBoxStyle}" IsReadOnly="True" />
-        <TextBox Text="{Binding Path=User.Name.FirstName}" Grid.Row="2" Grid.Column="2" Margin="4" Style="{StaticResource TextBoxStyle}" IsReadOnly="True" />
-        <TextBox Text="{Binding Path=User.Name.Patronymic}" Grid.Row="3" Grid.Column="2" Margin="4" Style="{StaticResource TextBoxStyle}" IsReadOnly="True" />
-        <TextBox Text="{Binding Path=User.Name.DisplayName}" Grid.Row="4" Grid.Column="2" Margin="4" Style="{StaticResource TextBoxStyle}" IsReadOnly="True" />
-        <TextBox Text="{Binding Path=User.Department}" Grid.Row="5" Grid.Column="2" Margin="4" Style="{StaticResource TextBoxStyle}" IsReadOnly="True" />
-        <TextBox Text="{Binding Path=User.Comments}" Grid.Row="6" Grid.Column="2" Grid.RowSpan="2" Margin="4" Style="{StaticResource TextBoxStyle}" IsReadOnly="True" />
+        <TextBox Text="{Binding Path=User.Name.LastName}" Grid.Row="1" Grid.Column="2" Margin="4" Style="{DynamicResource TextBoxStyle}" IsReadOnly="True" />
+        <TextBox Text="{Binding Path=User.Name.FirstName}" Grid.Row="2" Grid.Column="2" Margin="4" Style="{DynamicResource TextBoxStyle}" IsReadOnly="True" />
+        <TextBox Text="{Binding Path=User.Name.Patronymic}" Grid.Row="3" Grid.Column="2" Margin="4" Style="{DynamicResource TextBoxStyle}" IsReadOnly="True" />
+        <TextBox Text="{Binding Path=User.Name.DisplayName}" Grid.Row="4" Grid.Column="2" Margin="4" Style="{DynamicResource TextBoxStyle}" IsReadOnly="True" />
+        <TextBox Text="{Binding Path=User.Department}" Grid.Row="5" Grid.Column="2" Margin="4" Style="{DynamicResource TextBoxStyle}" IsReadOnly="True" />
+        <TextBox Text="{Binding Path=User.Comments}" Grid.Row="6" Grid.Column="2" Grid.RowSpan="2" Margin="4" Style="{DynamicResource TextBoxStyle}" IsReadOnly="True" />
         
-        <Button Content="Выход" Command="{Binding LogoutCommand}" Grid.Row="0" Grid.Column="2" Width="100" Height="32" Margin="4" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ButtonInfoStyle}" />
+        
+        <Button Content="Выход" Command="{Binding LogoutCommand}" Grid.Row="0" Grid.Column="2" Width="100" Height="32" Margin="4" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{DynamicResource ButtonInfoStyle}" />
         
         <Grid Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="4" >
             <Grid.RowDefinitions>
@@ -64,10 +65,10 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             
-            <TextBlock Text="Активность пользователя" Grid.Row="0" Grid.Column="0" Style="{StaticResource DialogTitleTextBlockStyle}" />
+            <TextBlock Text="Активность пользователя" Grid.Row="0" Grid.Column="0" Style="{DynamicResource DialogTitleTextBlockStyle}" />
 
             <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-            <tk:DataGrid Style="{StaticResource DataGridDefaultStyle}" IsReadOnly="True" 
+            <tk:DataGrid Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True" 
                      Grid.Row="1" ItemsSource="{Binding Path=UserLogList}">
                 <tk:DataGrid.Columns>
                     <tk:DataGridTextColumn Header="Тип" Width="120" Binding="{Binding Path=MessageTypeAsString}" />

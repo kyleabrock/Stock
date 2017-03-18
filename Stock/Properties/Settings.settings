@@ -2,17 +2,47 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Stock.UI.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="SettingsAppFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)">\\Srvr-ossi-04611\Документы\!Базы данных\Backup\StockSettings\</Value>
-    </Setting>
     <Setting Name="RefreshPeriod" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">120</Value>
     </Setting>
     <Setting Name="TemplatesFolderPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Templates\</Value>
+      <Value Profile="(Default)">.\Templates\</Value>
     </Setting>
     <Setting Name="ExportFolderPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Export\</Value>
+      <Value Profile="(Default)">.\Export\</Value>
+    </Setting>
+    <Setting Name="StockUnitFilesFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.\Files\StockUnit</Value>
+    </Setting>
+    <Setting Name="SettingsAppFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Work\Resources</Value>
+    </Setting>
+    <Setting Name="DbDataSource" Type="System.String" Scope="User">
+      <Value Profile="(Default)">db.ktm.ossi.loc</Value>
+    </Setting>
+    <Setting Name="DbInitialCatalog" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Stock</Value>
+    </Setting>
+    <Setting Name="DbUserID" Type="System.String" Scope="User">
+      <Value Profile="(Default)">developer</Value>
+    </Setting>
+    <Setting Name="DbPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Pf,hfkj</Value>
+    </Setting>
+    <Setting Name="RememberCreditentials" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="LdapAuth" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="UserId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">maltsev</Value>
+    </Setting>
+    <Setting Name="UserPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Live4Art</Value>
+    </Setting>
+    <Setting Name="IntegratedSecurity" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

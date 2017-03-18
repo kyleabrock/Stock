@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Data.SqlTypes;
 
 namespace Stock.Core.Domain
 {
     public class DocumentNumber
     {
-        private string _number = "";
+        private string _number = String.Empty;
         public virtual string Number
         {
             get { return _number; }
             set { _number = value; }
         }
         
-        private DateTime _date = SqlDateTime.MinValue.Value;
+        private DateTime _date = DateTime.Now;
         public virtual DateTime Date
         {
             get { return _date; }

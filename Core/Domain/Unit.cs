@@ -1,3 +1,5 @@
+using System;
+
 namespace Stock.Core.Domain
 {
     public class Unit : EntityBase, ILoggedEntity
@@ -5,28 +7,28 @@ namespace Stock.Core.Domain
         public virtual StockUnit StockUnit { get; set; }
         public virtual UnitType UnitType { get; set; }
 
-        private string _manufacture = "";
+        private string _manufacture = String.Empty;
         public virtual string Manufacture
         {
             get { return _manufacture; }
             set { _manufacture = value; }
         }
 
-        private string _modelName = "";
+        private string _modelName = String.Empty;
         public virtual string ModelName
         {
             get { return _modelName; }
             set { _modelName = value; }
         }
 
-        private string _serial = "";
+        private string _serial = String.Empty;
         public virtual string Serial
         {
             get { return _serial; }
             set { _serial = value; }
         }
         
-        private string _comments = "";
+        private string _comments = String.Empty;
         public virtual string Comments
         {
             get { return _comments; }

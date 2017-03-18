@@ -6,7 +6,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using Stock.Core.Domain;
 using Stock.Core.Filter;
-using Stock.Core.Finder;
+using Stock.Core.Filter.FilterParams;
 
 namespace Stock.Core.Repository
 {
@@ -37,56 +37,6 @@ namespace Stock.Core.Repository
                 foreach (var item in result)
                 {
                     NHibernateUtil.Initialize(item.UnitType.TypeName);
-                    NHibernateUtil.Initialize(item.StockUnit.StockNumber);
-                }
-
-                return result;
-            }
-        }
-
-        public IList<Unit> GetAllByComplexFilter(IFilterBase filter)
-        {
-            using (ISession session = NHibernateHelper.OpenSession())
-            {
-                var mainCriteria = session.CreateCriteria<Unit>();
-                var unitFilter = filter as UnitFilter;
-                if (unitFilter != null)
-                {
-                    if (unitFilter.Manufacture != null)
-                        mainCriteria.Add(Restrictions.Eq("Manufacture", unitFilter.Manufacture));
-                    if (unitFilter.ModelName != null)
-                        mainCriteria.Add(Restrictions.Eq("ModelName", unitFilter.ModelName));
-                    if (unitFilter.UnitType != null)
-                        mainCriteria.CreateCriteria("UnitType").Add(Restrictions.Eq("Id", unitFilter.UnitType.Id));
-                    if (unitFilter.Owner != null)
-                    {
-                        mainCriteria.CreateCriteria("StockUnit")
-                                    .CreateCriteria("Owner")
-                                    .Add(Restrictions.Eq("Id", unitFilter.Owner.Id));
-                    }
-                }
-
-                var result = mainCriteria.List<Unit>();
-                foreach (var item in result)
-                {
-                    NHibernateUtil.Initialize(item.UnitType.TypeName);
-                    NHibernateUtil.Initialize(item.StockUnit.StockNumber);
-                }
-
-                return result;
-            }
-        }
-
-        public IList<Unit> Find(UnitFinder finder)
-        {
-            using (ISession session = NHibernateHelper.OpenSession())
-            {
-                var criteria = finder.Criteria ?? DetachedCriteria.For<Unit>();
-                
-                var result = criteria.GetExecutableCriteria(session).List<Unit>();
-                foreach (var item in result)
-                {
-                    NHibernateUtil.Initialize(item.UnitType);
                     NHibernateUtil.Initialize(item.StockUnit.StockNumber);
                 }
 
@@ -129,6 +79,17 @@ namespace Stock.Core.Repository
                     .Asc.List<string>();
 
                 return new List<string>(result.Distinct());
+            }
+        }
+
+        protected override void InitializeTableValues(IEnumerable<Unit> items)
+        {
+            foreach (var item in items)
+            {
+                NHibernateUtil.Initialize(item.UnitType);
+                NHibernateUtil.Initialize(item.StockUnit.StockNumber);
+                NHibernateUtil.Initialize(item.StockUnit.Status.StatusName);
+                NHibernateUtil.Initialize(item.StockUnit.Status.StatusType);
             }
         }
     }

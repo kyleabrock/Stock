@@ -5,6 +5,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using Stock.Core.Domain;
 using Stock.Core.Filter;
+using Stock.Core.Filter.FilterParams;
 
 namespace Stock.Core.Repository
 {
@@ -45,6 +46,16 @@ namespace Stock.Core.Repository
             }
         }
 
+        protected override void InitializeTableValues(IEnumerable<Document> items)
+        {
+            foreach (var item in items)
+            {
+                NHibernateUtil.Initialize(item.DocumentType);
+                NHibernateUtil.Initialize(item.Owner);
+                NHibernateUtil.Initialize(item.StockUnitList);
+            }
+        }
+
         public IList<Document> GetByStockUnit(StockUnit stockUnit)
         {
             using (ISession session = NHibernateHelper.OpenSession())
@@ -66,31 +77,6 @@ namespace Stock.Core.Repository
                 }
 
                 return new List<Document>();
-            }
-        }
-
-        public IList<Document> GetAllByComplexFilter(IFilterBase filter)
-        {
-            using (ISession session = NHibernateHelper.OpenSession())
-            {
-                var mainCriteria = session.CreateCriteria<Document>();
-                var documentFilter = filter as DocumentFilter;
-                if (documentFilter != null)
-                {
-                    if (documentFilter.DocumentType != null)
-                        mainCriteria.CreateCriteria("DocumentType").Add(Restrictions.Eq("Id", documentFilter.DocumentType.Id));
-                    if (documentFilter.Owner != null)
-                        mainCriteria.CreateCriteria("Owner").Add(Restrictions.Eq("Id", documentFilter.Owner.Id));
-                }
-
-                var result = mainCriteria.List<Document>();
-                foreach (var item in result)
-                {
-                    NHibernateUtil.Initialize(item.DocumentType);
-                    NHibernateUtil.Initialize(item.Owner);
-                }
-
-                return result;
             }
         }
     }

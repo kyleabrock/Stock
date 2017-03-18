@@ -4,80 +4,108 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:tk="http://schemas.microsoft.com/wpf/2008/toolkit"
-             xmlns:viewModels="clr-namespace:Stock.UI.ViewModels"
+             xmlns:viewModels="clr-namespace:Stock.UI.ViewModels" 
+             xmlns:utils="clr-namespace:Stock.UI.Utils"
+             xmlns:domain="clr-namespace:Stock.Core.Domain;assembly=Stock.Core"
              mc:Ignorable="d" 
              d:DesignWidth="1000" d:DesignHeight="700" Background="White">
     <UserControl.DataContext>
         <viewModels:UnitTableViewModel x:Name="ViewModel" />
     </UserControl.DataContext>
-    
+    <UserControl.Resources>
+        <utils:StatusTypeToColorConverter x:Key="ColorConverter" />
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
         	<RowDefinition Height="48"/>
             <RowDefinition Height="48"/>
             <RowDefinition Height="16"/>
             <RowDefinition />
+            <RowDefinition Height="24" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="0" x:Name="FilterGridColumn"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Устройства" Style="{StaticResource WindowTitleBlockStyle}" Grid.Row="0"/>
+        <TextBlock Text="Устройства" Style="{DynamicResource WindowTitleBlockStyle}" Grid.Row="0"/>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Height="32" VerticalAlignment="Bottom">
-            <Button x:Name="ToStockUnitButton" Content="Карта ОС" Command="{Binding OpenStockUnitCommand}" Style="{StaticResource ButtonDefaultStyle}" Width="100" Margin="4,0" />
-            <Button Content="Карточка" Command="{Binding OpenCardCommand}" Style="{StaticResource ButtonDefaultStyle}" Width="100" Margin="4,0" />
-            <Button Margin="4,0" Style="{StaticResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
-            <Button Margin="4,0" Style="{StaticResource FilterButtonSmallStyle}" Click="FilterButton_OnClick" />
+            <Button x:Name="ToStockUnitButton" Content="Карта ОС" Command="{Binding OpenStockUnitCommand}" Style="{DynamicResource ButtonDefaultStyle}" Width="100" Margin="4,0" />
+            <Button Content="Карточка" Command="{Binding OpenCardCommand}" Style="{DynamicResource ButtonDefaultStyle}" Width="100" Margin="4,0" />
+            <Button Margin="4,0" Style="{DynamicResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
+            <Button Margin="4,0" Style="{DynamicResource FilterButtonSmallStyle}" Click="FilterButton_OnClick" />
         </StackPanel>
         <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{StaticResource TextBoxStyle}" />
+            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle}" />
             <Button Margin="4,0" Command="{Binding SearchCommand}" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" 
-                    Style="{StaticResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
+                    Style="{DynamicResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
         </Grid>
 
         <!-- Filter Grid -->
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <StackPanel Orientation="Vertical" Background="{StaticResource BootstrapGrayColor5}" Grid.Column="1" Grid.Row="3" Width="200">
-            <TextBlock Style="{StaticResource DialogTextBlockStyle}">
+        <StackPanel Orientation="Vertical" Background="{DynamicResource BootstrapGrayColor5}" Grid.Column="1" Grid.Row="3" Width="200">
+            <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
+                <Run Language="ru-RU">Статус</Run>
+            </TextBlock>
+            <ComboBox ItemsSource="{Binding Path=FilterStatusList}" SelectedItem="{Binding Path=ComplexFilterParams.Status}" 
+                      Margin="4,0,4,4" Style="{DynamicResource ComboBoxStyle}" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" d:DataContext="{d:DesignInstance domain:Status}">
+                            <Border Margin="2,0" Background="{Binding Path=StatusType, Converter={StaticResource ColorConverter}}" Width="8" />
+                            <ContentPresenter Content="{Binding Path=StatusName}" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
                 <Run Language="ru-RU">МОЛ</Run>
             </TextBlock>
-            <ComboBox ItemsSource="{Binding Path=FilterOwnerList}" SelectedItem="{Binding Path=ComplexFilter.Owner}" 
-                      DisplayMemberPath="Name.DisplayName" Margin="4" Height="32"
-                      Style="{StaticResource ComboBoxStyle}"  />
-            
-            <TextBlock Style="{StaticResource DialogTextBlockStyle}">
+            <ComboBox ItemsSource="{Binding Path=FilterOwnerList}" SelectedItem="{Binding Path=ComplexFilterParams.Owner}" 
+                      DisplayMemberPath="Name.DisplayName" Margin="4,0,4,4"
+                      Style="{DynamicResource ComboBoxStyle}"  />
+
+            <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
                 <Run Language="ru-RU">Устройство</Run>
             </TextBlock>
-            <ComboBox ItemsSource="{Binding Path=FilterUnitTypeList}" SelectedItem="{Binding Path=ComplexFilter.UnitType}" 
-                      DisplayMemberPath="TypeName" Margin="4" Height="32"
-                      Style="{StaticResource ComboBoxStyle}"  />
+            <ComboBox ItemsSource="{Binding Path=FilterUnitTypeList}" SelectedItem="{Binding Path=ComplexFilterParams.UnitType}" 
+                      DisplayMemberPath="TypeName" Margin="4,0,4,4"
+                      Style="{DynamicResource ComboBoxStyle}"  />
 
-            <TextBlock Margin="4" Style="{StaticResource DialogTextBlockStyle}">
+            <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
                 <Run Language="ru-RU">Производитель</Run>
             </TextBlock>
-            <ComboBox ItemsSource="{Binding Path=FilterManufactureList}" SelectedItem="{Binding Path=ComplexFilter.Manufacture}" 
-                      Margin="4" Height="32"
-                      Style="{StaticResource ComboBoxStyle}" />
+            <ComboBox ItemsSource="{Binding Path=FilterManufactureList}" SelectedItem="{Binding Path=ComplexFilterParams.Manufacture}" 
+                      Margin="4,0,4,4" Style="{DynamicResource ComboBoxStyle}" />
 
-            <TextBlock Margin="4" Style="{StaticResource DialogTextBlockStyle}">
+            <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
                 <Run Language="ru-RU">Модель</Run>
             </TextBlock>
-            <ComboBox ItemsSource="{Binding Path=FilterModelNameList}" SelectedItem="{Binding Path=ComplexFilter.ModelName}" 
-                      Margin="4" Height="32"
-                      Style="{StaticResource ComboBoxStyle}" />
+            <ComboBox ItemsSource="{Binding Path=FilterModelNameList}" SelectedItem="{Binding Path=ComplexFilterParams.ModelName}" 
+                      Margin="4,0,4,4" Style="{DynamicResource ComboBoxStyle}" />
 
-            <Button Content="Применить" Style="{StaticResource ButtonInfoStyle}" Margin="4" Height="32" Command="{Binding FilterCommand}" />
-            <Button Content="Сброс" Style="{StaticResource ButtonDefaultStyle}" Margin="4" Height="32" Command="{Binding ClearFilterCommand}" />
+            <Button Content="Применить" Style="{DynamicResource ButtonInfoStyle}" Margin="4" Height="32" Command="{Binding FilterCommand}" />
+            <Button Content="Сброс" Style="{DynamicResource ButtonDefaultStyle}" Margin="4" Height="32" Command="{Binding ClearFilterCommand}" />
         </StackPanel>
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid Grid.Row="3" Style="{StaticResource DataGridDefaultStyle}" IsReadOnly="True"
-                     ItemsSource="{Binding Path=TableItemListView}" SelectedItem="{Binding Path=SelectedItem}" 
+        <tk:DataGrid Grid.Row="3" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True"
+                     ItemsSource="{Binding Path=ItemList}" SelectedItem="{Binding Path=SelectedItem}" 
                      MouseDoubleClick="MainDataGrid_OnMouseDoubleClick">
             <tk:DataGrid.Columns>
+                <tk:DataGridTemplateColumn Header="Статус" Width="76" ClipboardContentBinding="{Binding Path=StockUnit.Status.StatusName}" SortMemberPath="StockUnit.Status.StatusName">
+                    <tk:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Margin="4" Background="{Binding Path=StockUnit.Status.StatusType, Converter={StaticResource ColorConverter}}" CornerRadius="6" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Path=StockUnit.Status.StatusName}" Margin="4" FontSize="10" Foreground="{DynamicResource ButtonForegroundBrush}" HorizontalAlignment="Center" />
+                            </Border>
+                        </DataTemplate>
+                    </tk:DataGridTemplateColumn.CellTemplate>
+                </tk:DataGridTemplateColumn>
                 <tk:DataGridTextColumn Header="Инв.№" Binding="{Binding StockUnit.StockNumber}" Width="90" />
                 <tk:DataGridTextColumn Header="Тип" Binding="{Binding UnitType.TypeName}" Width="120" />
                 <tk:DataGridTextColumn Header="Производитель" Binding="{Binding Manufacture}" Width="120" />
@@ -85,11 +113,27 @@
                 <tk:DataGridTextColumn Header="Сер.№" Binding="{Binding Serial}" Width="150" />
                 <tk:DataGridTextColumn Header="Комментарии" Binding="{Binding Comments}" Width="120" />
             </tk:DataGrid.Columns>
+            <tk:DataGrid.ContextMenu>
+                <ContextMenu Style="{DynamicResource ContextMenuStyle}">
+                    <MenuItem Header="Карта ОС" Command="{Binding OpenStockUnitCommand}" Icon="{DynamicResource DarkImportImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                    <Separator />
+                    <MenuItem Header="Показать карточку" VerticalContentAlignment="Center" Command="{Binding OpenCardCommand}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                </ContextMenu>
+            </tk:DataGrid.ContextMenu>
         </tk:DataGrid>
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
+        <StatusBar Grid.Row="4">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Всего элементов: " />
+                    <TextBlock Text="{Binding Path=ItemListCollection.Count}" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+
         <ProgressBar IsIndeterminate="True" Grid.Row="3" 
-                     Width="64" Height="64" Style="{StaticResource RadialProgressBar}"
+                     Width="64" Height="64" Style="{DynamicResource RadialProgressBar}"
                      HorizontalAlignment="Center" VerticalAlignment="Center" 
                      Visibility="{Binding Path=RefreshCommand.IsExecuting, Converter={StaticResource BoolToVisibilityConverter}}" />
 

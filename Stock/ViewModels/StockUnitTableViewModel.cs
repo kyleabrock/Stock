@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Input;
 using Stock.Core.Domain;
 using Stock.Core.Filter;
-using Stock.Core.Finder;
+using Stock.Core.Filter.FilterParams;
 using Stock.Core.Repository;
 using Stock.UI.ViewModels.Base;
 
@@ -12,96 +13,194 @@ namespace Stock.UI.ViewModels
 {
     public class StockUnitTableViewModel : TableNavigationViewModel<StockUnit>
     {
-        //TODO: IsSearched results
         public StockUnitTableViewModel()
         {
             InitViewModel();
         }
 
-        public IEnumerable<Status> FilterStatusList 
+        #region filterParams
+
+        private ObservableCollection<CheckBoxItem<Owner>> _filterOwnerCheckList;
+        public ObservableCollection<CheckBoxItem<Owner>> FilterOwnerCheckList
         {
-            get { return _filterStatusList; }
-            set { _filterStatusList = value; OnPropertyChanged("FilterStatusList"); }
+            get { return _filterOwnerCheckList; }
+            set { _filterOwnerCheckList = value; OnPropertyChanged("FilterOwnerCheckList"); }
         }
 
-        public IEnumerable<Owner> FilterOwnerList
+        private ObservableCollection<CheckBoxItem<Status>> _filterStatusCheckList;
+        public ObservableCollection<CheckBoxItem<Status>> FilterStatusCheckList
         {
-            get { return _filterOwnerList; }
-            set { _filterOwnerList = value; OnPropertyChanged("FilterOwnerList"); }
+            get { return _filterStatusCheckList; }
+            set { _filterStatusCheckList = value; OnPropertyChanged("FilterStatusCheckList"); }
         }
 
-        public IEnumerable<Card> FilterCardList
+        private ObservableCollection<CheckBoxItem<Card>> _filterCardCheckList;
+        public ObservableCollection<CheckBoxItem<Card>> FilterCardCheckList
         {
-            get { return _filterCardList; }
-            set { _filterCardList = value; OnPropertyChanged("FilterCardList"); }
+            get { return _filterCardCheckList; }
+            set { _filterCardCheckList = value; OnPropertyChanged("FilterCardCheckList"); }
         }
 
-        private StockUnitRepository _stockUnitRepository;
-        private IEnumerable<Status> _filterStatusList;
-        private IEnumerable<Owner> _filterOwnerList;
-        private IEnumerable<Card> _filterCardList;
-        private bool _initFilterStatus = false;
+        private int _filterOwnerCount;
+        public int FilterOwnerCount
+        {
+            get { return _filterOwnerCount; }
+            set { _filterOwnerCount = value; OnPropertyChanged("FilterOwnerCount"); }
+        }
+
+        private int _filterStatusCount;
+        public int FilterStatusCount
+        {
+            get { return _filterStatusCount; }
+            set { _filterStatusCount = value; OnPropertyChanged("FilterStatusCount"); }
+        }
+
+        private int _filterCardCount;
+        public int FilterCardCount
+        {
+            get { return _filterCardCount; }
+            set { _filterCardCount = value; OnPropertyChanged("FilterCardCount"); }
+        }
+
+        #endregion
+
+        public ICommand CopyCommand { get; set; }
+        public ICommand ShowCardCommand { get; set; }
+        public Action<StockUnit> CopyAction { get; set; }
+        public Action<Card> ShowCardAction { get; set; }
+
+        protected override void RefreshMethod()
+        {
+            if (!IsFilterInitialized)
+            {
+                InitFilter();
+                IsFilterInitialized = true;
+            }
+
+            FillFilter();
+            base.RefreshMethod();
+        }
+
+        private bool IsFilterInitialized { get; set; }
+
+        private void FillFilter()
+        {
+            var owners = (from item in FilterOwnerCheckList where item.IsChecked select item.Item).ToList();
+            var cards = (from item in FilterCardCheckList where item.IsChecked select item.Item).ToList();
+            var status = (from item in FilterStatusCheckList where item.IsChecked select item.Item).ToList();
+            FilterOwnerCount = owners.Count;
+            FilterCardCount = cards.Count;
+            FilterStatusCount = status.Count;
+
+            var filterParams = ComplexFilterParams as StockUnitFilterParams;
+            if (filterParams != null)
+            {
+                filterParams.Owner = owners;
+                filterParams.Status = status;
+                filterParams.Card = cards;
+
+                Filter = new StockUnitFilter(filterParams);
+            }
+        }
         
         private void InitViewModel()
         {
-            _stockUnitRepository = new StockUnitRepository();
+            Repository = new StockUnitRepository();
             
-            AddCommand = new RelayCommand(x => AddMethod());
-            EditCommand = new RelayCommand(x => EditMethod());
+            AddCommand = new RelayCommand(x => AddAction());
+            CopyCommand = new RelayCommand(x => CopyMethod());
+            EditCommand = new RelayCommand(x => EditAction());
             DeleteCommand = new RelayCommand(x => DeleteMethod());
-            RefreshCommand = new AsyncCommand(x => RefreshMethod());
-            RefreshCommand.RunWorkerCompleted += RefreshCommand_RunWorkerCompleted;
+            ShowCardCommand = new RelayCommand(x => ShowCardMethod());
             
-            ComplexFilter = new StockUnitFilter();
+            ClearFilterCommand = new RelayCommand(x => ClearFilterMethod());
+        }
+
+        private void ShowCardMethod()
+        {
+            var item = SelectedItem as StockUnit;
+            if (item != null)
+            {
+                var card = item.Card;
+                if (card != null)
+                    ShowCardAction(card);
+            }
         }
 
         private void InitFilter()
         {
+            ComplexFilterParams = new StockUnitFilterParams();
             var statusRepository = new StatusRepository();
             var ownerRepository = new OwnerRepository();
             var cardRepository = new CardRepository();
 
-            FilterStatusList = statusRepository.GetAll(status => status.StatusType);
-            FilterOwnerList = ownerRepository.GetAll(owner => owner.Name.DisplayName);
-            FilterCardList = cardRepository.GetAll();
+            var filterStatusList = statusRepository.GetAll(status => status.StatusType);
+            var filterOwnerList = ownerRepository.GetAll(owner => owner.Name.DisplayName);
+            var filterCardList = cardRepository.GetAll(card => card.CardName);
 
-            _initFilterStatus = true;
+            _filterOwnerCheckList = new ObservableCollection<CheckBoxItem<Owner>>();
+            foreach (var owner in filterOwnerList)
+                FilterOwnerCheckList.Add(new CheckBoxItem<Owner> {Item = owner});
+            OnPropertyChanged("FilterOwnerCheckList");
+
+            _filterStatusCheckList = new ObservableCollection<CheckBoxItem<Status>>();
+            foreach (var status in filterStatusList)
+                FilterStatusCheckList.Add(new CheckBoxItem<Status> { Item = status });
+            OnPropertyChanged("FilterStatusCheckList");
+
+            _filterCardCheckList = new ObservableCollection<CheckBoxItem<Card>>();
+            foreach (var card in filterCardList)
+                FilterCardCheckList.Add(new CheckBoxItem<Card> { Item = card });
+            OnPropertyChanged("FilterCardCheckList");
         }
 
-        private void RefreshCommand_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void ClearFilterMethod()
         {
-            if (!_initFilterStatus)
-                InitFilter();
+            Filter = new StockUnitFilter();
+            ComplexFilterParams = new StockUnitFilterParams();
+            InitFilter();
 
-            SaveTableSortOrder();
-            TableItemListView = CollectionViewSource.GetDefaultView(TableItemList);
-            LoadTableSortOrder();
+            if (string.IsNullOrEmpty(SearchString)) IsSearched = false;
+            
+            if (RefreshCommand != null)
+                RefreshCommand.Execute(null);
         }
 
-        private void RefreshMethod()
+        private void CopyMethod()
         {
-            if (!IsSearched)
+            var item = SelectedItem as StockUnit;
+            if (item != null)
             {
-                TableItemList = ComplexFilterStatus
-                    ? _stockUnitRepository.GetAllByComplexFilter(ComplexFilter)
-                    : _stockUnitRepository.GetAll(x => x.StockNumber, false, false);
-            }
-            else
-            {
-                var finder = new StockUnitFinder();
-                finder.CreateCriteria(SearchString);
-                TableItemList = _stockUnitRepository.Find(finder);
-            }
-        }
+                var repository = new StockUnitRepository();
+                var stockUnit = repository.GetById(item.Id, true);
 
-        private void AddMethod()
-        {
-            AddAction();
-        }
+                var result = new StockUnit
+                    {
+                        StockNumber = item.StockNumber,
+                        StockName = item.StockName,
+                        CreationDate = item.CreationDate,
+                        Comments = item.Comments
+                    };
 
-        private void EditMethod()
-        {
-            EditAction();
+                var units = stockUnit.UnitList;
+                var resultUnits = new List<Unit>();
+                foreach (var unit in units)
+                {
+                    var resultUnit = new Unit
+                        {
+                            StockUnit = result,
+                            UnitType = unit.UnitType,
+                            Manufacture = unit.Manufacture,
+                            ModelName = unit.ModelName,
+                            Comments = unit.Comments
+                        };
+                    
+                    resultUnits.Add(resultUnit);
+                }
+                
+                result.UnitList = resultUnits;
+                CopyAction(result);
+            }
         }
 
         private void DeleteMethod()
@@ -112,29 +211,48 @@ namespace Stock.UI.ViewModels
                 const string caption = "Удаление";
                 const string text = "Вы действительно хотите удалить эту запись?\r\n" +
                                     "Все устройства будут удалены.";
-                const MessageBoxButton buttons = MessageBoxButton.OKCancel;
-
-                if (MessageBox.Show(text, caption, buttons) == MessageBoxResult.OK)
+                
+                if (ShowDialogMessage(text, caption))
                 {
-                    DeleteStockUnit(item);
-                    if (RefreshCommand != null)
-                        RefreshCommand.Execute(null);
+                    if (DeleteStockUnit(item))
+                    {
+                        if (RefreshCommand != null)
+                            RefreshCommand.Execute(null);
+                    }
                 }
             }
         }
 
-        private void DeleteStockUnit(StockUnit item)
+        private bool DeleteStockUnit(StockUnit item)
         {
-            var repository = new StockUnitRepository();
-            var stockUnit = repository.GetById(item.Id, true);
+            var stockUnit = Repository.GetById(item.Id);
             if (stockUnit.UnitList != null)
             {
-                var unitRepository = new UnitRepository();
+                IRepository<Unit> unitRepository = new Repository<Unit>();
                 foreach (var unit in stockUnit.UnitList)
-                    unitRepository.Delete(unit);
+                {
+                    try
+                    {
+                        unitRepository.Delete(unit);
+                    }
+                    catch (Exception ex)
+                    {
+                        ShowDialogMessage(ex.Message, "Ошибка");
+                    }
+                }
             }
 
-            repository.Delete(item);
+            try
+            {
+                Repository.Delete(item);
+            }
+            catch (Exception ex)
+            {
+                ShowDialogMessage(ex.Message, "Ошибка");
+                return false;
+            }
+
+            return true;
         }
     }
 }

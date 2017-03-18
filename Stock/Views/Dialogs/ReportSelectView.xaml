@@ -3,7 +3,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	x:Class="Stock.UI.Views.Dialogs.ReportSelectView"
 	x:Name="Window"
-	Title="ReportSelectView"
+	Title="Отчеты"
 	Width="400" Height="300" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
     
 	<Grid>
@@ -13,11 +13,11 @@
 			<RowDefinition Height="40"/>
 		</Grid.RowDefinitions>
         
-        <ListView Grid.Row="0" Grid.Column="0" Margin="4" ItemsSource="{Binding Path=ReportList}" SelectedItem="{Binding Path=SelectedItem}" Style="{StaticResource ListViewStyle}" />
+        <ListView Grid.Row="0" Grid.Column="0" Margin="4" ItemsSource="{Binding Path=ReportList}" SelectedItem="{Binding Path=SelectedItem}" Style="{DynamicResource ListViewStyle}" />
         <CheckBox Grid.Row="1" Grid.Column="0" Content="Открыть папку по завершению" FontSize="13.333" Margin="4" IsChecked="{Binding Path=OpenFolderAfterExport}" VerticalAlignment="Center" />
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Margin="4" IsDefault="True" Content="OK" Command="{Binding OkCommand}" Width="100" Height="32" Style="{StaticResource ButtonDefaultStyle}" />
-            <Button Margin="4" IsCancel="True" Content="Отмена" Command="{Binding CancelCommand}" Width="100" Height="32" Style="{StaticResource ButtonDefaultStyle}" />
+            <Button Margin="4" IsDefault="True" Content="OK" Command="{Binding OkCommand}" Width="100" Height="32" Style="{DynamicResource ButtonDefaultStyle}" />
+            <Button Margin="4" IsCancel="True" Content="Отмена" Command="{Binding CancelCommand}" Width="100" Height="32" Style="{DynamicResource ButtonDefaultStyle}" />
         </StackPanel>
 	</Grid>
 </Window>

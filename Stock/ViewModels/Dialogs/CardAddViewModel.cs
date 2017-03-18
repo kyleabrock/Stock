@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Data.SqlTypes;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Stock.Core.Domain;
@@ -35,25 +33,6 @@ namespace Stock.UI.ViewModels.Dialogs
                 InitViewModel(_cardRepository.GetById(cardId, true));
         }
 
-        public void AddStockUnit()
-        {
-            var stockUnitRepository = new StockUnitRepository();
-            foreach (var item in NewStockUnitList)
-            {
-                var eagerItem = stockUnitRepository.GetById(item.Id, true);
-                eagerItem.Card = _card;
-                if (!StockUnitList.Contains(eagerItem))
-                    StockUnitList.Add(eagerItem);
-                if (_itemsToDelete.Contains(eagerItem))
-                {
-                    _itemsToDelete.Remove(eagerItem);
-                    DefaultCard.StockUnitList.Remove(eagerItem);
-                }
-            }
-            
-            NewStockUnitList = new ObservableCollection<StockUnit>();
-        }
-
         private Card _card;
         public Card Card
         {
@@ -80,44 +59,24 @@ namespace Stock.UI.ViewModels.Dialogs
         public ObservableCollection<StockUnit> StockUnitList
         {
             get { return _stockUnitList; }
-            set
-            {
-                _stockUnitList = value; 
-                OnPropertyChanged("StockUnitList");
-            }
-        }
-
-        private ObservableCollection<StockUnit> _newStockUnitList;
-        public ObservableCollection<StockUnit> NewStockUnitList
-        {
-            get { return _newStockUnitList; }
-            set
-            {
-                _newStockUnitList = value;
-                OnPropertyChanged("NewStockUnitList");
-            }
+            set { _stockUnitList = value; OnPropertyChanged("StockUnitList"); }
         }
 
         private object _selectedItem;
         public object SelectedItem
         {
-            get
-            {
-                return _selectedItem;
-            }
-            set
-            {
-                _selectedItem = value;
-                OnPropertyChanged("SelectedItem");
-            }
+            get { return _selectedItem; }
+            set { _selectedItem = value; OnPropertyChanged("SelectedItem"); }
         }
 
         public ObservableCollection<Staff> StaffList { get; private set; }
-        public ICommand RemoveStockUnitCommand { get; set; }
+        public ICommand AddCommand { get; set; }
+        public ICommand RemoveCommand { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand CloseCommand { get; set; }
-        public ICommand ExportStockUnitCommand { get; set; }
+        public ICommand ExportCommand { get; set; }
         public Action CloseAction { get; set; }
+        public Func<Card, ObservableCollection<StockUnit>> AddFunc { get; set; }
 
         private readonly CardRepository _cardRepository;
         private readonly List<StockUnit> _itemsToDelete = new List<StockUnit>();
@@ -125,24 +84,46 @@ namespace Stock.UI.ViewModels.Dialogs
         private void InitViewModel(Card card)
         {
             Card = card;
-            if (Card.IsNew)
-                Card.StockUnitList = new List<StockUnit>();
+            //if (Card.IsNew)
+            //    Card.StockUnitList = new List<StockUnit>();
 
             InitLists();
             DefaultCard = _cardRepository.GetDefaultCard();
             StockUnitList = new ObservableCollection<StockUnit>(Card.StockUnitList);
-            StockUnitList.CollectionChanged += StockUnitList_CollectionChanged;
 
-            RemoveStockUnitCommand = new RelayCommand(x => RemoveMethod());
+            AddCommand = new RelayCommand(x => AddMethod());
+            RemoveCommand = new RelayCommand(x => RemoveMethod());
             SaveCommand = new RelayCommand(x => SaveMethod());
             CloseCommand = new RelayCommand(x => CloseMethod());
-            ExportStockUnitCommand = new RelayCommand(x => ExportMethod());
+            ExportCommand = new RelayCommand(x => ExportMethod());
         }
 
         private void InitLists()
         {
             var staffRepository = new StaffRepository();
             StaffList = new ObservableCollection<Staff>(staffRepository.GetAllOrdered());
+        }
+
+        private void AddMethod()
+        {
+            var stockUnitRepository = new StockUnitRepository();
+            
+            var items = AddFunc(DefaultCard);
+            if (items == null) return;
+
+            foreach (var item in items)
+            {
+                DefaultCard.StockUnitList.Remove(item);
+                OnPropertyChanged("DefaultCard");
+                
+                var stockUnit = stockUnitRepository.GetById(item.Id, true);
+                stockUnit.Card = _card;
+
+                if (!StockUnitList.Contains(stockUnit))
+                    StockUnitList.Add(stockUnit);
+                if (_itemsToDelete.Contains(stockUnit))
+                    _itemsToDelete.Remove(stockUnit);
+            }
         }
 
         private void RemoveMethod(bool removeFromCollection = true)
@@ -170,8 +151,8 @@ namespace Stock.UI.ViewModels.Dialogs
 
             var user = ApplicationState.GetValue<UserAcc>("User");
             ILogFactory logFactory = new LogFactory();
-            var logEntity = logFactory.CreateLogMessage(user, Card);
-            var repository = new Repository<Log>();
+            var logEntity = logFactory.CreateMessage(user, Card);
+            IRepository<Log> repository = new LogRepository();
             repository.Save(logEntity);
 
             CloseAction();
@@ -207,18 +188,6 @@ namespace Stock.UI.ViewModels.Dialogs
             var cardReport = new CardReport();
             cardReport.Export(Card, false);
             MessageBox.Show("Карточка успешно экспортирована");
-        }
-
-        private void StockUnitList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.OldItems == null) return;
-
-            foreach (var item in e.OldItems.OfType<StockUnit>())
-            {
-                item.Card = DefaultCard;
-                DefaultCard.StockUnitList.Add(item);
-                _itemsToDelete.Add(item);
-            }
         }
     }
 }

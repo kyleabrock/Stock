@@ -1,4 +1,6 @@
-﻿namespace Stock.Core.Domain
+﻿using System;
+
+namespace Stock.Core.Domain
 {
     public class Staff : EntityBase, ILoggedEntity
     {
@@ -9,14 +11,14 @@
             set { _name = value; }
         }
 
-        private string _department = "";
+        private string _department = String.Empty;
         public virtual string Department
         {
             get { return _department; }
             set { _department = value; }
         }
 
-        private string _comments = "";
+        private string _comments = String.Empty;
         public virtual string Comments
         {
             get { return _comments; }

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Data;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Stock.Core.Domain;
 using Stock.Core.Filter;
+using Stock.Core.Filter.FilterParams;
 using Stock.Core.Repository;
 using Stock.UI.ViewModels.Base;
 
@@ -12,98 +12,112 @@ namespace Stock.UI.ViewModels
 {
     public class CardTableViewModel : TableNavigationViewModel<Card>
     {
-        //TODO: IsSearched results
         public CardTableViewModel()
         {
             InitViewModel();
         }
 
-        private IEnumerable<Staff> _filterStaffList;
-        public IEnumerable<Staff> FilterStaffList
+        private ObservableCollection<CheckBoxItem<Staff>> _filterStaffCheckList;
+        public ObservableCollection<CheckBoxItem<Staff>> FilterStaffCheckList
         {
-            get { return _filterStaffList; }
-            set { _filterStaffList = value; OnPropertyChanged("FilterStaffList"); }
+            get { return _filterStaffCheckList; }
+            set { _filterStaffCheckList = value; OnPropertyChanged("FilterStaffCheckList"); }
         }
 
-        private IEnumerable<string> _filterDepartmentList;
-        public IEnumerable<string> FilterDepartmentList
+        private ObservableCollection<CheckBoxItem<string>> _filterDepartmentCheckList;
+        public ObservableCollection<CheckBoxItem<string>> FilterDepartmentCheckList
         {
-            get { return _filterDepartmentList; }
-            set { _filterDepartmentList = value; OnPropertyChanged("FilterDepartmentList"); }
+            get { return _filterDepartmentCheckList; }
+            set { _filterDepartmentCheckList = value; OnPropertyChanged("FilterDepartmentCheckList"); }
         }
 
-        private CardRepository _cardRepository;
-        private bool _initFilterStatus = false;
+        private int _filterStaffCount;
+        public int FilterStaffCount
+        {
+            get { return _filterStaffCount; }
+            set { _filterStaffCount = value; OnPropertyChanged("FilterStaffCount"); }
+        }
+
+        private int _filterDepartmentCount;
+        public int FilterDepartmentCount
+        {
+            get { return _filterDepartmentCount; }
+            set { _filterDepartmentCount = value; OnPropertyChanged("FilterDepartmentCount"); }
+        }
+
+        protected override void RefreshMethod()
+        {
+            if (!IsFilterInitialized)
+            {
+                InitFilter();
+                IsFilterInitialized = true;
+            }
+
+            FillFilter();
+            base.RefreshMethod();
+        }
+
+        private bool IsFilterInitialized { get; set; }
+
+        private void FillFilter()
+        {
+            var staff = (from item in FilterStaffCheckList where item.IsChecked select item.Item).ToList();
+            var departments = (from item in FilterDepartmentCheckList where item.IsChecked select item.Item).ToList();
+
+            FilterStaffCount = staff.Count;
+            FilterDepartmentCount = departments.Count;
+
+            var filterParams = ComplexFilterParams as CardFilterParams;
+            if (filterParams != null)
+            {
+                filterParams.Staff = staff;
+                filterParams.Department = departments;
+
+                Filter = new CardFilter(filterParams);
+            }
+        }
 
         private void InitViewModel()
         {
-            _cardRepository = new CardRepository();
-
+            Repository = new CardRepository();
+            
             AddCommand = new RelayCommand(x => AddMethod());
             EditCommand = new RelayCommand(x => EditMethod());
             DeleteCommand = new RelayCommand(x => DeleteMethod());
-            RefreshCommand = new AsyncCommand(x => RefreshMethod());
-            RefreshCommand.RunWorkerCompleted += RefreshCommand_RunWorkerCompleted;
-            
-            ComplexFilter = new CardFilter();
+            ClearFilterCommand = new RelayCommand(x => ClearFilterMethod());
         }
-
+        
         private void InitFilter()
         {
+            ComplexFilterParams = new CardFilterParams();
+
             var staffRepository = new StaffRepository();
-            FilterDepartmentList = staffRepository.GetDepartments();
-            FilterStaffList = staffRepository.GetAll(staff => staff.Name.DisplayName);
+            var filterDepartmentList = staffRepository.GetDepartments();
+            var filterStaffList = staffRepository.GetAll(staff => staff.Name.DisplayName);
 
-            _initFilterStatus = true;
+            _filterStaffCheckList = new ObservableCollection<CheckBoxItem<Staff>>();
+            foreach (var staff in filterStaffList)
+                FilterStaffCheckList.Add(new CheckBoxItem<Staff> { Item = staff });
+            OnPropertyChanged("FilterStaffCheckList");
+
+            _filterDepartmentCheckList = new ObservableCollection<CheckBoxItem<string>>();
+            foreach (var department in filterDepartmentList)
+                FilterDepartmentCheckList.Add(new CheckBoxItem<string> { Item = department });
+            OnPropertyChanged("FilterDepartmentCheckList");
         }
-
-        private void RefreshCommand_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        
+        private void ClearFilterMethod()
         {
-            if (!_initFilterStatus)
-                InitFilter();
+            Filter = new CardFilter();
+            ComplexFilterParams = new CardFilterParams();
+            InitFilter();
 
-            SaveTableSortOrder();
+            if (string.IsNullOrEmpty(SearchString)) IsSearched = false;
 
-            if (!IsSearched)
-                TableItemListView = CollectionViewSource.GetDefaultView(TableItemList);
-            else
-            {
-                //Get all units
-                var itemList = CollectionViewSource.GetDefaultView(TableItemList);
-                var filter = new Predicate<object>(FilterItems);
-                itemList.Filter = filter;
-                TableItemListView = itemList;
-            }
-
-            LoadTableSortOrder();
+            if (RefreshCommand != null)
+                RefreshCommand.Execute(null);
         }
-
-        private void RefreshMethod()
-        {
-            TableItemList = ComplexFilterStatus ? 
-                _cardRepository.GetAllByComplexFilter(ComplexFilter) 
-                : _cardRepository.GetAll(x=> x.CardNumber, false, false);
-        }
-
-        private bool FilterItems(object obj)
-        {
-            if (!(obj is Card))
-                return false;
-
-            var filterString = SearchString;
-            var right = (Card)obj;
-
-            if (StringContains(right.CardNumber, filterString))
-                return true;
-            if (StringContains(right.CardName, filterString))
-                return true;
-            if (StringContains(right.CreationDate.ToShortDateString(), filterString))
-                return true;
-            if (StringContains(right.Staff.Name.DisplayName, filterString))
-                return true;
-            return StringContains(right.Comments, filterString);
-        }
-
+        
         private void AddMethod()
         {
             AddAction();
@@ -122,9 +136,8 @@ namespace Stock.UI.ViewModels
                 const string caption = "Удаление";
                 const string text = "Вы действительно хотите удалить эту запись?\r\n" +
                                     "Все устройства будут удалены.";
-                const MessageBoxButton buttons = MessageBoxButton.OKCancel;
 
-                if (MessageBox.Show(text, caption, buttons) == MessageBoxResult.OK)
+                if (ShowDialogMessage(text, caption))
                 {
                     DeleteCard(item);
                     if (RefreshCommand != null)
@@ -148,7 +161,14 @@ namespace Stock.UI.ViewModels
                 }
             }
 
-            repository.Delete(item);
+            try
+            {
+                repository.Delete(item);
+            }
+            catch (Exception ex)
+            {
+                ShowInfoMessage(ex.Message, "Ошибка");
+            }
         }
     }
 }

@@ -11,7 +11,7 @@
 	Title="Новый сотрудник"
 	Width="480" Height="600" ResizeMode="NoResize" 
     WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
-    Icon="../../Themes/MainIcon.ico">
+    Icon="pack://application:,,,/Stock;component/Themes/MainIcon.ico">
     <Window.DataContext>
         <dialogs:RepairAddViewModel x:Name="ViewModel"/>
     </Window.DataContext>
@@ -40,76 +40,76 @@
 		</Grid.RowDefinitions>
         
         <!-- Title -->
-        <TextBlock Grid.RowSpan="2" Grid.ColumnSpan="2" Style="{StaticResource DialogTitleTextBlockStyle}">
+        <TextBlock Grid.RowSpan="2" Grid.ColumnSpan="2" Style="{DynamicResource DialogTitleTextBlockStyle}">
             <Run Language="ru-RU" Text="Новая позиция"/>
         </TextBlock>
         <!-- Main form -->
-        <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="en-US" Text="ID" />
         </TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="ru-RU" Text="Дата создания"/>
         </TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <TextBlock Grid.Row="4" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="ru-RU" Text="Инв.№"/>
         </TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <TextBlock Grid.Row="5" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="ru-RU" Text="Устройство"/>
         </TextBlock>
-        <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <TextBlock Grid.Row="6" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="ru-RU" Text="Сер. №"/>
         </TextBlock>
-        <TextBlock Grid.Row="7" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <TextBlock Grid.Row="7" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="ru-RU" Text="Неисправность"/>
         </TextBlock>
-        <TextBlock Grid.Row="9" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <TextBlock Grid.Row="9" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="ru-RU" Text="Результат"/>
         </TextBlock>
-        <TextBlock Grid.Row="11" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <TextBlock Grid.Row="11" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="ru-RU" Text="Дата выполнения"/>
         </TextBlock>
-        <TextBlock Grid.Row="12" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <TextBlock Grid.Row="12" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="ru-RU" Text="Исполнитель"/>
         </TextBlock>
-        <TextBlock Grid.Row="13" Grid.Column="0" Style="{StaticResource DialogTextBlockStyle}">
+        <TextBlock Grid.Row="13" Grid.Column="0" Style="{DynamicResource DialogTextBlockStyle}">
             <Run Language="ru-RU" Text="Комментарии"/>
         </TextBlock>
-        
-        <TextBox Text="{Binding Path=Repair.Id}" Grid.Row="2" Grid.Column="1" Margin="4" IsReadOnly="True" Style="{StaticResource TextBoxStyle}" />
+
+        <TextBox Text="{Binding Path=Repair.Id}" Grid.Row="2" Grid.Column="1" Margin="4" IsEnabled="False" Style="{DynamicResource TextBoxStyle}" />
         <xctk:DateTimePicker x:Name="CreationDateDtPk" Value="{Binding Path=Repair.StartedDate}" Grid.Row="3" Grid.Column="1" 
                              TimePickerVisibility="Collapsed" Format="ShortDate" 
                              ShowButtonSpinner="False"
-                             Margin="4" Style="{StaticResource DateTimePickerStyle}" VerticalAlignment="Center"/>
+                             Margin="4" Style="{DynamicResource DateTimePickerStyle}" VerticalAlignment="Center"/>
         <ComboBox DisplayMemberPath="StockNumber" Margin="4"
-                  ItemsSource="{Binding Path=StockUnitList}" SelectedItem="{Binding Path=StockUnitSelectedItem}" 
-                  IsEditable="True" Grid.Row="4" Grid.Column="1" Style="{StaticResource ComboBoxStyle}" 
+                  ItemsSource="{Binding Path=StockUnitList}" SelectedItem="{Binding Path=StockUnitSelectedItem, UpdateSourceTrigger=PropertyChanged}" 
+                  IsEditable="True" Grid.Row="4" Grid.Column="1" Style="{DynamicResource ComboBoxStyle}" 
                   SelectionChanged="StockUnitCb_OnSelectionChanged" />
         <ComboBox DisplayMemberPath="FullModelName" Margin="4"
-                  ItemsSource="{Binding Path=UnitList}" SelectedItem="{Binding Path=Unit}" 
-                  Grid.Row="5" Grid.Column="1" Style="{StaticResource ComboBoxStyle}" />
-        <TextBox Text="{Binding Path=Unit.Serial}" Grid.Row="6" Grid.Column="1" 
+                  ItemsSource="{Binding Path=UnitList}" SelectedItem="{Binding Path=Unit, UpdateSourceTrigger=PropertyChanged}" 
+                  Grid.Row="5" Grid.Column="1" Style="{DynamicResource ComboBoxStyle}" />
+        <TextBox Text="{Binding Path=Unit.Serial, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" 
                  IsReadOnly="True" Margin="4"
-                 Style="{StaticResource TextBoxStyle}"/>
-        <TextBox Text="{Binding Path=Repair.Defect}" Grid.Row="7" Grid.Column="1" 
+                 Style="{DynamicResource TextBoxStyle}"/>
+        <TextBox Text="{Binding Path=Repair.Defect, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="1" 
                  Grid.RowSpan="2" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="4"
-                 Style="{StaticResource TextBoxStyle}"/>
-        <TextBox Text="{Binding Path=Repair.Result}" Grid.Row="9" Grid.Column="1" 
+                 Style="{DynamicResource TextBoxStyle}"/>
+        <TextBox Text="{Binding Path=Repair.Result, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="1" 
                  Grid.RowSpan="2" VerticalAlignment="Stretch" TextWrapping="Wrap" Margin="4"
-                 Style="{StaticResource TextBoxStyle}"/>
-        <xctk:DateTimePicker x:Name="CompletedDateDtPk" Value="{Binding Path=Repair.CompletedDate}" Grid.Row="11" Grid.Column="1" 
+                 Style="{DynamicResource TextBoxStyle}"/>
+        <xctk:DateTimePicker x:Name="CompletedDateDtPk" Value="{Binding Path=Repair.CompletedDate, UpdateSourceTrigger=PropertyChanged}" Grid.Row="11" Grid.Column="1" 
                              TimePickerVisibility="Collapsed" Format="ShortDate" 
                              ShowButtonSpinner="False"
-                             Margin="4" Style="{StaticResource DateTimePickerStyle}" VerticalAlignment="Center"/>
+                             Margin="4" Style="{DynamicResource DateTimePickerStyle}" VerticalAlignment="Center"/>
         <ComboBox DisplayMemberPath="Name.DisplayName" Margin="4"
-                  ItemsSource="{Binding Path=UserList}" SelectedItem="{Binding Path=Repair.User}" 
-                  Grid.Row="12" Grid.Column="1" Style="{StaticResource ComboBoxStyle}"/>
-        <TextBox Text="{Binding Path=Repair.Comments}" 
-                 Grid.Row="13" Grid.Column="1" Margin="4" Style="{StaticResource TextBoxStyle}" TextWrapping="Wrap" />
+                  ItemsSource="{Binding Path=UserList}" SelectedItem="{Binding Path=Repair.User, UpdateSourceTrigger=PropertyChanged}" 
+                  Grid.Row="12" Grid.Column="1" Style="{DynamicResource ComboBoxStyle}"/>
+        <TextBox Text="{Binding Path=Repair.Comments, UpdateSourceTrigger=PropertyChanged}" 
+                 Grid.Row="13" Grid.Column="1" Margin="4" Style="{DynamicResource TextBoxStyle}" TextWrapping="Wrap" />
 
         <!-- Dialog buttons -->
         <StackPanel Grid.Row="14" Grid.Column="1" Height="40" Margin="0,4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <Button Content="Сохранить" IsDefault="True" Margin="4,0" Height="32" Width="100" Style="{StaticResource ButtonDefaultStyle}" Command="{Binding SaveCommand}"/>
-            <Button Content="Отмена" IsCancel="True" Margin="4,0" Height="32" Width="100" Style="{StaticResource ButtonDefaultStyle}" Command="{Binding CloseCommand}"/>
+            <Button Content="Сохранить" IsDefault="True" Margin="4,0" Height="32" Width="100" Style="{DynamicResource ButtonDefaultStyle}" Command="{Binding SaveCommand}"/>
+            <Button Content="Отмена" IsCancel="True" Margin="4,0" Height="32" Width="100" Style="{DynamicResource ButtonDefaultStyle}" Command="{Binding CloseCommand}"/>
         </StackPanel>
 	</Grid>
 </Window>
