@@ -58,6 +58,10 @@
     <ApplicationIcon>Themes\MainIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Blake.Controls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Blake.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Controls.Input.Toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -316,10 +320,6 @@
     <Resource Include="Themes\Status.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BlakeUI\Blake.Controls\Blake.Controls.csproj">
-      <Project>{B6DB960D-2A22-4312-9DEC-63F10354B332}</Project>
-      <Name>Blake.Controls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Core\Stock.Core.csproj">
       <Project>{A75AD08D-6ABD-4931-B056-410744BDF829}</Project>
       <Name>Stock.Core</Name>

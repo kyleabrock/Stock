@@ -48,8 +48,6 @@ namespace Stock.UI
             SetValue("LdapAuth", ldapAuth);
             SetValue("UserId", userId);
             SetValue("UserPassword", userPassword);
-
-            NHibernateHelper.Configure(dbDataSource, dbInitialCatalog, dbUserId, dbPassword, integratedSecurity);
         }
 
         public static void LoadSettings()

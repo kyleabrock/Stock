@@ -61,7 +61,7 @@
         </Grid>
 
         <Grid Grid.Row="4" Style="{StaticResource EntryFieldStyle}">
-            <CheckBox x:Name="IntegratedSecurityBox" Content="Авторизация Windows" IsChecked="{Binding Path=IntergatedSecurity}" />
+            <CheckBox x:Name="IntegratedSecurityBox" Content="Авторизация Windows" IsChecked="{Binding Path=IntegratedSecurity}" />
         </Grid>
 
         <Grid Grid.Row="5" Style="{StaticResource EntryFieldStyle}">
