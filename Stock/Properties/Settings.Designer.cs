@@ -73,18 +73,6 @@ namespace Stock.UI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Work\\Resources")]
-        public string SettingsAppFolder {
-            get {
-                return ((string)(this["SettingsAppFolder"]));
-            }
-            set {
-                this["SettingsAppFolder"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("db.ktm.ossi.loc")]
         public string DbDataSource {
             get {
@@ -188,6 +176,78 @@ namespace Stock.UI.Properties {
             }
             set {
                 this["IntegratedSecurity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public double CardTableCardNumberWidth {
+            get {
+                return ((double)(this["CardTableCardNumberWidth"]));
+            }
+            set {
+                this["CardTableCardNumberWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("250")]
+        public double CardTableCardNameWidth {
+            get {
+                return ((double)(this["CardTableCardNameWidth"]));
+            }
+            set {
+                this["CardTableCardNameWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("85")]
+        public double CardTableCreationDateWidth {
+            get {
+                return ((double)(this["CardTableCreationDateWidth"]));
+            }
+            set {
+                this["CardTableCreationDateWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double CardTableDisplayNameWidth {
+            get {
+                return ((double)(this["CardTableDisplayNameWidth"]));
+            }
+            set {
+                this["CardTableDisplayNameWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("250")]
+        public double CardTableCommentsWidth {
+            get {
+                return ((double)(this["CardTableCommentsWidth"]));
+            }
+            set {
+                this["CardTableCommentsWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Work\\Resources")]
+        public string SettingsAppFolder {
+            get {
+                return ((string)(this["SettingsAppFolder"]));
+            }
+            set {
+                this["SettingsAppFolder"] = value;
             }
         }
     }

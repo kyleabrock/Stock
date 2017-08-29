@@ -104,12 +104,13 @@
                     </StackPanel>
 
                     <tk:DataGrid Grid.Row="1" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="False" CanUserAddRows="True" Margin="4" PreviewKeyDown="MainDataGrid_PreviewKeyDown"
-                                 ItemsSource="{Binding Path=UnitList}" SelectionMode="Single" SelectedItem="{Binding SelectedItem}"
+                                 ItemsSource="{Binding Path=UnitList}" SelectionMode="Extended" SelectedItem="{Binding SelectedItem}"
                                  CanUserDeleteRows="False" KeyboardNavigation.TabNavigation="Cycle">
                         <tk:DataGrid.Columns>
                             <tk:DataGridComboBoxColumn Header="Тип" Width="140" 
                                                        SelectedValuePath="TypeName" DisplayMemberPath="TypeName"
-                                                       SelectedItemBinding="{Binding UnitType}" >
+                                                       SelectedItemBinding="{Binding UnitType}"
+                                                       ClipboardContentBinding="{Binding UnitType.TypeName}" >
                                 <tk:DataGridComboBoxColumn.ElementStyle>
                                     <Style TargetType="{x:Type ComboBox}">
                                         <Setter Property="ItemsSource" Value="{Binding Path=DataContext.UnitTypes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
@@ -122,7 +123,7 @@
                                     </Style>
                                 </tk:DataGridComboBoxColumn.EditingElementStyle>
                             </tk:DataGridComboBoxColumn>
-                            <tk:DataGridTemplateColumn Header="Производитель" Width="140" >
+                            <tk:DataGridTemplateColumn Header="Производитель" Width="140" ClipboardContentBinding="{Binding Manufacture}" >
                                 <tk:DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Manufacture}" VerticalAlignment="Center" />
@@ -136,7 +137,7 @@
                                     </DataTemplate>
                                 </tk:DataGridTemplateColumn.CellEditingTemplate>
                             </tk:DataGridTemplateColumn>
-                            <tk:DataGridTemplateColumn Header="Модель" Width="140">
+                            <tk:DataGridTemplateColumn Header="Модель" Width="140" ClipboardContentBinding="{Binding ModelName}">
                                 <tk:DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding ModelName}" VerticalAlignment="Center" />

@@ -37,7 +37,7 @@ namespace Stock.Core.Filter
             var manufactures = filterParams.Manufacture;
 
             var ownerCriterion = CreateCriterion(owners, "owner");
-            var statusesCriterion = CreateCriterion(statuses, "owner");
+            var statusesCriterion = CreateCriterion(statuses, "status");
             var unitTypeCriterion = CreateCriterion(unitType, "type");
             var modelsCriterion = CreateCriterion(models, "type", "ModelName");
             var manufactureCriterion = CreateCriterion(manufactures, "type", "Manufacture");

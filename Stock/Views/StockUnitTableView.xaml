@@ -8,58 +8,64 @@
              xmlns:utils="clr-namespace:Stock.UI.Utils"
              xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1000" Background="{DynamicResource DefaultBackground}">
+             d:DesignHeight="700" d:DesignWidth="1000" Background="{StaticResource DefaultBackground}">
     <UserControl.DataContext>
         <viewModels:StockUnitTableViewModel x:Name="ViewModel" />
     </UserControl.DataContext>
     <UserControl.Resources>
         <utils:StatusTypeToColorConverter x:Key="ColorConverter" />
         <utils:IntToVisibilityConverter x:Key="IntToVisibilityConverter" />
+
+        <Style TargetType="{x:Type xctk:DateTimePicker}" BasedOn="{StaticResource DateTimePickerStyle}">
+            <Setter Property="TimePickerVisibility" Value="Collapsed" />
+            <Setter Property="Format" Value="ShortDate" />
+            <Setter Property="ShowButtonSpinner" Value="False" />
+            <Setter Property="Margin" Value="4,0,4,4" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DialogTextBlockStyle}">
+            <Setter Property="Margin" Value="4,4,4,2" />
+        </Style>
     </UserControl.Resources>
     
-    <Grid>
+    <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="48"/>
-            <RowDefinition Height="48"/>
-            <RowDefinition Height="16"/>
             <RowDefinition />
             <RowDefinition Height="24" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width="0" x:Name="FilterGridColumn"/>
+            <ColumnDefinition Width="1" x:Name="FilterGridColumn"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Основные средства" Grid.Row="0" Style="{DynamicResource WindowTitleBlockStyle}" />
-
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Height="32" VerticalAlignment="Bottom">
-            <Button Margin="4,0" Style="{DynamicResource AddButtonNormalStyle}" Command="{Binding AddCommand}" />
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Height="32" VerticalAlignment="Center">
+            <Button Margin="0,0,4,0" Style="{DynamicResource AddButtonNormalStyle}" Command="{Binding AddCommand}" />
             <Button Margin="4,0" Style="{DynamicResource ImportButtonSmallStyle}" Command="{Binding CopyCommand}" />
             <Button Margin="4,0" Style="{DynamicResource EditButtonSmallStyle}" Command="{Binding EditCommand}" />
             <Button Margin="4,0" Style="{DynamicResource DeleteButtonSmallStyle}" Command="{Binding DeleteCommand}" />
             <Button Margin="4,0" Style="{DynamicResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
             <Button Margin="4,0" Style="{DynamicResource FilterButtonSmallStyle}" Click="FilterButton_OnClick" />
         </StackPanel>
-        <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle}" />
-            <Button Margin="4,0" Command="{Binding SearchCommand}" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" 
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right">
+            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="0" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle}" />
+            <Button Margin="0" Command="{Binding SearchCommand}" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" 
                     Style="{DynamicResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
         </Grid>
 
         <!-- Filter Grid -->
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <StackPanel Orientation="Vertical" Background="{DynamicResource BootstrapGrayColor5}" Grid.Column="1" Grid.Row="3" Width="200">
-            <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
+        <StackPanel Orientation="Vertical" Background="{DynamicResource BootstrapGrayColor5}" Grid.Row="1" Grid.Column="1" Width="200">
+            <TextBlock>
                 <Run Language="ru-RU">Дата с</Run>
             </TextBlock>
-            <xctk:DateTimePicker Value="{Binding Path=ComplexFilterParams.StartDateTime}" TimePickerVisibility="Collapsed" Format="ShortDate" 
-                             ShowButtonSpinner="False" Margin="4,0,4,4" Style="{DynamicResource DateTimePickerStyle}" VerticalAlignment="Center"/>
+            <xctk:DateTimePicker Value="{Binding Path=ComplexFilterParams.StartDateTime}" />
 
-            <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
+            <TextBlock>
                 <Run Language="ru-RU">Дата по</Run>
             </TextBlock>
-            <xctk:DateTimePicker Value="{Binding Path=ComplexFilterParams.EndDateTime}" TimePickerVisibility="Collapsed" Format="ShortDate" 
-                             ShowButtonSpinner="False" Margin="4,0,4,4" Style="{DynamicResource DateTimePickerStyle}" VerticalAlignment="Center"/>
+            <xctk:DateTimePicker Value="{Binding Path=ComplexFilterParams.EndDateTime}" />
 
             <Expander Margin="4">
                 <Expander.Header>
@@ -136,8 +142,9 @@
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
         <tk:DataGrid IsReadOnly="True" Style="{DynamicResource DataGridDefaultStyle}"
-                     MouseDoubleClick="MainDataGrid_OnMouseDoubleClick" Grid.Row="3"
-                     ItemsSource="{Binding ItemList}" SelectedItem="{Binding SelectedItem}" ClipboardCopyMode="IncludeHeader" CopyingRowClipboardContent="DataGrid_OnCopyingRowClipboardContent">
+                     MouseDoubleClick="MainDataGrid_OnMouseDoubleClick" Grid.Row="1" Grid.Column="0"
+                     ItemsSource="{Binding ItemList}" SelectedItem="{Binding SelectedItem}"
+                     CopyingRowClipboardContent="DataGrid_OnCopyingRowClipboardContent">
             <tk:DataGrid.Columns>
                 <tk:DataGridTemplateColumn Header="Статус" Width="76" ClipboardContentBinding="{Binding Path=Status.StatusName}" SortMemberPath="Status.StatusName">
                     <tk:DataGridTemplateColumn.CellTemplate>
@@ -170,19 +177,19 @@
         </tk:DataGrid>
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
-        <StatusBar Grid.Row="4">
-            <StatusBarItem>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Всего элементов: " />
-                    <TextBlock Text="{Binding Path=ItemListCollection.Count}" />
-                </StackPanel>
-            </StatusBarItem>
-        </StatusBar>
-
-        <ProgressBar IsIndeterminate="True" Grid.Row="3" 
+        <ProgressBar IsIndeterminate="True" Grid.Row="1" Grid.Column="0"
                      Width="64" Height="64" Style="{DynamicResource RadialProgressBar}"
                      HorizontalAlignment="Center" VerticalAlignment="Center" 
                      Visibility="{Binding Path=RefreshCommand.IsExecuting, Converter={StaticResource BoolToVisibilityConverter}}" />
 
+        <StatusBar Grid.Row="2" Grid.Column="0" Background="{StaticResource DefaultBackground}">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Всего элементов: " FontSize="11" Margin="0" />
+                    <TextBlock Text="{Binding Path=ItemListCollection.Count}" FontSize="11" Margin="0" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+        
     </Grid>
 </UserControl>

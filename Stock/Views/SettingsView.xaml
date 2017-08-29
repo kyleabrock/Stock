@@ -1,14 +1,14 @@
-﻿<UserControl x:Class="Stock.UI.Views.SettingsView"
+﻿<Window x:Class="Stock.UI.Views.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:Stock.UI.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1000" Background="{DynamicResource DefaultBackground}">
-    <UserControl.DataContext>
+             d:DesignHeight="480" d:DesignWidth="640" Background="{DynamicResource DefaultBackground}">
+    <Window.DataContext>
         <viewModels:SettingsViewModel x:Name="ViewModel" />
-    </UserControl.DataContext>
+    </Window.DataContext>
     
     <Grid>
         <Grid.RowDefinitions>
@@ -47,4 +47,4 @@
         <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="100" Height="32" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right" Margin="4,0" Style="{DynamicResource ButtonInfoStyle}" />
 
     </Grid>
-</UserControl>
+</Window>

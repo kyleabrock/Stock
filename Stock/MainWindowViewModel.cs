@@ -1,16 +1,21 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Stock.Core.Domain;
+using Stock.UI.ViewModels.Base;
 
 namespace Stock.UI
 {
-    public class MainWindowViewModel : ViewModels.Base.ViewModelBase
+    public class MainWindowViewModel : ViewModelBase
     {
-        public MainWindowViewModel(Action<string> showDialogMessage, Func<bool> showLoginWindow)
+        public MainWindowViewModel(Action<string> showDialogMessage, Func<bool> showLoginWindow, Action settingsWindow)
         {
             ShowDialogMessage = showDialogMessage;
             ShowLoginWindow = showLoginWindow;
+            ShowSettingsWindow = settingsWindow;
+
+            SettingsCommand = new RelayCommand(x => ShowSettingsWindow());
 
             //Blank user image
             var defaultImageUri = new Uri(@"pack://application:,,,/Stock;component/Themes/UserAcc.png");
@@ -29,7 +34,7 @@ namespace Stock.UI
             }
         }
 
-        private UserAcc _user = new UserAcc();
+        private UserAcc _user = UserAcc.Guest();
         public UserAcc User
         {
             get { return _user; }
@@ -45,6 +50,8 @@ namespace Stock.UI
 
         public Action<string> ShowDialogMessage { get; set; }
         public Func<bool> ShowLoginWindow { get; set; }
+        public ICommand SettingsCommand { get; set; }
+        public Action ShowSettingsWindow { get; set; }
 
         private readonly BitmapImage _defaultUserImage;
 

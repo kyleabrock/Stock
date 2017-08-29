@@ -10,39 +10,40 @@
     <UserControl.DataContext>
         <viewModels:OwnerTableViewModel x:Name="ViewModel" />
     </UserControl.DataContext>
+    <UserControl.Resources>
+        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DialogTextBlockStyle}">
+            <Setter Property="Margin" Value="4,4,4,2" />
+        </Style>
+    </UserControl.Resources>
     
     <Grid>
         <Grid.RowDefinitions>
         	<RowDefinition Height="48"/>
-            <RowDefinition Height="48"/>
-            <RowDefinition Height="16"/>
             <RowDefinition />
             <RowDefinition Height="24"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Сотрудники" Style="{DynamicResource WindowTitleBlockStyle}" Grid.Row="0"/>
-
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Height="32" VerticalAlignment="Bottom">
-            <Button Margin="4,0" Style="{DynamicResource AddButtonNormalStyle}" Command="{Binding AddCommand}" />
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Height="32" VerticalAlignment="Center">
+            <Button Margin="0,0,4,0" Style="{DynamicResource AddButtonNormalStyle}" Command="{Binding AddCommand}" />
             <Button Margin="4,0" Style="{DynamicResource EditButtonSmallStyle}" Command="{Binding EditCommand}" />
             <Button Margin="4,0" Style="{DynamicResource DeleteButtonSmallStyle}" Command="{Binding DeleteCommand}" />
             <Button Margin="4,0" Style="{DynamicResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
             <Button Margin="4,0" Style="{DynamicResource FilterButtonSmallStyle}" />
         </StackPanel>
-        <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle}" />
-            <Button Margin="4,0" Command="{Binding SearchCommand}" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" 
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Height="32" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="0" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle}" />
+            <Button Margin="0" Command="{Binding SearchCommand}" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" 
                     Style="{DynamicResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
         </Grid>
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid Grid.Row="3" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True" 
+        <tk:DataGrid Grid.Row="1" IsReadOnly="True" 
                      MouseDoubleClick="MainDataGrid_OnMouseDoubleClick"
                      ItemsSource="{Binding ItemList}" SelectedItem="{Binding SelectedItem}">
             <tk:DataGrid.Columns>
-                <tk:DataGridTextColumn Header="Имя" Binding="{Binding Path=Name.DisplayName}" Width="250" />
-                <tk:DataGridTextColumn Header="Отдел" Binding="{Binding Path=Department}" Width="100" />
-                <tk:DataGridTextColumn Header="Комментарии" Binding="{Binding Path=Comments}" Width="450" />
+                <tk:DataGridTextColumn Header="Имя" Binding="{Binding Path=Name.DisplayName}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" Width="250" />
+                <tk:DataGridTextColumn Header="Отдел" Binding="{Binding Path=Department}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" Width="100" />
+                <tk:DataGridTextColumn Header="Комментарии" Binding="{Binding Path=Comments}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" Width="450" />
             </tk:DataGrid.Columns>
             <tk:DataGrid.ContextMenu>
                 <ContextMenu Style="{DynamicResource ContextMenuStyle}">
@@ -54,7 +55,12 @@
         </tk:DataGrid>
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
-        <StatusBar Grid.Row="4">
+        <ProgressBar IsIndeterminate="True" Grid.Row="1" 
+                     Width="64" Height="64" Style="{DynamicResource RadialProgressBar}"
+                     HorizontalAlignment="Center" VerticalAlignment="Center" 
+                     Visibility="{Binding Path=RefreshCommand.IsExecuting, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+        <StatusBar Grid.Row="2">
             <StatusBarItem>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Всего элементов: " />
@@ -62,11 +68,6 @@
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>
-
-        <ProgressBar IsIndeterminate="True" Grid.Row="3" 
-                     Width="64" Height="64" Style="{DynamicResource RadialProgressBar}"
-                     HorizontalAlignment="Center" VerticalAlignment="Center" 
-                     Visibility="{Binding Path=RefreshCommand.IsExecuting, Converter={StaticResource BoolToVisibilityConverter}}" />
 
     </Grid>
 </UserControl>

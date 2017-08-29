@@ -1,17 +1,17 @@
 ﻿<Window x:Class="Stock.UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:views="clr-namespace:Stock.UI.Views"
+        xmlns:views="clr-namespace:Stock.UI.Views" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="IT-Учет" Height="700" Width="1024" MinWidth="800" MinHeight="600" 
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource BootstrapGrayColor1}"
+        Background="{StaticResource FgTabColor}"
         Icon="Themes/MainIcon.ico">
     <Window.Resources>
         <Style x:Key="TabContentPresenterStyle" TargetType="{x:Type ContentPresenter}">
             <Setter Property="Margin" Value="0,8,8,8" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ButtonForegroundBrush}" />
+            <Setter Property="TextBlock.Foreground" Value="{StaticResource DefaultBackground}" />
             <Setter Property="TextBlock.FontFamily" Value="Segoe UI" />
             <Setter Property="TextBlock.FontSize" Value="13.333" />
         </Style>
@@ -23,139 +23,178 @@
     </Window.Resources>
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <TabControl Name="MainTabControl" SelectionChanged="MainTabControl_SelectionChanged" 
-                    Style="{DynamicResource MenuTabControlStyle}" Padding="4,0">
-            <TabItem Style="{DynamicResource MenuLoginTabItemStyle}" BorderThickness="0,0,0,1" Margin="0,0,4,0">
-                <TabItem.Header>
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical" Width="132">
-                        <Border Margin="8,4" Width="64" Height="64">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="64" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            <Rectangle Grid.Column="0" Fill="{StaticResource FgSelectedTabColor}" />
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Image Source="Themes/LoginIcon.png" Width="32" Height="32" VerticalAlignment="Center" Margin="16,0,0,0" />
+                <TextBlock Text="IT-учет" VerticalAlignment="Center" Margin="4" 
+                           FontSize="13.333" FontWeight="Bold" Foreground="{StaticResource BootstrapGrayColor5}" />
+            </StackPanel>
+
+            <Rectangle Grid.Column="1" Fill="{StaticResource DefaultBackground}" />
+            <Button Grid.Column="1" Margin="8,0" Style="{StaticResource SettingsButtonSmallStyle}" Command="{Binding SettingsCommand}" HorizontalAlignment="Left" />
+            <xctk:DropDownButton Grid.Column="1" Height="40" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                                 Margin="0,0,8,0" Background="{x:Null}" BorderThickness="0">
+                <xctk:DropDownButton.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Margin="0" Width="32" Height="32">
                             <Grid>
-                                <Border x:Name="MaskBorder" Background="White" BorderThickness="0" CornerRadius="32" />
+                                <Border x:Name="MaskBorder" Background="White" BorderThickness="0" CornerRadius="4" />
                                 <StackPanel>
                                     <StackPanel.OpacityMask>
                                         <VisualBrush Visual="{Binding ElementName=MaskBorder}" />
                                     </StackPanel.OpacityMask>
-                                    <Image Width="64" Height="64" Source="{Binding Path=UserImage}" />
+                                    <Image Width="32" Height="32" Source="{Binding Path=UserImage}" />
                                 </StackPanel>
                             </Grid>
                         </Border>
-                        <ContentPresenter Content="{Binding Path=User.Name.DisplayName}" Margin="0,8" HorizontalAlignment="Center" 
-                                          VerticalAlignment="Center" TextBlock.Foreground="{DynamicResource ButtonForegroundBrush}"
-                                          TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="13.333"/>
+                        <ContentPresenter Content="{Binding Path=User.Name.DisplayName}" Margin="8,0,0,0" HorizontalAlignment="Left" 
+                                          VerticalAlignment="Center" TextBlock.Foreground="{StaticResource BootstrapGrayColor2}"
+                                          TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="11" TextBlock.FontWeight="Bold" />
                     </StackPanel>
-                </TabItem.Header>
-                <Grid>
-                    <views:UserPageView />
-                </Grid>
-            </TabItem>
-            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0" IsSelected="True">
+                </xctk:DropDownButton.Content>
+                <xctk:DropDownButton.DropDownContent>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal" Margin="16,8,16,8">
+                            <Image Width="64" Height="64" Source="{Binding Path=UserImage}" />
+                            <ContentPresenter Content="{Binding Path=User.Name.DisplayName}" Margin="8,0" HorizontalAlignment="Left" 
+                                          VerticalAlignment="Center" TextBlock.Foreground="{StaticResource BootstrapColor1}"
+                                          TextBlock.FontFamily="Segoe UI" TextBlock.FontSize="13.333" TextBlock.FontWeight="Bold" />
+                        </StackPanel>
+                        <Border Background="{StaticResource BootstrapGrayColor3}" Height="1" Margin="16,0" />
+                        <TextBlock FontSize="11" FontFamily="Segoe UI" FontWeight="Bold" Margin="16,4,16,2">
+                            <Hyperlink Foreground="{StaticResource BootstrapColor1}">Настройки</Hyperlink>
+                        </TextBlock>
+                        <TextBlock FontSize="11" FontFamily="Segoe UI" FontWeight="Bold" Margin="16,2">
+                            <Hyperlink Foreground="{StaticResource BootstrapColor1}">Учетная запись</Hyperlink>
+                        </TextBlock>
+                        <TextBlock FontSize="11" FontFamily="Segoe UI" FontWeight="Bold" Margin="16,2,16,4">
+                            <Hyperlink Foreground="{StaticResource BootstrapColor1}">Справка</Hyperlink>
+                        </TextBlock>
+                        <Border Background="{StaticResource BootstrapGrayColor3}" Height="1" Margin="16,0" />
+                        <TextBlock FontSize="11" FontFamily="Segoe UI" FontWeight="Bold" Margin="16,4,16,8">
+                            <Hyperlink Foreground="{StaticResource BootstrapColor1}">Выход</Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                </xctk:DropDownButton.DropDownContent>
+            </xctk:DropDownButton>
+        </Grid>
+        
+        <TabControl Grid.Row="1"  Name="MainTabControl" SelectionChanged="MainTabControl_SelectionChanged" 
+                    Style="{StaticResource MenuTabControlStyle}" Padding="0" BorderThickness="0">
+        	<TabControl.Background>
+        		<LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+        			<GradientStop Color="#FFFCFCFE" Offset="0"/>
+        			<GradientStop Color="White" Offset="1"/>
+        		</LinearGradientBrush>
+        	</TabControl.Background>
+            <TabItem Style="{StaticResource MenuMainTabItemStyle}" BorderThickness="0,0,0,2" IsSelected="True">
     			<TabItem.Header>
     				<StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
-                        <Image Source="{DynamicResource StockUnitBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <Image Source="{StaticResource StockUnitBitmapImage}" Style="{StaticResource MenuImage}" />
 						<ContentPresenter Content="Комплекты" Style="{StaticResource TabContentPresenterStyle}"/>
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Margin="0">
-                    <views:StockUnitTableView />
+                    <views:StockUnitTableView Margin="8,0,8,0" />
                 </Grid>
     		</TabItem>
-            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
+            <TabItem Style="{StaticResource MenuMainTabItemStyle}"  BorderThickness="0,0,0,2">
     			<TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Source="{DynamicResource CardBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <Image Source="{StaticResource CardBitmapImage}" Style="{StaticResource MenuImage}" />
                         <ContentPresenter Content="Карточки" Style="{StaticResource TabContentPresenterStyle}"/>
 					</StackPanel>			
 				</TabItem.Header>
                 <Grid>
-                    <views:CardTableView />
+                    <views:CardTableView x:Name="CardTable" Margin="8,0,8,0" />
                 </Grid>
     		</TabItem>
-            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
+            <TabItem Style="{StaticResource MenuMainTabItemStyle}" BorderThickness="0,0,0,2">
     			<TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Source="{DynamicResource DocumentBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <Image Source="{StaticResource DocumentBitmapImage}" Style="{StaticResource MenuImage}" />
                         <ContentPresenter Content="Документы" Style="{StaticResource TabContentPresenterStyle}"/>
 					</StackPanel>		
 				</TabItem.Header>
                 <Grid>
-                    <views:DocumentTableView />
+                    <views:DocumentTableView Margin="8,0,8,0" />
                 </Grid>
     		</TabItem>
-            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
+            <TabItem Style="{StaticResource MenuMainTabItemStyle}" BorderThickness="0,0,0,2">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Source="{DynamicResource UnitBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <Image Source="{StaticResource UnitBitmapImage}" Style="{StaticResource MenuImage}" />
                         <ContentPresenter Content="Устройства" Style="{StaticResource TabContentPresenterStyle}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <views:UnitTableView />
+                    <views:UnitTableView Margin="8,0,8,0" />
                 </Grid>
             </TabItem>
-            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
+            <TabItem Style="{StaticResource MenuMainTabItemStyle}" BorderThickness="0,0,0,2">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Source="{DynamicResource RepairBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <Image Source="{StaticResource RepairBitmapImage}" Style="{StaticResource MenuImage}" />
                         <ContentPresenter Content="Ремонт" Style="{StaticResource TabContentPresenterStyle}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <views:RepairTableView />
+                    <views:RepairTableView Margin="8,0,8,0" />
                 </Grid>
             </TabItem>
-            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
+            <TabItem Style="{StaticResource MenuMainTabItemStyle}" BorderThickness="0,0,0,2">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Source="{DynamicResource OwnerBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <Image Source="{StaticResource OwnerBitmapImage}" Style="{StaticResource MenuImage}" />
                         <ContentPresenter Content="МОЛ"  Style="{StaticResource TabContentPresenterStyle}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <views:OwnerTableView />
+                    <views:OwnerTableView Margin="8,0,8,0" />
                 </Grid>
             </TabItem>
-            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
+            <TabItem Style="{StaticResource MenuMainTabItemStyle}" BorderThickness="0,0,0,2">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Source="{DynamicResource StaffBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <Image Source="{StaticResource StaffBitmapImage}" Style="{StaticResource MenuImage}" />
                         <ContentPresenter Content="Сотрудники" Style="{StaticResource TabContentPresenterStyle}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <views:StaffTableView />
+                    <views:StaffTableView Margin="8,0,8,0" />
                 </Grid>
             </TabItem>
-            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
+            <TabItem Style="{StaticResource MenuMainTabItemStyle}" BorderThickness="0,0,0,2">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Source="{DynamicResource StatusBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <Image Source="{StaticResource StatusBitmapImage}" Style="{StaticResource MenuImage}" />
                         <ContentPresenter Content="Статусы" Style="{StaticResource TabContentPresenterStyle}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <views:StatusTableView />
+                    <views:StatusTableView Margin="8,0,8,0" />
                 </Grid>
             </TabItem>
-            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
+            <TabItem Style="{StaticResource MenuMainTabItemStyle}" BorderThickness="0">
                 <TabItem.Header>
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Source="{DynamicResource SettingsBitmapImage}" Style="{StaticResource MenuImage}" />
+                        <Image Source="{StaticResource SettingsBitmapImage}" Style="{StaticResource MenuImage}" />
                         <ContentPresenter Content="Журнал" Style="{StaticResource TabContentPresenterStyle}" />
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <views:LogTableView />
-                </Grid>
-            </TabItem>
-            <TabItem Style="{DynamicResource MenuMainTabItemStyle}" Margin="0,0,4,0">
-                <TabItem.Header>
-                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                        <Image Source="{DynamicResource SettingsBitmapImage}" Style="{StaticResource MenuImage}" />
-                        <ContentPresenter Content="Настройки" Style="{StaticResource TabContentPresenterStyle}" />
-                    </StackPanel>
-                </TabItem.Header>
-                <Grid>
-                    <views:SettingsView />
+                    <views:LogTableView Margin="8,0,8,0" />
                 </Grid>
             </TabItem>
         </TabControl>

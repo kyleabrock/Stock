@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Stock.Core.Domain
+﻿namespace Stock.Core.Domain
 {
     public class EntityBase
     {
@@ -15,12 +13,6 @@ namespace Stock.Core.Domain
             get { return _id == PlaceholderId; }
         }
 
-        private Guid _shadowGuid = Guid.NewGuid();
-        public virtual Guid ShadowGuid
-        {
-            get { return _shadowGuid; }
-        }
-
         private const int PlaceholderId = -1;
         private int _id = PlaceholderId;
 
@@ -30,25 +22,17 @@ namespace Stock.Core.Domain
             if (other == null)
                 return false;
 
-            if (other.IsNew)
-                return ShadowGuid == other.ShadowGuid;
-
-            return Id == other.Id;
+            return _id == other.Id;
         }
 
         public override int GetHashCode()
         {
-            if (IsNew)
-                return ShadowGuid.GetHashCode();
-
-            return Id.GetHashCode();
+            return _id.GetHashCode();
         }
 
         protected bool Equals(EntityBase other)
         {
-            if (other.IsNew)
-                return ShadowGuid == other.ShadowGuid;
-            return Id == other.Id;
+            return _id == other._id;
         }
     }
 }

@@ -33,5 +33,15 @@ namespace Stock.Core.Domain
             get { return _comments; }
             set { _comments = value; }
         }
+
+        public static UserAcc Guest()
+        {
+            var result = new UserAcc
+                {
+                    Name = new Name {DisplayName = "Гость"}
+                };
+
+            return result;
+        }
     }
 }

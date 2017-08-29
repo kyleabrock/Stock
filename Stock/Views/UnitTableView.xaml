@@ -19,8 +19,6 @@
     <Grid>
         <Grid.RowDefinitions>
         	<RowDefinition Height="48"/>
-            <RowDefinition Height="48"/>
-            <RowDefinition Height="16"/>
             <RowDefinition />
             <RowDefinition Height="24" />
         </Grid.RowDefinitions>
@@ -29,23 +27,21 @@
             <ColumnDefinition Width="0" x:Name="FilterGridColumn"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Устройства" Style="{DynamicResource WindowTitleBlockStyle}" Grid.Row="0"/>
-
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Height="32" VerticalAlignment="Bottom">
-            <Button x:Name="ToStockUnitButton" Content="Карта ОС" Command="{Binding OpenStockUnitCommand}" Style="{DynamicResource ButtonDefaultStyle}" Width="100" Margin="4,0" />
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Height="32" VerticalAlignment="Center">
+            <Button x:Name="ToStockUnitButton" Content="Карта ОС" Command="{Binding OpenStockUnitCommand}" Style="{DynamicResource ButtonDefaultStyle}" Width="100" Margin="0,0,4,0" />
             <Button Content="Карточка" Command="{Binding OpenCardCommand}" Style="{DynamicResource ButtonDefaultStyle}" Width="100" Margin="4,0" />
             <Button Margin="4,0" Style="{DynamicResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
             <Button Margin="4,0" Style="{DynamicResource FilterButtonSmallStyle}" Click="FilterButton_OnClick" />
         </StackPanel>
-        <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle}" />
-            <Button Margin="4,0" Command="{Binding SearchCommand}" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" 
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right">
+            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="0" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle}" />
+            <Button Margin="0" Command="{Binding SearchCommand}" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" 
                     Style="{DynamicResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
         </Grid>
 
         <!-- Filter Grid -->
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <StackPanel Orientation="Vertical" Background="{DynamicResource BootstrapGrayColor5}" Grid.Column="1" Grid.Row="3" Width="200">
+        <StackPanel Orientation="Vertical" Background="{DynamicResource BootstrapGrayColor5}" Grid.Column="1" Grid.Row="1" Width="200">
             <TextBlock Style="{DynamicResource DialogTextBlockStyle}" Margin="4,4,4,2">
                 <Run Language="ru-RU">Статус</Run>
             </TextBlock>
@@ -93,7 +89,7 @@
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid Grid.Row="3" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True"
+        <tk:DataGrid Grid.Row="1" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True"
                      ItemsSource="{Binding Path=ItemList}" SelectedItem="{Binding Path=SelectedItem}" 
                      MouseDoubleClick="MainDataGrid_OnMouseDoubleClick">
             <tk:DataGrid.Columns>
@@ -106,12 +102,12 @@
                         </DataTemplate>
                     </tk:DataGridTemplateColumn.CellTemplate>
                 </tk:DataGridTemplateColumn>
-                <tk:DataGridTextColumn Header="Инв.№" Binding="{Binding StockUnit.StockNumber}" Width="90" />
-                <tk:DataGridTextColumn Header="Тип" Binding="{Binding UnitType.TypeName}" Width="120" />
-                <tk:DataGridTextColumn Header="Производитель" Binding="{Binding Manufacture}" Width="120" />
-                <tk:DataGridTextColumn Header="Модель" Binding="{Binding ModelName}" Width="120" />
-                <tk:DataGridTextColumn Header="Сер.№" Binding="{Binding Serial}" Width="150" />
-                <tk:DataGridTextColumn Header="Комментарии" Binding="{Binding Comments}" Width="120" />
+                <tk:DataGridTextColumn Header="Инв.№" Binding="{Binding StockUnit.StockNumber}" Width="90" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Тип" Binding="{Binding UnitType.TypeName}" Width="120" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Производитель" Binding="{Binding Manufacture}" Width="120" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Модель" Binding="{Binding ModelName}" Width="120" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Сер.№" Binding="{Binding Serial}" Width="150" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Комментарии" Binding="{Binding Comments}" Width="120" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
             </tk:DataGrid.Columns>
             <tk:DataGrid.ContextMenu>
                 <ContextMenu Style="{DynamicResource ContextMenuStyle}">
@@ -122,20 +118,20 @@
             </tk:DataGrid.ContextMenu>
         </tk:DataGrid>
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
-
-        <StatusBar Grid.Row="4">
-            <StatusBarItem>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Всего элементов: " />
-                    <TextBlock Text="{Binding Path=ItemListCollection.Count}" />
-                </StackPanel>
-            </StatusBarItem>
-        </StatusBar>
-
-        <ProgressBar IsIndeterminate="True" Grid.Row="3" 
+        
+        <ProgressBar IsIndeterminate="True" Grid.Row="1" 
                      Width="64" Height="64" Style="{DynamicResource RadialProgressBar}"
                      HorizontalAlignment="Center" VerticalAlignment="Center" 
                      Visibility="{Binding Path=RefreshCommand.IsExecuting, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Всего элементов: " FontSize="11" Margin="0" />
+                    <TextBlock Text="{Binding Path=ItemListCollection.Count}" FontSize="11" Margin="0" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
 
     </Grid>
 </UserControl>

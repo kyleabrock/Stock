@@ -37,7 +37,41 @@ namespace Stock.Core
             return true;
         }
 
-        public static string LastError { get; private set; }
+        public static bool TestConnection()
+        {
+            return true;
+            //var configuration = new Configuration();
+            //try
+            //{
+            //    configuration.Configure();
+            //}
+            //catch (HibernateConfigException ex)
+            //{
+            //    LastError = ex.Message;
+            //    return false;
+            //}
+            //try
+            //{
+            //    configuration.AddAssembly(typeof(Unit).Assembly);
+            //}
+            //catch (MappingException ex)
+            //{
+            //    LastError = ex.Message;
+            //    return false;
+            //}
+            //try
+            //{
+            //    _sessionFactory = configuration.BuildSessionFactory();
+            //}
+            //catch (Exception ex)
+            //{
+            //    LastError = ex.Message;
+            //    return false;
+            //}
+            //return true;
+        }
+
+        public static string LastError { get; set; }
 
         public static void ExportSchema()
         {
@@ -46,25 +80,6 @@ namespace Stock.Core
             configuration.AddAssembly(typeof(Unit).Assembly);
 
             new SchemaExport(configuration).Execute(false, true, false);
-        }
-
-
-        private static Configuration ReadConfigFromCacheFileOrBuildIt(string dbDataSource, string dbInitialCatalog, string dbUserId, string dbPassword, bool integratedSecurity)
-        {
-            Configuration nhConfigurationCache;
-            var nhCfgCache = new ConfigurationFileCache(typeof(EntityBase).Assembly);
-            var cachedCfg = nhCfgCache.LoadConfigurationFromFile();
-            if (cachedCfg == null)
-            {
-                nhConfigurationCache = BuildConfiguration(dbDataSource, dbInitialCatalog, dbUserId, dbPassword, integratedSecurity);
-                nhCfgCache.SaveConfigurationToFile(nhConfigurationCache);
-            }
-            else
-            {
-                nhConfigurationCache = cachedCfg;
-            }
-
-            return nhConfigurationCache;
         }
 
         private static Configuration BuildConfiguration(string dbDataSource, string dbInitialCatalog, string dbUserId, string dbPassword, bool integratedSecurity)
@@ -101,6 +116,24 @@ namespace Stock.Core
                 LastError = ex.Message;
                 return null;
             }
+        }
+
+        private static Configuration ReadConfigFromCacheFileOrBuildIt(string dbDataSource, string dbInitialCatalog, string dbUserId, string dbPassword, bool integratedSecurity)
+        {
+            Configuration nhConfigurationCache;
+            var nhCfgCache = new ConfigurationFileCache(typeof(EntityBase).Assembly);
+            var cachedCfg = nhCfgCache.LoadConfigurationFromFile();
+            if (cachedCfg == null)
+            {
+                nhConfigurationCache = BuildConfiguration(dbDataSource, dbInitialCatalog, dbUserId, dbPassword, integratedSecurity);
+                nhCfgCache.SaveConfigurationToFile(nhConfigurationCache);
+            }
+            else
+            {
+                nhConfigurationCache = cachedCfg;
+            }
+
+            return nhConfigurationCache;
         }
     }
 }

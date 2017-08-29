@@ -9,40 +9,41 @@
              xmlns:utils="clr-namespace:Stock.UI.Utils"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1000" Background="White">
+    
     <UserControl.DataContext>
         <viewModels:StatusTableViewModel x:Name="ViewModel" />
     </UserControl.DataContext>
     <UserControl.Resources>
         <utils:StatusTypeToColorConverter x:Key="ColorConverter" />
         <coreutils:StatusTypeToNameConverter x:Key="NameConverter" />
+
+        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DialogTextBlockStyle}">
+            <Setter Property="Margin" Value="4,4,4,2" />
+        </Style>
     </UserControl.Resources>
     
     <Grid>
         <Grid.RowDefinitions>
         	<RowDefinition Height="48"/>
-            <RowDefinition Height="48"/>
-            <RowDefinition Height="16"/>
             <RowDefinition />
             <RowDefinition Height="24" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Статусы" Style="{DynamicResource WindowTitleBlockStyle}" Grid.Row="0"/>
-
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Height="32" VerticalAlignment="Bottom">
-            <Button Margin="4,0" Style="{DynamicResource AddButtonNormalStyle}" Command="{Binding AddCommand}" />
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Height="32" VerticalAlignment="Center">
+            <Button Margin="0,0,4,0" Style="{DynamicResource AddButtonNormalStyle}" Command="{Binding AddCommand}" />
             <Button Margin="4,0" Style="{DynamicResource EditButtonSmallStyle}" Command="{Binding EditCommand}" />
             <Button Margin="4,0" Style="{DynamicResource DeleteButtonSmallStyle}" Command="{Binding DeleteCommand}" />
             <Button Margin="4,0" Style="{DynamicResource RefreshButtonSmallStyle}" x:Name="RefreshButton" Command="{Binding RefreshCommand}" />
             <Button Margin="4,0" Style="{DynamicResource FilterButtonSmallStyle}" />
         </StackPanel>
-        <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="4,0" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle}" />
-            <Button Margin="4,0" Command="{Binding SearchCommand}" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" 
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right">
+            <TextBox x:Name="SearchTb" Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}" Width="300" Margin="0" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxStyle}" />
+            <Button Margin="0" Command="{Binding SearchCommand}" IsDefault="{Binding ElementName=SearchTb, Path=IsKeyboardFocused}" 
                     Style="{DynamicResource SearchButtonSmallStyle}" HorizontalAlignment="Right" />
         </Grid>
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid Grid.Row="3" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True" 
+        <tk:DataGrid Grid.Row="1" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True" 
                      MouseDoubleClick="MainDataGrid_OnMouseDoubleClick"
                      ItemsSource="{Binding Path=ItemList}" SelectedItem="{Binding SelectedItem}">
             <tk:DataGrid.Columns>
@@ -57,8 +58,8 @@
                         </DataTemplate>
                     </tk:DataGridTemplateColumn.CellTemplate>
                 </tk:DataGridTemplateColumn>
-                <tk:DataGridTextColumn Header="Название" Width="250" Binding="{Binding Path=StatusName}" />
-                <tk:DataGridTextColumn Header="Комментарии" Width="480" Binding="{Binding Path=Comments}" />
+                <tk:DataGridTextColumn Header="Название" Width="250" Binding="{Binding Path=StatusName}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
+                <tk:DataGridTextColumn Header="Комментарии" Width="480" Binding="{Binding Path=Comments}" ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" />
             </tk:DataGrid.Columns>
             <tk:DataGrid.ContextMenu>
                 <ContextMenu Style="{DynamicResource ContextMenuStyle}">
@@ -70,19 +71,19 @@
         </tk:DataGrid>
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
-        <StatusBar Grid.Row="4">
-            <StatusBarItem>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Всего элементов: " />
-                    <TextBlock Text="{Binding Path=ItemListCollection.Count}" />
-                </StackPanel>
-            </StatusBarItem>
-        </StatusBar>
-
-        <ProgressBar IsIndeterminate="True" Grid.Row="3" 
+        <ProgressBar IsIndeterminate="True" Grid.Row="1" 
                      Width="64" Height="64" Style="{DynamicResource RadialProgressBar}"
                      HorizontalAlignment="Center" VerticalAlignment="Center" 
                      Visibility="{Binding Path=RefreshCommand.IsExecuting, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Всего элементов: " Margin="0" FontSize="11" />
+                    <TextBlock Text="{Binding Path=ItemListCollection.Count}" Margin="0" FontSize="11" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
 
     </Grid>
 </UserControl>

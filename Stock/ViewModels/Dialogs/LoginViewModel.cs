@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Stock.Core;
@@ -105,12 +106,18 @@ namespace Stock.UI.ViewModels.Dialogs
         public ICommand ChangeConnectionCommand { get; private set; }
         public Action ChangeConnectionAction { get; set; }
         public Action LoginAction { get; set; }
-        public Action<string> ShowInfoMessage { get; set; }
         private UserAcc User { get; set; }
 
         private void LoginMethod(object parameter)
         {
             InProgress = true;
+
+            var dbDataSource = ApplicationState.GetValue<string>("DbDataSource");
+            var dbInitialCatalog = ApplicationState.GetValue<string>("DbInitialCatalog");
+            var dbUserId = ApplicationState.GetValue<string>("DbUserId");
+            var dbPassword = ApplicationState.GetValue<string>("DbPassword");
+            var integratedSecurity = ApplicationState.GetValue<bool>("IntegratedSecurity");
+            NHibernateHelper.Configure(dbDataSource, dbInitialCatalog, dbUserId, dbPassword, integratedSecurity);
 
             var passwordBox = parameter as PasswordBox;
             if (passwordBox == null) return;
@@ -165,16 +172,14 @@ namespace Stock.UI.ViewModels.Dialogs
 
         private bool CheckConnection()
         {
-            var dbDataSource = ApplicationState.GetValue<string>("DbDataSource");
-            var dbInitialCatalog = ApplicationState.GetValue<string>("DbInitialCatalog");
-            var dbUserId = ApplicationState.GetValue<string>("DbUserId");
-            var dbPassword = ApplicationState.GetValue<string>("DbPassword");
-            var integratedSecurity = ApplicationState.GetValue<bool>("IntegratedSecurity");
+            if (!Core.NHibernateHelper.TestConnection())
+            {
+                string errorText = "Ошибка при подключении к базе данных.\r\nПодробные сведения об ошибке: ";
+                errorText += Core.NHibernateHelper.LastError;
 
-            var result = NHibernateHelper.Configure(dbDataSource, dbInitialCatalog, dbUserId, dbPassword, integratedSecurity);
-            if (!result)
+                MessageBox.Show(Application.Current.MainWindow, errorText, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
-            
+            }
             return true;
         }
 

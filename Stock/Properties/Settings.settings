@@ -14,9 +14,6 @@
     <Setting Name="StockUnitFilesFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)">.\Files\StockUnit</Value>
     </Setting>
-    <Setting Name="SettingsAppFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Work\Resources</Value>
-    </Setting>
     <Setting Name="DbDataSource" Type="System.String" Scope="User">
       <Value Profile="(Default)">db.ktm.ossi.loc</Value>
     </Setting>
@@ -43,6 +40,24 @@
     </Setting>
     <Setting Name="IntegratedSecurity" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CardTableCardNumberWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="CardTableCardNameWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">250</Value>
+    </Setting>
+    <Setting Name="CardTableCreationDateWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">85</Value>
+    </Setting>
+    <Setting Name="CardTableDisplayNameWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="CardTableCommentsWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">250</Value>
+    </Setting>
+    <Setting Name="SettingsAppFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Work\Resources</Value>
     </Setting>
   </Settings>
 </SettingsFile>

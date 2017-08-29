@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Iesi.Collections">
+      <HintPath>C:\Libraries\NHibernate\Required_Bins\Iesi.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\..\..\Libraries\NHibernate\Required_Bins\NHibernate.dll</HintPath>
     </Reference>
@@ -114,9 +117,6 @@
     <Compile Include="Utils\StatusTypeToNameConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="hibernate.cfg.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="Mapper\StockUnitFiles.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

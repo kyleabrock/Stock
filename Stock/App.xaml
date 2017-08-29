@@ -1,7 +1,9 @@
 ﻿<Application x:Class="Stock.UI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:utils="clr-namespace:Stock.UI.Utils"
+             xmlns:tk="http://schemas.microsoft.com/wpf/2008/toolkit"
+             xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              Startup="ApplicationStart"
              ShutdownMode="OnMainWindowClose">
      
@@ -26,6 +28,13 @@
             <Style x:Key="EditingTextBoxStyle" TargetType="{x:Type TextBox}">
                 <Setter Property="VerticalContentAlignment" Value="Center" />
             </Style>
+            
+            <!-- Default theme -->
+            <Style TargetType="{x:Type tk:DataGrid}" BasedOn="{StaticResource DataGridDefaultStyle}" />
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonDefaultStyle}" />
+            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxStyle}" />
+            <Style TargetType="{x:Type xctk:DateTimePicker}" BasedOn="{StaticResource DateTimePickerStyle}" />
+            <!-- Default theme -->
 
         </ResourceDictionary>
     </Application.Resources>

@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace Stock.UI.Views
 {
@@ -19,7 +20,8 @@ namespace Stock.UI.Views
             var dialog = new FolderBrowserDialog();
             DialogResult result = dialog.ShowDialog();
             
-            return result == DialogResult.OK ? dialog.SelectedPath : null;
+            return String.Empty;
+            //return result == DialogResult.OK ? dialog.SelectedPath : null;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Stock.UI.ViewModels.Dialogs
             if (!string.IsNullOrEmpty(dbDataSource)) DbDataSource = dbDataSource;
             if (!string.IsNullOrEmpty(dbInitialCatalog)) DbInitialCatalog = dbInitialCatalog;
             if (!string.IsNullOrEmpty(dbUserId)) DbUserId = dbUserId;
-            IntegratedSecurity = integratedSecurity;
+            IntergatedSecurity = integratedSecurity;
         }
 
         public ConnectionViewModel(Action<string> fillPass) : this()
@@ -64,14 +64,14 @@ namespace Stock.UI.ViewModels.Dialogs
             }
         }
 
-        private bool _integratedSecurity;
-        public bool IntegratedSecurity
+        private bool _intergatedSecurity;
+        public bool IntergatedSecurity
         {
-            get { return _integratedSecurity; }
+            get { return _intergatedSecurity; }
             set 
             { 
-                _integratedSecurity = value;
-                OnPropertyChanged("IntegratedSecurity");
+                _intergatedSecurity = value;
+                OnPropertyChanged("IntergatedSecurity");
             }
         }
 
@@ -88,11 +88,10 @@ namespace Stock.UI.ViewModels.Dialogs
             
             ApplicationState.SetValue("DbDataSource", DbDataSource);
             ApplicationState.SetValue("DbInitialCatalog", DbInitialCatalog);
-            if (IntegratedSecurity)
+            if (IntergatedSecurity)
             {
                 ApplicationState.SetValue("DbUserId", String.Empty);
                 ApplicationState.SetValue("DbPassword", String.Empty);
-                ApplicationState.SetValue("IntegratedSecurity", IntegratedSecurity);
             }
             else
             {
@@ -102,7 +101,7 @@ namespace Stock.UI.ViewModels.Dialogs
                 ApplicationState.SetValue("DbPassword", password);
             }
 
-            var configureResults = NHibernateHelper.Configure(DbDataSource, DbInitialCatalog, DbUserId, passwordBox.Password, IntegratedSecurity);
+            var configureResults = NHibernateHelper.Configure(DbDataSource, DbInitialCatalog, DbUserId, passwordBox.Password, IntergatedSecurity);
             if (!configureResults)
                 ShowInfoMessage("Ошибка подключения к базе данных.\r\nПодробные сведения об ошибке:\r\n" + NHibernateHelper.LastError);
             else
@@ -117,7 +116,7 @@ namespace Stock.UI.ViewModels.Dialogs
             var passwordBox = parameter as PasswordBox;
             if (passwordBox == null) return;
             
-            var configureResults = NHibernateHelper.Configure(DbDataSource, DbInitialCatalog, DbUserId, passwordBox.Password, IntegratedSecurity);
+            var configureResults = NHibernateHelper.Configure(DbDataSource, DbInitialCatalog, DbUserId, passwordBox.Password, IntergatedSecurity);
             if (!configureResults)
                 ShowInfoMessage("Ошибка подключения к базе данных.\r\nПодробные сведения об ошибке:\r\n" + NHibernateHelper.LastError);
             else

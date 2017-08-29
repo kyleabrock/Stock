@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 using Stock.Core.Domain;
 using Stock.Core.Filter;
@@ -71,13 +73,27 @@ namespace Stock.UI.ViewModels
         {
             if (!IsFilterInitialized)
             {
-                Filter = new UnitFilter();
                 InitFilter();
-
                 IsFilterInitialized = true;
             }
 
+            FillFilter();
             base.RefreshMethod();
+        }
+
+        private void FillFilter()
+        {
+            var filterParams = ComplexFilterParams as UnitFilterParams;
+            if (filterParams != null)
+            {
+                filterParams.UnitType = new List<UnitType>();
+                filterParams.Status = new List<Status>();
+                filterParams.Owner = new List<Owner>();
+                filterParams.ModelName = new List<string>();
+                filterParams.Manufacture = new List<string>();
+                
+                Filter = new UnitFilter(filterParams);
+            }
         }
 
         private bool IsFilterInitialized { get; set; }
@@ -85,6 +101,7 @@ namespace Stock.UI.ViewModels
         private void InitViewModel()
         {
             Repository = new UnitRepository();
+            ComplexFilterParams = new UnitFilterParams();
 
             OpenCardCommand = new RelayCommand(x => OpenCardMethod());
             OpenStockUnitCommand = new RelayCommand(x => OpenStockUnitMethod());
@@ -94,6 +111,9 @@ namespace Stock.UI.ViewModels
 
         private void InitFilter()
         {
+            Filter = new UnitFilter();
+            ComplexFilterParams = new UnitFilterParams();
+
             var unitTypeRepository = new UnitTypeRepository();
             FilterUnitTypeList = unitTypeRepository.GetAll(type => type.TypeName);
 

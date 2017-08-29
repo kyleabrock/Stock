@@ -14,7 +14,7 @@ namespace Stock.UI
         {
             InitializeComponent();
             
-            var viewModel = new MainWindowViewModel(ShowDialogMessage, ShowLoginWindow);
+            var viewModel = new MainWindowViewModel(ShowDialogMessage, ShowLoginWindow, ShowSettingsDialog);
             DataContext = viewModel;
         }
 
@@ -29,6 +29,12 @@ namespace Stock.UI
         private void ShowDialogMessage(string s)
         {
             MessageBox.Show(s);
+        }
+
+        private void ShowSettingsDialog()
+        {
+            var dialog = new Views.SettingsView();
+            dialog.ShowDialog();
         }
 
         private DispatcherTimer _timer;
