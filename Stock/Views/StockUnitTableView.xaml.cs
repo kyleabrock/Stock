@@ -22,7 +22,16 @@ namespace Stock.UI.Views
         {
             if (RefreshButton.Command.CanExecute(null))
                 RefreshButton.Command.Execute(null);
+
+            if (!_settingsLoaded)
+                LoadSettings();
+            else
+            {
+                SaveSettings();
+            }
         }
+
+        private bool _settingsLoaded = false;
 
         private void SetActions()
         {
@@ -36,6 +45,8 @@ namespace Stock.UI.Views
                 ViewModel.ShowCardAction = ShowCard;
             if (ViewModel.ShowInfoMessage == null)
                 ViewModel.ShowInfoMessage = (text, caption) => MessageBox.Show(text, caption);
+            if (ViewModel.ExportAction == null)
+                ViewModel.ExportAction = ExportStockUnit;
             if (ViewModel.ShowDialogMessage == null)
             {
                 const MessageBoxButton buttons = MessageBoxButton.OKCancel;
@@ -43,6 +54,12 @@ namespace Stock.UI.Views
                 ViewModel.ShowDialogMessage =
                     (text, caption) => MessageBox.Show(text, caption, buttons) == result;
             }
+        }
+
+        private void ExportStockUnit(StockUnit stockUnit)
+        {
+            var exportDialog = new ExportView(stockUnit) { Owner = Window.GetWindow(this) };
+            exportDialog.ShowDialog();
         }
 
         private void ShowCard(Card card)
@@ -102,6 +119,42 @@ namespace Stock.UI.Views
         {
             //e.ClipboardRowContent.Clear();
             //var cells = DataGrid.SelectedCells;
+        }
+
+        private void LoadSettings()
+        {
+            for (int i = 0; i < DataGrid.Columns.Count; i++)
+            {
+                var columnWidth = string.Format("StockUnitTableColumn{0}Width", i);
+                DataGrid.Columns[i].Width =
+                    new DataGridLength(AppSettings.GetAsDouble(columnWidth));
+
+                var columnDisplayIndex = string.Format("StockUnitTableColumn{0}DisplayIndex", i);
+                DataGrid.Columns[i].DisplayIndex = AppSettings.GetAsInt(columnDisplayIndex);
+            }
+
+            _settingsLoaded = true;
+        }
+
+        private void SaveSettings()
+        {
+            for (int i = 0; i < DataGrid.Columns.Count; i++)
+            {
+                var columnWidth = string.Format("StockUnitTableColumn{0}Width", i);
+                AppSettings.SetValue(columnWidth, DataGrid.Columns[i].Width.Value);
+
+                var columnDisplayIndex = string.Format("StockUnitTableColumn{0}DisplayIndex", i);
+                if (DataGrid.Columns[i].DisplayIndex != -1)
+                    AppSettings.SetValue(columnDisplayIndex, DataGrid.Columns[i].DisplayIndex);
+            }
+
+            AppSettings.Save();
+        }
+
+        private void StockUnitTableView_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            var window = Window.GetWindow(this);
+            window.Closing += (s, j) => SaveSettings();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Stock.Core.Repository
 {
     public class StockUnitNoteRepository : Repository<StockUnitNote>
     {
-        public IList<StockUnitNote> GetByStockUnitId(StockUnit stockUnit)
+        public IList<StockUnitNote> GetByStockUnit(StockUnit stockUnit)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {

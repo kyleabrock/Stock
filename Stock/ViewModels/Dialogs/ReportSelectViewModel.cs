@@ -50,7 +50,7 @@ namespace Stock.UI.ViewModels.Dialogs
 
         private void InitViewModel()
         {
-            var templatesPath = ApplicationState.GetValue<string>("TemplatesFolderPath");
+            var templatesPath = AppSettings.GetValue<string>("TemplatesFolderPath");
             ReportList = new ObservableCollection<string>(_report.GetTemplates(templatesPath));
             
             OkCommand = new RelayCommand(x => OkMethod());
@@ -62,7 +62,7 @@ namespace Stock.UI.ViewModels.Dialogs
             var selectedTemplate = _selectedItem as string;
             if (!string.IsNullOrEmpty(selectedTemplate))
             {
-                var exportDirectoryPath = ApplicationState.GetValue<string>("ExportFolderPath");
+                var exportDirectoryPath = AppSettings.GetValue<string>("ExportFolderPath");
                 var result = _report.Export(_entityBase, selectedTemplate, exportDirectoryPath);
                 if (result)
                 {

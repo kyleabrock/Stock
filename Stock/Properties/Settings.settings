@@ -6,7 +6,7 @@
       <Value Profile="(Default)">120</Value>
     </Setting>
     <Setting Name="TemplatesFolderPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">.\Templates\</Value>
+      <Value Profile="(Default)">C:\Work\Stock\Stock\bin\Debug\Templates\</Value>
     </Setting>
     <Setting Name="ExportFolderPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">.\Export\</Value>
@@ -40,21 +40,6 @@
     </Setting>
     <Setting Name="IntegratedSecurity" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="CardTableCardNumberWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">50</Value>
-    </Setting>
-    <Setting Name="CardTableCardNameWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">250</Value>
-    </Setting>
-    <Setting Name="CardTableCreationDateWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">85</Value>
-    </Setting>
-    <Setting Name="CardTableDisplayNameWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">100</Value>
-    </Setting>
-    <Setting Name="CardTableCommentsWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">250</Value>
     </Setting>
     <Setting Name="SettingsAppFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Work\Resources</Value>

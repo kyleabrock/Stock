@@ -61,6 +61,5 @@ namespace Stock.Core
                 return bf.Deserialize(file) as Configuration;
             }
         }
-    
     }
 }

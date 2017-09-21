@@ -7,10 +7,9 @@
              xmlns:viewModels="clr-namespace:Stock.UI.ViewModels"
              xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              xmlns:utils="clr-namespace:Stock.UI.Utils"
-             xmlns:properties="clr-namespace:Stock.UI.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1000" 
-             Background="{DynamicResource DefaultBackground}">
+             Background="{DynamicResource DefaultBackground}" Loaded="UserControl_Loaded">
     <UserControl.DataContext>
         <viewModels:CardTableViewModel x:Name="ViewModel" />
     </UserControl.DataContext>

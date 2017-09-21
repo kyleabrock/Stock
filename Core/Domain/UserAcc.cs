@@ -43,5 +43,10 @@ namespace Stock.Core.Domain
 
             return result;
         }
+
+        public override string ToString()
+        {
+            return Name.DisplayName;
+        }
     }
 }

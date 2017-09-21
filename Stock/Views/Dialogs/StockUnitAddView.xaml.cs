@@ -65,7 +65,7 @@ namespace Stock.UI.Views.Dialogs
 
         private void MainDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            //if (e.Key == Key.Delete)
+            //if (e.SettingKey == SettingKey.Delete)
             //    ViewModel.RemoveUnit();
         }
 	}

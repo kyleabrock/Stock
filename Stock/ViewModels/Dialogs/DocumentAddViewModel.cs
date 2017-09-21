@@ -133,7 +133,7 @@ namespace Stock.UI.ViewModels.Dialogs
             Document.StockUnitList = StockUnitList;
             _documentRepository.Save(Document);
 
-            var user = ApplicationState.GetValue<UserAcc>("User");
+            var user = AppSettings.User;
             ILogFactory logFactory = new LogFactory();
             var logEntity = logFactory.CreateMessage(user, Document);
             var repository = new Repository<Log>();

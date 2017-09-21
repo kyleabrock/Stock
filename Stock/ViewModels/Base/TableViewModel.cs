@@ -76,7 +76,8 @@ namespace Stock.UI.ViewModels.Base
             LoadTableSortOrder();
         }
 
-        private SortDescriptionCollection _sortDescriptionCollection;
+        private readonly SortDescriptionCollection _sortDescriptionCollection = 
+            new SortDescriptionCollection();
 
         private void FindMethod()
         {
@@ -89,14 +90,11 @@ namespace Stock.UI.ViewModels.Base
 
         private void SaveTableSortOrder()
         {
-            if (_itemList == null) return;
-            if (_itemList.SortDescriptions.Count <= 0) return;
+            if (ItemList == null) return;
+            if (ItemList.SortDescriptions.Count <= 0) return;
 
-            if (_sortDescriptionCollection == null)
-                _sortDescriptionCollection = new SortDescriptionCollection();
-
-            var sortDescriptionArray = new SortDescription[_itemList.SortDescriptions.Count];
-            _itemList.SortDescriptions.CopyTo(sortDescriptionArray, 0);
+            var sortDescriptionArray = new SortDescription[ItemList.SortDescriptions.Count];
+            ItemList.SortDescriptions.CopyTo(sortDescriptionArray, 0);
 
             _sortDescriptionCollection.Clear();
             foreach (var sortDescription in sortDescriptionArray)
@@ -105,12 +103,11 @@ namespace Stock.UI.ViewModels.Base
 
         private void LoadTableSortOrder()
         {
-            if (_itemList == null) return;
-            if (_sortDescriptionCollection == null) return;
+            if (ItemList == null) return;
 
-            _itemList.SortDescriptions.Clear();
+            ItemList.SortDescriptions.Clear();
             foreach (var sortDescription in _sortDescriptionCollection)
-                _itemList.SortDescriptions.Add(sortDescription);
+                ItemList.SortDescriptions.Add(sortDescription);
         }
     }
 }

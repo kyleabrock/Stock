@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Stock.Core.Domain
 {
-    public class StockUnit : EntityBase, ILoggedEntity
+    public class StockUnit : EntityBase, ILoggedEntity, IDataErrorInfo
     {
         private string _stockNumber = String.Empty;
         public virtual string StockNumber
@@ -76,5 +77,26 @@ namespace Stock.Core.Domain
                 return result;
             }
         }
+
+        public virtual string this[string columnName]
+        {
+            get
+            {
+                string error = String.Empty;
+                switch (columnName)
+                {
+                    case "StockNumber" :
+                        if (StockNumber == String.Empty)
+                        {
+                            error = "Инв. № не должен быть пустым";
+                        }
+                        break;
+                }
+                Error = error;
+                return error;
+            }
+        }
+
+        public virtual string Error { get; set; }
     }
 }

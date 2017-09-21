@@ -63,7 +63,15 @@
         </TextBlock>
 
         <TextBox Text="{Binding Path=StockUnit.Id}" Grid.Column="1" Margin="4" IsEnabled="False" Style="{DynamicResource TextBoxStyle}" VerticalAlignment="Center"/>
-        <TextBox x:Name="StockNumberTb" Text="{Binding Path=StockUnit.StockNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="4" Style="{DynamicResource TextBoxStyle}" VerticalAlignment="Center"/>
+        <TextBox x:Name="StockNumberTb" Grid.Row="1" Grid.Column="1" Margin="4" Style="{DynamicResource TextBoxStyle}" VerticalAlignment="Center">
+            <TextBox.Text>
+                <Binding Path="StockUnit.StockNumber" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
         <TextBox Text="{Binding Path=StockUnit.StockName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Margin="4" TextWrapping="Wrap" 
                  VerticalAlignment="Stretch" Style="{DynamicResource TextBoxStyle}"
                  VerticalScrollBarVisibility="Auto"/>

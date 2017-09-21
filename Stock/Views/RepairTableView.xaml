@@ -7,7 +7,7 @@
              xmlns:viewModels="clr-namespace:Stock.UI.ViewModels"
              xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1000" Background="White">
+             d:DesignHeight="700" d:DesignWidth="1000" Background="White" Loaded="RepairTableView_OnLoaded">
     <UserControl.DataContext>
         <viewModels:RepairTableViewModel x:Name="ViewModel" />
     </UserControl.DataContext>
@@ -75,10 +75,9 @@
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True" 
+        <tk:DataGrid x:Name="DataGrid" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True" 
                      MouseDoubleClick="MainDataGrid_OnMouseDoubleClick" Grid.Row="1"
-                     ItemsSource="{Binding Path=ItemList}" SelectedItem="{Binding Path=SelectedItem}"
-                     Sorting="DataGrid_OnSorting">
+                     ItemsSource="{Binding Path=ItemList}" SelectedItem="{Binding Path=SelectedItem}">
             <tk:DataGrid.Columns>
                 <tk:DataGridTextColumn Header="Дата" Width="85" Binding="{Binding Path=StartedDate, StringFormat=\{0:dd.MM.yyyy\}}" />
                 <tk:DataGridTextColumn Header="Неисправность" Width="150" Binding="{Binding Path=Defect}">
@@ -96,7 +95,7 @@
                         </Style>
                     </tk:DataGridTextColumn.ElementStyle>
                 </tk:DataGridTextColumn>
-                <tk:DataGridTextColumn Header="Завершено" Width="85" Binding="{Binding Path=StartedDate, StringFormat=\{0:dd.MM.yyyy\}}" />
+                <tk:DataGridTextColumn Header="Завершено" Width="85" Binding="{Binding Path=CompletedDate, StringFormat=\{0:dd.MM.yyyy\}}" />
                 <tk:DataGridTextColumn Header="Результат" Width="150" Binding="{Binding Path=Result}">
                     <tk:DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">

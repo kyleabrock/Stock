@@ -16,14 +16,11 @@ namespace Stock.UI
             
             var viewModel = new MainWindowViewModel(ShowDialogMessage, ShowLoginWindow, ShowSettingsDialog);
             DataContext = viewModel;
-        }
 
-        private bool ShowLoginWindow()
-        {
-            var dialog = new Views.Dialogs.LoginView();
-            var showDialog = dialog.ShowDialog();
-            
-            return showDialog != null && (bool) showDialog;
+            if (viewModel.ShowAccountAction == null)
+                viewModel.ShowAccountAction = ShowAccountDialog;
+
+            Closing += (s, j) => AppSettings.Save();
         }
 
         private void ShowDialogMessage(string s)
@@ -31,9 +28,23 @@ namespace Stock.UI
             MessageBox.Show(s);
         }
 
+        private bool ShowLoginWindow()
+        {
+            var dialog = new Views.Dialogs.LoginView();
+            var showDialog = dialog.ShowDialog();
+
+            return showDialog != null && (bool)showDialog;
+        }
+
+        private void ShowAccountDialog()
+        {
+            var dialog = new UserPageView { Owner = GetWindow(this) };
+            dialog.ShowDialog();
+        }
+
         private void ShowSettingsDialog()
         {
-            var dialog = new Views.SettingsView();
+            var dialog = new SettingsView { Owner = GetWindow(this) };
             dialog.ShowDialog();
         }
 
@@ -76,7 +87,7 @@ namespace Stock.UI
         //{
         //    if (!LoginWindow.LoginStatus) return;
 
-        //    ApplicationState.SetValue("User", LoginWindow.LoggedInUser);
+        //    AppSettings.SetValue("User", LoginWindow.LoggedInUser);
         //    LoginWindow.ClearValues();
         //    LoginWindow.Visibility = Visibility.Hidden;
         //    LoginWindow.IsEnabled = false;
@@ -105,7 +116,7 @@ namespace Stock.UI
 
         //    LoginWindow.IsEnabled = true;
         //    LoginWindow.LoginStatus = false;
-        //    ApplicationState.SetValue("User", null);
+        //    AppSettings.SetValue("User", null);
         //    LoginWindow.Visibility = Visibility.Visible;
 
         //    UserImage.Source = (BitmapImage)FindResource("UserAccBitmapImage");

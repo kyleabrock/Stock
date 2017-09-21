@@ -10,13 +10,14 @@ namespace Stock.UI.ViewModels
     {
         public SettingsViewModel()
         {
-            RefreshPeriod = Properties.Settings.Default["RefreshPeriod"].ToString();
-            SettingsAppFolderPath = Properties.Settings.Default["SettingsAppFolder"].ToString();
-            TemplatesFolderPath = Properties.Settings.Default["TemplatesFolderPath"].ToString();
-            ExportFolderPath = Properties.Settings.Default["ExportFolderPath"].ToString();
-            StockUnitFilesFolder = Properties.Settings.Default["StockUnitFilesFolder"].ToString();
+            RefreshPeriod = Properties.Settings.Default.RefreshPeriod.ToString();
+            SettingsAppFolderPath = Properties.Settings.Default.SettingsAppFolder;
+            TemplatesFolderPath = Properties.Settings.Default.TemplatesFolderPath;
+            ExportFolderPath = Properties.Settings.Default.ExportFolderPath;
+            StockUnitFilesFolder = Properties.Settings.Default.StockUnitFilesFolder;
 
             SaveCommand = new RelayCommand(x => SaveMethod());
+            CancelCommand = new RelayCommand(x => CloseAction());
             SettingsAppFolderCommand = new RelayCommand(x => { SettingsAppFolderPath = SelectFolderFunc() ?? SettingsAppFolderPath; });
             TemplatesFolderPathCommand = new RelayCommand(x => { TemplatesFolderPath = SelectFolderFunc() ?? TemplatesFolderPath; });
             ExportFolderPathCommand = new RelayCommand(x => { ExportFolderPath = SelectFolderFunc() ?? ExportFolderPath; });
@@ -63,21 +64,26 @@ namespace Stock.UI.ViewModels
         public ICommand TemplatesFolderPathCommand { get; set; }
         public ICommand ExportFolderPathCommand { get; set; }
         public ICommand StockUnitFilesFolderCommand { get; set; }
+        public ICommand CancelCommand { get; set; }
         public Func<string> SelectFolderFunc { get; set; }
+        public Action CloseAction { get; set; }
 
         private void SaveMethod()
         {
             if (CheckValues())
             {
-                int refreshPeriod = int.Parse(RefreshPeriod);
-                Properties.Settings.Default["RefreshPeriod"] = refreshPeriod;
+                int refreshPeriod;
+                if (int.TryParse(RefreshPeriod, out refreshPeriod))
+                    Properties.Settings.Default.RefreshPeriod = refreshPeriod;
 
-                Properties.Settings.Default["SettingsAppFolder"] = SettingsAppFolderPath;
-                Properties.Settings.Default["TemplatesFolderPath"] = TemplatesFolderPath;
-                Properties.Settings.Default["ExportFolderPath"] = ExportFolderPath;
-                Properties.Settings.Default["StockUnitFilesFolder"] = StockUnitFilesFolder;
+                Properties.Settings.Default.SettingsAppFolder = SettingsAppFolderPath;
+                Properties.Settings.Default.TemplatesFolderPath = TemplatesFolderPath;
+                Properties.Settings.Default.ExportFolderPath = ExportFolderPath;
+                Properties.Settings.Default.StockUnitFilesFolder = StockUnitFilesFolder;
                 
                 Properties.Settings.Default.Save();
+
+                CloseAction();
             }
         }
 

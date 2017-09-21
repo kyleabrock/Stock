@@ -1,6 +1,9 @@
-﻿using System;
+﻿using System.Text;
 using NHibernate;
 using NHibernate.Cfg;
+using NHibernate.Dialect;
+using NHibernate.Driver;
+using NHibernate.Tool.hbm2ddl;
 using NUnit.Framework;
 using Stock.Core.Domain;
 
@@ -9,36 +12,48 @@ namespace Stock.Core.Tests
     [TestFixture]
     public class ConnectionTest
     {
-        [Test]
-        public void BuildConfiguration()
-        {
-            var configuration = new Configuration();
-            configuration.Configure();
-            configuration.AddAssembly(typeof(Unit).Assembly);
-            ISessionFactory sessionFactory = configuration.BuildSessionFactory();
+        private Configuration _configuration;
+        private ISessionFactory _sessionFactory;
 
-            Assert.IsNotNull(sessionFactory);
+        /// <summary>
+        /// Настройка подключения к базе данных
+        /// </summary>
+        [SetUp]
+        public void Configure()
+        {
+            _configuration = new Configuration().DataBaseIntegration(db =>
+            {
+                var conn = new StringBuilder();
+                conn.Append("Data Source=db.ktm.ossi.loc;");
+                conn.Append("Initial Catalog=Stock;");
+                conn.Append("User ID=developer;");
+                conn.Append("Password=Pf,hfkj");
+
+                db.Driver<SqlClientDriver>();
+                db.ConnectionString = conn.ToString();
+                db.Dialect<MsSql2008Dialect>();
+            });
+            
+            _configuration.AddAssembly(typeof(EntityBase).Assembly);
+            _sessionFactory = _configuration.BuildSessionFactory();
         }
 
+        /// <summary>
+        /// Генерирование новой базы данных
+        /// </summary>
         [Test]
-        public void BuildConfigurationCfgFileNotExists()
+        public void Can_generate_schema()
         {
-            var configuration = new Configuration();
-            Assert.That(() => configuration.Configure("nullfile"), Throws.TypeOf<HibernateConfigException>());
+            new SchemaExport(_configuration).Execute(true, false, false);
         }
 
+        /// <summary>
+        /// Генерирование изменений в базу данных относительно существующей
+        /// </summary>
         [Test]
-        public void BuildConfigurationNotConfiguredNotMapped()
+        public void Can_update_schema()
         {
-            var configuration = new Configuration();
-            Assert.That(() => configuration.BuildSessionFactory(), Throws.TypeOf<InvalidOperationException>());
-        }
-
-        [Test]
-        public void BuildConfigurationNotConfigured()
-        {
-            var configuration = new Configuration();
-            Assert.That(() => configuration.AddAssembly(typeof(Unit).Assembly), Throws.TypeOf<MappingException>());
+            new SchemaUpdate(_configuration).Execute(true, false);
         }
     }
 }

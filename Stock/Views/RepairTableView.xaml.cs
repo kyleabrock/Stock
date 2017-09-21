@@ -22,7 +22,16 @@ namespace Stock.UI.Views
         {
             if (RefreshButton.Command.CanExecute(null))
                 RefreshButton.Command.Execute(null);
+
+            if (!_settingsLoaded)
+                LoadSettings();
+            else
+            {
+                SaveSettings();
+            }
         }
+
+        private bool _settingsLoaded = false;
 
         private void SetActions()
         {
@@ -80,9 +89,40 @@ namespace Stock.UI.Views
             }
         }
 
-        private void DataGrid_OnSorting(object sender, DataGridSortingEventArgs e)
+        private void LoadSettings()
         {
-            var column = e.Column;
+            for (int i = 0; i < DataGrid.Columns.Count; i++)
+            {
+                var columnWidth = string.Format("RepairTableColumn{0}Width", i);
+                DataGrid.Columns[i].Width =
+                    new DataGridLength(AppSettings.GetAsDouble(columnWidth));
+
+                var columnDisplayIndex = string.Format("RepairTableColumn{0}DisplayIndex", i);
+                DataGrid.Columns[i].DisplayIndex = AppSettings.GetAsInt(columnDisplayIndex);
+            }
+
+            _settingsLoaded = true;
+        }
+
+        private void SaveSettings()
+        {
+            for (int i = 0; i < DataGrid.Columns.Count; i++)
+            {
+                var columnWidth = string.Format("RepairTableColumn{0}Width", i);
+                AppSettings.SetValue(columnWidth, DataGrid.Columns[i].Width.Value);
+
+                var columnDisplayIndex = string.Format("RepairTableColumn{0}DisplayIndex", i);
+                if (DataGrid.Columns[i].DisplayIndex != -1)
+                    AppSettings.SetValue(columnDisplayIndex, DataGrid.Columns[i].DisplayIndex);
+            }
+
+            AppSettings.Save();
+        }
+
+        private void RepairTableView_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            var window = Window.GetWindow(this);
+            window.Closing += (s, j) => SaveSettings();
         }
     }
 }

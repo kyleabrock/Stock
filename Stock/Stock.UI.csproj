@@ -29,9 +29,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -61,7 +62,26 @@
   <PropertyGroup>
     <StartupObject>Stock.UI.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>EEB18D3A92EC9BC2E81E6CA7F1DDE4DBDEFFC69A</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Stock.UI_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Controls.Input.Toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -81,17 +101,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ApplicationState.cs" />
+    <Compile Include="AppSettings.cs" />
     <Compile Include="AutoCompleteFocusableBox.cs" />
     <Compile Include="CheckBoxItem.cs" />
     <Compile Include="FocusAttacher.cs" />
     <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="Tests\AppSettingsTests.cs" />
     <Compile Include="Utils\BoolToVisibilityConverter.cs" />
+    <Compile Include="Utils\HashGenerator.cs" />
     <Compile Include="Utils\InverseBoolConverter.cs" />
     <Compile Include="Utils\IntToVisibilityConverter.cs" />
     <Compile Include="ViewModels\Base\AsyncCommand.cs" />
     <Compile Include="ViewModels\Base\AsyncCommandBase.cs" />
     <Compile Include="ViewModels\Dialogs\ConnectionViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\ExportViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\LoginViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\OwnerAddViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\ReportSelectViewModel.cs" />
@@ -107,6 +130,9 @@
     <Compile Include="ViewModels\Dialogs\CardAddViewModel.cs" />
     <Compile Include="Views\Dialogs\ConnectionView.xaml.cs">
       <DependentUpon>ConnectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\ExportView.xaml.cs">
+      <DependentUpon>ExportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
@@ -191,6 +217,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Dialogs\ConnectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\ExportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -305,13 +335,18 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Manual.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="user.config" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Themes\Exit.png" />
@@ -380,6 +415,9 @@
     <Resource Include="Themes\MainIcon16.ico" />
     <Resource Include="Themes\MainIcon32.ico" />
     <Resource Include="Themes\MainIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Themes\Stock32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

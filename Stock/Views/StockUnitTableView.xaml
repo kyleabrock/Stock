@@ -8,7 +8,7 @@
              xmlns:utils="clr-namespace:Stock.UI.Utils"
              xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1000" Background="{StaticResource DefaultBackground}">
+             d:DesignHeight="700" d:DesignWidth="1000" Background="{StaticResource DefaultBackground}" Loaded="StockUnitTableView_OnLoaded">
     <UserControl.DataContext>
         <viewModels:StockUnitTableViewModel x:Name="ViewModel" />
     </UserControl.DataContext>
@@ -141,7 +141,7 @@
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid IsReadOnly="True" Style="{DynamicResource DataGridDefaultStyle}"
+        <tk:DataGrid x:Name="DataGrid" IsReadOnly="True" Style="{DynamicResource DataGridDefaultStyle}"
                      MouseDoubleClick="MainDataGrid_OnMouseDoubleClick" Grid.Row="1" Grid.Column="0"
                      ItemsSource="{Binding ItemList}" SelectedItem="{Binding SelectedItem}"
                      CopyingRowClipboardContent="DataGrid_OnCopyingRowClipboardContent">
@@ -170,6 +170,8 @@
                     <MenuItem Header="Удалить" Command="{Binding DeleteCommand}" Icon="{DynamicResource DarkBinImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
                     <Separator />
                     <MenuItem Header="Дублировать" Command="{Binding CopyCommand}" Icon="{DynamicResource DarkImportImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
+                    <Separator />
+                    <MenuItem Header="Экспорт" Command="{Binding ExportCommand}" Icon="{DynamicResource DarkImportImage}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
                     <Separator />
                     <MenuItem Header="Показать карточку" VerticalContentAlignment="Center" Command="{Binding ShowCardCommand}" Style="{DynamicResource MenuItemStyle}" MinHeight="24" />
                 </ContextMenu>

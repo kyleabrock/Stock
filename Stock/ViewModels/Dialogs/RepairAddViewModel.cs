@@ -102,7 +102,7 @@ namespace Stock.UI.ViewModels.Dialogs
             Repair.Unit = Unit;
             _repairRepository.Save(Repair);
 
-            var user = ApplicationState.GetValue<UserAcc>("User");
+            var user = AppSettings.User;
             ILogFactory logFactory = new LogFactory();
             var logEntity = logFactory.CreateMessage(user, Repair);
             var repository = new Repository<Log>();

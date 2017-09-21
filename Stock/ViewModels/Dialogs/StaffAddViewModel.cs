@@ -49,7 +49,7 @@ namespace Stock.UI.ViewModels.Dialogs
         {
             _staffRepository.Save(Staff);
 
-            var user = ApplicationState.GetValue<UserAcc>("User");
+            var user = AppSettings.User;
             ILogFactory logFactory = new LogFactory();
             var logEntity = logFactory.CreateMessage(user, Staff);
             var repository = new Repository<Log>();

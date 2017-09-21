@@ -16,20 +16,39 @@ namespace Stock.UI.ViewModels
         public UserPageViewModel()
         {
             SetUserCommand = new RelayCommand(x => SetUserMethod());
-            LogoutCommand = new RelayCommand(x => LogoutMethod());
-            
-            //SetUserCommand.Execute(null);
+            OkCommand = new RelayCommand(x => OkMethod());
+            CancelCommand = new RelayCommand(x => CloseAction());
+
+            User = AppSettings.User;
+            Account = AppSettings.Account;
+
+            SetUserCommand.Execute(null);
+        }
+
+        private void OkMethod()
+        {
+            var userRepository = new Repository<UserAcc>();
+            userRepository.Save(User);
+            CloseAction();
         }
 
         public ICommand SetUserCommand { get; set; }
-        public ICommand LogoutCommand { get; set; }
-        public Action Logout { get; set; }
+        public ICommand OkCommand { get; set; }
+        public ICommand CancelCommand { get; set; }
+        public Action CloseAction { get; set; }
 
         private UserAcc _user;
         public UserAcc User
         {
             get { return _user; }
             set { _user = value; OnPropertyChanged("User"); }
+        }
+
+        private Account _account;
+        public Account Account
+        {
+            get { return _account; }
+            set { _account = value; OnPropertyChanged("Account"); }
         }
 
         private ImageSource _userImageSource;
@@ -48,8 +67,8 @@ namespace Stock.UI.ViewModels
 
         private void SetUserMethod()
         {
-            var user = ApplicationState.GetValue<UserAcc>("User");
-            var settingsFolder = ApplicationState.GetValue<string>("SettingsAppFolder");
+            var user = AppSettings.User;
+            var settingsFolder = AppSettings.GetValue<string>("SettingsAppFolder");
             if (user != null)
             {
                 User = user;
@@ -67,11 +86,6 @@ namespace Stock.UI.ViewModels
                 UserLogList = null;
                 UserImageSource = (BitmapImage) Application.Current.Resources["UserAccBitmapImage"];
             }
-        }
-
-        private void LogoutMethod()
-        {
-            Logout();
         }
     }
 }

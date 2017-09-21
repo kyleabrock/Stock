@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Stock.Core.Domain;
+using Stock.Core.Repository;
 using Stock.UI.ViewModels.Base;
 
 namespace Stock.UI
@@ -16,22 +17,14 @@ namespace Stock.UI
             ShowSettingsWindow = settingsWindow;
 
             SettingsCommand = new RelayCommand(x => ShowSettingsWindow());
+            AccountCommand = new RelayCommand(x => ShowAccountAction());
+            ManualCommand = new RelayCommand(x => ManualMethod());
+            ExitCommand = new RelayCommand(x => ExitMethod());
 
-            //Blank user image
             var defaultImageUri = new Uri(@"pack://application:,,,/Stock;component/Themes/UserAcc.png");
             _defaultUserImage = new BitmapImage(defaultImageUri);
-            UserImage = _defaultUserImage;
 
-            var currentUser = ApplicationState.GetValue<UserAcc>("User");
-            if (currentUser != null)
-            {
-                User = currentUser;
-                LoadData();
-            }
-            else
-            {
-                showLoginWindow();
-            }
+            LoadUser();
         }
 
         private UserAcc _user = UserAcc.Guest();
@@ -52,19 +45,33 @@ namespace Stock.UI
         public Func<bool> ShowLoginWindow { get; set; }
         public ICommand SettingsCommand { get; set; }
         public Action ShowSettingsWindow { get; set; }
+        public ICommand AccountCommand { get; set; }
+        public Action ShowAccountAction { get; set; }
+        public ICommand ManualCommand { get; set; }
+        public ICommand ExitCommand { get; set; }
 
         private readonly BitmapImage _defaultUserImage;
 
-        private void LoadData()
+        private void LoadUser()
         {
-            if (!LoadSettings())
-                return;
-            LoadUserProfile();
+            if (!LoadSettings()) return;
+
+            //Blank user image
+            UserImage = _defaultUserImage;
+
+            var currentUser = AppSettings.User;
+            if (currentUser == null)
+                ShowLoginWindow();
+            else
+            {
+                User = currentUser;
+                LoadUserProfile();
+            }
         }
 
         private bool LoadSettings()
         {
-            ApplicationState.LoadSettings();
+            AppSettings.Load();
             return ValidateSettings();
         }
 
@@ -84,10 +91,10 @@ namespace Stock.UI
 
         private bool ValidateSettings()
         {
-            var settingsAppFolder = ApplicationState.GetValue<string>("SettingsAppFolder");
-            var templatesFolderPath = ApplicationState.GetValue<string>("TemplatesFolderPath");
-            var exportFolderPath = ApplicationState.GetValue<string>("ExportFolderPath");
-            var stockUnitFilesFolder = ApplicationState.GetValue<string>("StockUnitFilesFolder");
+            var settingsAppFolder = Properties.Settings.Default.SettingsAppFolder;
+            var templatesFolderPath = Properties.Settings.Default.TemplatesFolderPath;
+            var exportFolderPath = Properties.Settings.Default.ExportFolderPath;
+            var stockUnitFilesFolder = Properties.Settings.Default.StockUnitFilesFolder;
 
             if (!Directory.Exists(settingsAppFolder))
             {
@@ -110,6 +117,23 @@ namespace Stock.UI
                 return false;
             }
             return true;
+        }
+
+        private void ManualMethod()
+        {
+            const string manualPath = ".\\Manual.pdf";
+            if (!File.Exists(manualPath))
+                ShowDialogMessage("Файл Manual.pdf не найден");
+            else
+            {
+                System.Diagnostics.Process.Start(".\\Manual.pdf");
+            }
+        }
+
+        private void ExitMethod()
+        {
+            ShowLoginWindow();
+            LoadUser();
         }
     }
 }

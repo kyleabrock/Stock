@@ -143,7 +143,7 @@ namespace Stock.UI.ViewModels.Dialogs
             StockUnitFiles = new ObservableCollection<StockUnitFile>(filesRepository.GetByStockUnitId(StockUnit));
             
             StockUnitNoteList = !StockUnit.IsNew ? 
-                new ObservableCollection<StockUnitNote>(_stockUnitNoteRepository.GetByStockUnitId(StockUnit)) 
+                new ObservableCollection<StockUnitNote>(_stockUnitNoteRepository.GetByStockUnit(StockUnit)) 
                 : new ObservableCollection<StockUnitNote>();
 
             var repository = new UnitRepository();
@@ -317,7 +317,7 @@ namespace Stock.UI.ViewModels.Dialogs
         //BUG: Make this function more crear
         private string GetFileFolderPath()
         {
-            var filePath = ApplicationState.GetValue<string>("StockUnitFilesFolder");
+            var filePath = Properties.Settings.Default.StockUnitFilesFolder;
             if (!filePath.EndsWith("\\"))
                 filePath += "\\";
 
@@ -354,7 +354,7 @@ namespace Stock.UI.ViewModels.Dialogs
             fileRepository.Save(StockUnitFiles);
             fileRepository.Delete(_deletedStockUnitFiles);
 
-            var user = ApplicationState.GetValue<UserAcc>("User");
+            var user = AppSettings.User;
             ILogFactory logFactory = new LogFactory();
             var logEntity = logFactory.CreateMessage(user, StockUnit);
             var repository = new Repository<Log>();

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Stock.Core.Domain;
-using Stock.Core.Filter;
-using Stock.Core.Filter.FilterParams;
 
 namespace Stock.Core.Repository
 {

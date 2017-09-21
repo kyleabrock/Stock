@@ -14,10 +14,10 @@ namespace Stock.UI.ViewModels.Dialogs
             SaveCommand = new RelayCommand(SaveMethod);
             CancelCommand = new RelayCommand(x => CloseAction());
 
-            var dbDataSource = ApplicationState.GetValue<string>("DbDataSource");
-            var dbInitialCatalog = ApplicationState.GetValue<string>("DbInitialCatalog");
-            var dbUserId = ApplicationState.GetValue<string>("DbUserId");
-            var integratedSecurity = ApplicationState.GetValue<bool>("IntegratedSecurity");
+            var dbDataSource = Properties.Settings.Default.DbDataSource;
+            var dbInitialCatalog = Properties.Settings.Default.DbInitialCatalog;
+            var dbUserId = Properties.Settings.Default.UserId;
+            var integratedSecurity = Properties.Settings.Default.IntegratedSecurity;
 
             if (!string.IsNullOrEmpty(dbDataSource)) DbDataSource = dbDataSource;
             if (!string.IsNullOrEmpty(dbInitialCatalog)) DbInitialCatalog = dbInitialCatalog;
@@ -27,7 +27,7 @@ namespace Stock.UI.ViewModels.Dialogs
 
         public ConnectionViewModel(Action<string> fillPass) : this()
         {
-            var dbPassword = ApplicationState.GetValue<string>("DbPassword");
+            var dbPassword = Properties.Settings.Default.DbPassword;
             fillPass(dbPassword);
         }
 
@@ -85,20 +85,20 @@ namespace Stock.UI.ViewModels.Dialogs
         {
             var passwordBox = parameter as PasswordBox;
             if (passwordBox == null) return;
-            
-            ApplicationState.SetValue("DbDataSource", DbDataSource);
-            ApplicationState.SetValue("DbInitialCatalog", DbInitialCatalog);
+
+            Properties.Settings.Default.DbDataSource = DbDataSource;
+            Properties.Settings.Default.DbInitialCatalog = DbInitialCatalog;
             if (IntergatedSecurity)
             {
-                ApplicationState.SetValue("DbUserId", String.Empty);
-                ApplicationState.SetValue("DbPassword", String.Empty);
+                Properties.Settings.Default.DbUserID = String.Empty;
+                Properties.Settings.Default.DbPassword = String.Empty;
             }
             else
             {
-                ApplicationState.SetValue("DbUserId", DbUserId);
+                Properties.Settings.Default.DbUserID = DbUserId;
 
                 var password = passwordBox.Password;
-                ApplicationState.SetValue("DbPassword", password);
+                Properties.Settings.Default.DbPassword = password;
             }
 
             var configureResults = NHibernateHelper.Configure(DbDataSource, DbInitialCatalog, DbUserId, passwordBox.Password, IntergatedSecurity);
@@ -106,7 +106,7 @@ namespace Stock.UI.ViewModels.Dialogs
                 ShowInfoMessage("Ошибка подключения к базе данных.\r\nПодробные сведения об ошибке:\r\n" + NHibernateHelper.LastError);
             else
             {
-                ApplicationState.SaveConnectionSettings();
+                Properties.Settings.Default.Save();
                 CancelCommand.Execute(null);
             }
         }

@@ -8,7 +8,7 @@
              xmlns:viewModels="clr-namespace:Stock.UI.ViewModels"
              xmlns:utils="clr-namespace:Stock.UI.Utils"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1000" Background="White">
+             d:DesignHeight="700" d:DesignWidth="1000" Background="White" Loaded="StatusTableView_OnLoaded">
     
     <UserControl.DataContext>
         <viewModels:StatusTableViewModel x:Name="ViewModel" />
@@ -43,11 +43,11 @@
         </Grid>
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid Grid.Row="1" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True" 
+        <tk:DataGrid x:Name="DataGrid" Grid.Row="1" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True" 
                      MouseDoubleClick="MainDataGrid_OnMouseDoubleClick"
                      ItemsSource="{Binding Path=ItemList}" SelectedItem="{Binding SelectedItem}">
             <tk:DataGrid.Columns>
-                <tk:DataGridTemplateColumn Header="Группа" Width="80" SortMemberPath="StaffType" SortDirection="Ascending">
+                <tk:DataGridTemplateColumn Header="Группа" Width="80">
                     <tk:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>

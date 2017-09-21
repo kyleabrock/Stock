@@ -120,7 +120,7 @@ namespace Stock.Report
 
         private void AppendNotes(XmlDocument doc, XmlElement root)
         {
-            var notesList = _noteRepository.GetByStockUnitId(_stockUnit);
+            var notesList = _noteRepository.GetByStockUnit(_stockUnit);
 
             var notesElement = doc.CreateElement("NotesList");
             foreach (var note in notesList)

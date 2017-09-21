@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using NHibernate;
 using Stock.Core.Domain;
-using Stock.Core.Filter;
 using IFilter = Stock.Core.Filter.IFilter;
 
 namespace Stock.Core.Repository

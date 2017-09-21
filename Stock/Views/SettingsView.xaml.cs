@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace Stock.UI.Views
 {
@@ -13,6 +12,8 @@ namespace Stock.UI.Views
             InitializeComponent();
             if (ViewModel.SelectFolderFunc == null)
                 ViewModel.SelectFolderFunc = OpenFolderDialog;
+            if (ViewModel.CloseAction == null)
+                ViewModel.CloseAction = Close;
         }
 
         private string OpenFolderDialog()
@@ -20,8 +21,7 @@ namespace Stock.UI.Views
             var dialog = new FolderBrowserDialog();
             DialogResult result = dialog.ShowDialog();
             
-            return String.Empty;
-            //return result == DialogResult.OK ? dialog.SelectedPath : null;
+            return result == System.Windows.Forms.DialogResult.OK ? dialog.SelectedPath : null;
         }
     }
 }

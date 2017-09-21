@@ -149,7 +149,7 @@ namespace Stock.UI.ViewModels.Dialogs
 
             stockUnitRepository.Save(_itemsToDelete);
 
-            var user = ApplicationState.GetValue<UserAcc>("User");
+            var user = AppSettings.User;
             ILogFactory logFactory = new LogFactory();
             var logEntity = logFactory.CreateMessage(user, Card);
             IRepository<Log> repository = new LogRepository();

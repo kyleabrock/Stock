@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using NHibernate;
-using NHibernate.Criterion;
 using Stock.Core.Domain;
-using Stock.Core.Filter;
-using Stock.Core.Filter.FilterParams;
 
 namespace Stock.Core.Repository
 {

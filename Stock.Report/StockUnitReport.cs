@@ -96,7 +96,7 @@ namespace Stock.Report
                 var repair = _repairRepository.GetAllByStockUnit(arg);
                 ExportRepairData(doc, repair);
 
-                var notes = _noteRepository.GetByStockUnitId(arg);
+                var notes = _noteRepository.GetByStockUnit(arg);
                 ExportNoteData(doc, notes);
 
                 RemoveSdtElements(doc);

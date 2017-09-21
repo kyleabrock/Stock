@@ -5,7 +5,8 @@
         Title="ИТ-учет. Авторизация" Height="380" Width="330"
         WindowStartupLocation="CenterScreen"
         WindowStyle="SingleBorderWindow"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Icon="../../Themes/MainIcon16.ico">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <utils:InverseBoolConverter x:Key="InverseBoolConverter" />
@@ -72,9 +73,9 @@
             <CheckBox Content="Запомнить" VerticalAlignment="Center" IsChecked="{Binding Path=RememberCreditentials}" />
         </Grid>
 
-        <Grid Grid.Row="6" Style="{StaticResource EntryFieldStyle}">
+        <!--<Grid Grid.Row="6" Style="{StaticResource EntryFieldStyle}">
             <CheckBox x:Name="LdapAuth" Content="LDAP-авторизация" VerticalAlignment="Center" IsChecked="{Binding Path=LdapAuth}" />
-        </Grid>
+        </Grid>-->
 
         <Grid Grid.Row="7" Style="{StaticResource EntryFieldStyle}">
             <Button Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=LoginPasswordBox}" Content="Вход" IsDefault="True" Height="32" Grid.Row="4" Style="{DynamicResource ButtonSuccessStyle}" />

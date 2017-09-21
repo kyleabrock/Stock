@@ -11,6 +11,10 @@
     <property name="Salt" not-null="true"/>
     <property name="HashedPassword" not-null="true"/>
     <one-to-one name="UserAcc" class="UserAcc" constrained="true"/>
+    <bag name="UserSettingList" table="UserSetting" inverse="true">
+      <key column="AccountId" />
+      <many-to-many class="UserSetting" column="UserSettingId" />
+    </bag>
   </class>
 
 </hibernate-mapping>

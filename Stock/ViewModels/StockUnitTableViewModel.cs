@@ -66,6 +66,8 @@ namespace Stock.UI.ViewModels
 
         public ICommand CopyCommand { get; set; }
         public ICommand ShowCardCommand { get; set; }
+        public ICommand ExportCommand { get; set; }
+        public Action<StockUnit> ExportAction { get; set; }
         public Action<StockUnit> CopyAction { get; set; }
         public Action<Card> ShowCardAction { get; set; }
 
@@ -112,6 +114,7 @@ namespace Stock.UI.ViewModels
             EditCommand = new RelayCommand(x => EditAction());
             DeleteCommand = new RelayCommand(x => DeleteMethod());
             ShowCardCommand = new RelayCommand(x => ShowCardMethod());
+            ExportCommand = new RelayCommand(x => ExportMethod());
             
             ClearFilterCommand = new RelayCommand(x => ClearFilterMethod());
         }
@@ -125,6 +128,13 @@ namespace Stock.UI.ViewModels
                 if (card != null)
                     ShowCardAction(card);
             }
+        }
+
+        private void ExportMethod()
+        {
+            var result = SelectedItem as StockUnit;
+            if (result != null)
+                ExportAction(result);
         }
 
         private void InitFilter()

@@ -16,6 +16,8 @@ namespace Stock.UI.ViewModels
             InitViewModel();
         }
 
+        public Action LoadSettingsAction { get; set; }
+
         private ObservableCollection<CheckBoxItem<Staff>> _filterStaffCheckList;
         public ObservableCollection<CheckBoxItem<Staff>> FilterStaffCheckList
         {

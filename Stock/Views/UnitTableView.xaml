@@ -8,7 +8,7 @@
              xmlns:utils="clr-namespace:Stock.UI.Utils"
              xmlns:domain="clr-namespace:Stock.Core.Domain;assembly=Stock.Core"
              mc:Ignorable="d" 
-             d:DesignWidth="1000" d:DesignHeight="700" Background="White">
+             d:DesignWidth="1000" d:DesignHeight="700" Background="White" Loaded="UnitTableView_OnLoaded">
     <UserControl.DataContext>
         <viewModels:UnitTableViewModel x:Name="ViewModel" />
     </UserControl.DataContext>
@@ -89,7 +89,7 @@
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid Grid.Row="1" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True"
+        <tk:DataGrid x:Name="DataGrid" Grid.Row="1" Style="{DynamicResource DataGridDefaultStyle}" IsReadOnly="True"
                      ItemsSource="{Binding Path=ItemList}" SelectedItem="{Binding Path=SelectedItem}" 
                      MouseDoubleClick="MainDataGrid_OnMouseDoubleClick">
             <tk:DataGrid.Columns>

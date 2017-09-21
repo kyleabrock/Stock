@@ -70,6 +70,8 @@
     <Compile Include="Domain\Unit.cs" />
     <Compile Include="Domain\UnitType.cs" />
     <Compile Include="Domain\UserAcc.cs" />
+    <Compile Include="Domain\UserSetting.cs" />
+    <Compile Include="Domain\UserSettings.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Factory\ILogFactory.cs" />
     <Compile Include="Factory\LogFactory.cs" />
@@ -109,9 +111,9 @@
     <Compile Include="Filter\StaffFilter.cs" />
     <Compile Include="Filter\StatusFilter.cs" />
     <Compile Include="Filter\RepairFilter.cs" />
+    <Compile Include="Repository\UserSettingRepository.cs" />
     <Compile Include="Tests\CardTest.cs" />
     <Compile Include="Tests\ConnectionTest.cs" />
-    <Compile Include="Tests\ExportSchemaTest.cs" />
     <Compile Include="Tests\StockUnitTest.cs" />
     <Compile Include="Tests\UnitTest.cs" />
     <Compile Include="Utils\StatusTypeToNameConverter.cs" />
@@ -140,6 +142,9 @@
     <EmbeddedResource Include="Mapper\Unit.hbm.xml" />
     <EmbeddedResource Include="Mapper\UnitType.hbm.xml" />
     <EmbeddedResource Include="Mapper\UserAcc.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Mapper\UserSetting.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

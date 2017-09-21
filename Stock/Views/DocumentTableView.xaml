@@ -8,7 +8,7 @@
              xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              xmlns:utils="clr-namespace:Stock.UI.Utils"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1000" Background="White">
+             d:DesignHeight="700" d:DesignWidth="1000" Background="White" Loaded="DocumentTableView_OnLoaded">
     <UserControl.DataContext>
         <viewModels:DocumentTableViewModel x:Name="ViewModel" />
     </UserControl.DataContext>
@@ -118,7 +118,7 @@
         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid IsReadOnly="True" MouseDoubleClick="MainDataGrid_OnMouseDoubleClick" Grid.Row="1"
+        <tk:DataGrid x:Name="DataGrid" IsReadOnly="True" MouseDoubleClick="MainDataGrid_OnMouseDoubleClick" Grid.Row="1"
                      ItemsSource="{Binding Path=ItemList}" SelectedItem="{Binding Path=SelectedItem}">
             <tk:DataGrid.Columns>
                 <tk:DataGridTextColumn Header="Документ" Width="250" Binding="{Binding Path=DocumentType.TypeName}" >

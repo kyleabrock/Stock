@@ -14,11 +14,15 @@ namespace Stock.Core.Domain
         public virtual int Priority { get; set; }
 
         private string _comments = String.Empty;
-
         public virtual string Comments
         {
             get { return _comments; }
             set { _comments = value; }
+        }
+
+        public override string ToString()
+        {
+            return TypeName;
         }
 
         public override bool Equals(object obj)

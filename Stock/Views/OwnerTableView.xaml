@@ -6,7 +6,7 @@
              xmlns:tk="http://schemas.microsoft.com/wpf/2008/toolkit"
              xmlns:viewModels="clr-namespace:Stock.UI.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1000" Background="White">
+             d:DesignHeight="700" d:DesignWidth="1000" Background="White" Loaded="OwnerTableView_OnLoaded">
     <UserControl.DataContext>
         <viewModels:OwnerTableViewModel x:Name="ViewModel" />
     </UserControl.DataContext>
@@ -37,7 +37,7 @@
         </Grid>
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-        <tk:DataGrid Grid.Row="1" IsReadOnly="True" 
+        <tk:DataGrid x:Name="DataGrid"  Grid.Row="1" IsReadOnly="True" 
                      MouseDoubleClick="MainDataGrid_OnMouseDoubleClick"
                      ItemsSource="{Binding ItemList}" SelectedItem="{Binding SelectedItem}">
             <tk:DataGrid.Columns>

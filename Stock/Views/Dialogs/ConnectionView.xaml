@@ -6,7 +6,8 @@
         Title="Настройка подключения к БД" Height="350" Width="300"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        WindowStyle="SingleBorderWindow">
+        WindowStyle="SingleBorderWindow"
+        Icon="../../Themes/MainIcon16.ico">
     <Window.Resources>
         <utils:InverseBoolConverter x:Key="InverseBoolConverter" />
         <Style x:Key="EntryFieldStyle" TargetType="Grid">

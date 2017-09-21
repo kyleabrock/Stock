@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Security.Cryptography;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Stock.Core;
 using Stock.Core.Domain;
 using Stock.Core.Repository;
+using Stock.UI.Utils;
 using Stock.UI.ViewModels.Base;
 
 namespace Stock.UI.ViewModels.Dialogs
@@ -14,25 +13,19 @@ namespace Stock.UI.ViewModels.Dialogs
     {
         public LoginViewModel()
         {
-            ApplicationState.LoadConnectionSettings();
-
             Action<object> loginAction = LoginMethod;
             LoginCommand = new AsyncCommand(loginAction);
             LoginCommand.RunWorkerCompleted += (s, e) => { if (User != null) LoginAction(); };
             ChangeConnectionCommand = new RelayCommand(x => ChangeConnectionAction());
 
-            var rememberCreditentials = ApplicationState.GetValue<bool>("RememberCreditentials");
-            var ldapAuth = ApplicationState.GetValue<bool>("LdapAuth");
-            var userId = ApplicationState.GetValue<string>("UserId");
-
-            RememberCreditentials = rememberCreditentials;
-            LdapAuth = ldapAuth;
-            LoginText = userId;
+            RememberCreditentials = Properties.Settings.Default.RememberCreditentials;
+            LdapAuth = Properties.Settings.Default.LdapAuth;
+            LoginText = Properties.Settings.Default.UserId;
         }
 
         public LoginViewModel(Action<string> fillPass) : this()
         {
-            var userPassword = ApplicationState.GetValue<string>("UserPassword");
+            var userPassword = Properties.Settings.Default.UserPassword;
             fillPass(userPassword);
         }
 
@@ -111,56 +104,30 @@ namespace Stock.UI.ViewModels.Dialogs
         private void LoginMethod(object parameter)
         {
             InProgress = true;
-
-            var dbDataSource = ApplicationState.GetValue<string>("DbDataSource");
-            var dbInitialCatalog = ApplicationState.GetValue<string>("DbInitialCatalog");
-            var dbUserId = ApplicationState.GetValue<string>("DbUserId");
-            var dbPassword = ApplicationState.GetValue<string>("DbPassword");
-            var integratedSecurity = ApplicationState.GetValue<bool>("IntegratedSecurity");
-            NHibernateHelper.Configure(dbDataSource, dbInitialCatalog, dbUserId, dbPassword, integratedSecurity);
+            if (!ConfigureDbConnection())
+            {
+                ShowError = true;
+                InProgress = false;
+                return;
+            }
 
             var passwordBox = parameter as PasswordBox;
             if (passwordBox == null) return;
-            
-            if (!CheckConnection())
-            {
-                ErrorMessage = "Ошибка подключения к БД.";
-                ShowError = true;
-                InProgress = false;
-                
-                return;
-            }
 
             var accountRepository = new AccountRepository();
             var account = accountRepository.GetByLogin(LoginText);
             if (!account.IsNew)
             {
-                byte[] hash = GenerateSaltedHash(GetBytes(passwordBox.Password), GetBytes(account.Salt));
-                string hashStr = Convert.ToBase64String(hash);
+                var generator = new HashGenerator();
+                var passwordHash = generator.GenerateSaltedHash(passwordBox.Password, account.Salt);
 
-                if (string.Equals(hashStr, account.HashedPassword))
+                if (string.Equals(passwordHash, account.HashedPassword))
                 {
                     var userAccRepository = new Repository<UserAcc>();
-                    User = userAccRepository.GetById(account.Id);
-                    ApplicationState.SetValue("User", User);
+                    account.UserAcc = userAccRepository.GetById(account.Id);
+                    User = account.UserAcc;
+                    SaveSettings(account, passwordBox.Password);
                     InProgress = false;
-
-                    if (RememberCreditentials)
-                    {
-                        ApplicationState.SetValue("RememberCreditentials", RememberCreditentials);
-                        ApplicationState.SetValue("LdapAuth", LdapAuth);
-                        ApplicationState.SetValue("UserId", LoginText);
-                        ApplicationState.SetValue("UserPassword", passwordBox.Password);
-                    }
-                    else
-                    {
-                        ApplicationState.SetValue("RememberCreditentials", false);
-                        ApplicationState.SetValue("LdapAuth", false);
-                        ApplicationState.SetValue("UserId", String.Empty);
-                        ApplicationState.SetValue("UserPassword", String.Empty);
-                    }
-                    ApplicationState.SaveUserCreditentials();
-
                     return;
                 }
             }
@@ -170,63 +137,53 @@ namespace Stock.UI.ViewModels.Dialogs
             InProgress = false;
         }
 
-        private bool CheckConnection()
+        private void SaveSettings(Account account, string password)
         {
-            if (!Core.NHibernateHelper.TestConnection())
-            {
-                string errorText = "Ошибка при подключении к базе данных.\r\nПодробные сведения об ошибке: ";
-                errorText += Core.NHibernateHelper.LastError;
+            AppSettings.User = User;
+            AppSettings.Account = account;
 
-                MessageBox.Show(Application.Current.MainWindow, errorText, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            if (RememberCreditentials)
+            {
+                Properties.Settings.Default.RememberCreditentials = RememberCreditentials;
+                Properties.Settings.Default.LdapAuth = LdapAuth;
+                Properties.Settings.Default.UserId = LoginText;
+                Properties.Settings.Default.UserPassword = password;
+            }
+            else
+            {
+                Properties.Settings.Default.RememberCreditentials = false;
+                Properties.Settings.Default.LdapAuth = false;
+                Properties.Settings.Default.UserId = String.Empty;
+                Properties.Settings.Default.UserPassword = String.Empty;
+            }
+            
+            Properties.Settings.Default.Save();
+        }
+
+        private bool ConfigureDbConnection()
+        {
+            var dbDataSource = Properties.Settings.Default.DbDataSource;
+            var dbInitialCatalog = Properties.Settings.Default.DbInitialCatalog;
+            var dbUserId = Properties.Settings.Default.DbUserID;
+            var dbPassword = Properties.Settings.Default.DbPassword;
+            var integratedSecurity = Properties.Settings.Default.IntegratedSecurity;
+            
+            var result = NHibernateHelper.Configure(dbDataSource, dbInitialCatalog, dbUserId, 
+                dbPassword, integratedSecurity);
+            if (!result)
+            {
+                ErrorMessage = "Ошибка при конфигурировании подключения." +
+                               "\r\nПодробные сведения об ошибке: " + NHibernateHelper.LastError;
                 return false;
             }
+            if (!NHibernateHelper.TestConnection())
+            {
+                ErrorMessage = "Ошибка при подключении к базе данных." +
+                               "\r\nПодробные сведения об ошибке: " + NHibernateHelper.LastError;
+                return false;
+            }
+
             return true;
         }
-
-        static byte[] GenerateSaltedHash(byte[] plainText, byte[] salt)
-        {
-            HashAlgorithm algorithm = new SHA256Managed();
-
-            var plainTextWithSaltBytes = new byte[plainText.Length + salt.Length];
-
-            for (int i = 0; i < plainText.Length; i++)
-                plainTextWithSaltBytes[i] = plainText[i];
-            for (int i = 0; i < salt.Length; i++)
-                plainTextWithSaltBytes[plainText.Length + i] = salt[i];
-
-            return algorithm.ComputeHash(plainTextWithSaltBytes);
-        }
-
-        static byte[] GetBytes(string str)
-        {
-            var bytes = new byte[str.Length * sizeof(char)];
-            Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
-        }
-
-        /*
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            var salt = new byte[32];
-            RandomNumberGenerator rng = new RNGCryptoServiceProvider();
-            rng.GetBytes(salt);
-
-            string saltStr = Convert.ToBase64String(salt);
-            byte[] hash = GenerateSaltedHash(GetBytes(PasswordBox.Password), GetBytes(saltStr));
-
-            account.Salt = saltStr;
-            account.HashedPassword = Convert.ToBase64String(hash);
-
-            repository.Save(account);
-            MessageBox.Show("Success!");
-        }
-
-        static string GetString(byte[] bytes)
-        {
-            var chars = new char[bytes.Length / sizeof(char)];
-            Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
-            return new string(chars);
-        }
-        */
     }
 }
